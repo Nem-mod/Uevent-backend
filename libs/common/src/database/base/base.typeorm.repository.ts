@@ -7,13 +7,9 @@ import {
   FindOptionsWhere,
 } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
-import { filter } from 'rxjs';
+import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 
-interface HasId {
-  id: number;
-}
-
-export abstract class BaseTypeormRepository<T extends HasId>
+export abstract class BaseTypeormRepository<T extends AbstractEntity>
   implements IBaseRepository<T>
 {
   constructor(private readonly entity: Repository<T>) {}
