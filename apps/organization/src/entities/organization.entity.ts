@@ -18,6 +18,6 @@ export class Organization extends AbstractEntity {
   @Column({ type: 'varchar', length: 255 })
   fopIdentifier!: string;
 
-  @Column({ type: 'geometry' })
-  location: Point;
+  // @Column({ type: 'geometry' })  TODO: change to Position as FK
+  // location: Point;
 }

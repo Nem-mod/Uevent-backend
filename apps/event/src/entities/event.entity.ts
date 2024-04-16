@@ -18,6 +18,6 @@ export class Event extends AbstractEntity {
   @Column({ type: 'varchar', length: 200, default: 'poster.webp' }) // TODO: change default and length
   poster!: string;
 
-  @Column({ type: 'geometry' })
-  location: Point;
+  // @Column({ type: 'geometry' }) TODO: change to Position as FK
+  // location: Point;
 }
