@@ -124,6 +124,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/analytics/tsconfig.app.json"
       }
+    },
+    "positions": {
+      "type": "application",
+      "root": "apps/positions",
+      "entryFile": "main",
+      "sourceRoot": "apps/positions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/positions/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
