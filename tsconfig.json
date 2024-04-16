@@ -24,5 +24,8 @@
         "libs/common/src/*"
       ]
     }
+  },
+  "watchOptions": {
+    "watchFile": "fixedPollingInterval"
   }
 }

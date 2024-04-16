@@ -9,10 +9,10 @@ import { LoggerModule } from '@app/common/logger/logger.module';
 
 @Module({
   imports: [
-    DatabaseModule,
     ConfigModule,
-    DatabaseModule.forFeature([Gateway]),
     LoggerModule,
+    DatabaseModule,
+    DatabaseModule.forFeature([Gateway]),
   ],
   providers: [
     GatewayService,

@@ -17,6 +17,7 @@ export class GatewayController {
 
   @Post()
   create(@Body() createGatewayDto: CreateGatewayDto) {
+    console.log('testTest hui');
     return this.gatewayService.create(createGatewayDto);
   }
 
