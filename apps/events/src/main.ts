@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { EventsModule } from './events.module';
+import { EventModule } from './event.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(EventsModule);
+  const app = await NestFactory.create(EventModule);
   await app.listen(3000);
 }
 bootstrap();

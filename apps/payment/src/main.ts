@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { CommentModule } from './comment.module';
+import { PaymentModule } from './payment.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(CommentModule);
+  const app = await NestFactory.create(PaymentModule);
   await app.listen(3000);
 }
 bootstrap();
