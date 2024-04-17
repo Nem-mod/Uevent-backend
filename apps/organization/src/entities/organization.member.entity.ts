@@ -1,17 +1,17 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
-import { OrganizationMemberRole } from '../interfaces/organization.member.enum';
 import { Organization } from './organization.entity';
 import { User } from '../../../user/src/entities/user.entity';
+import { OrganizationRole } from './organization.role.entity';
 
 @Entity()
 export class OrganizationMember extends AbstractEntity {
   @Column({ type: 'int' })
-  organization: Organization;
+  organization!: Organization;
 
   @Column({ type: 'int' })
-  user: User;
+  user!: User;
 
-  @Column({ type: 'enum', enum: OrganizationMemberRole })
-  role!: string; // TODO: change to table
+  @ManyToOne(() => OrganizationRole, { eager: true })
+  role!: OrganizationRole;
 }

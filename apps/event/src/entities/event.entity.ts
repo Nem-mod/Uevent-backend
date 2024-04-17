@@ -25,11 +25,11 @@ export class Event extends AbstractEntity {
   @ManyToOne(() => Organization)
   organization: Organization;
 
-  @ManyToMany(() => Theme)
+  @ManyToMany(() => Theme, { eager: true })
   @JoinTable()
   themes: Theme[];
 
-  @ManyToOne(() => Format)
+  @ManyToOne(() => Format, { eager: true })
   format: Format;
 
   @ManyToOne(() => Position)
