@@ -12,8 +12,8 @@ export class UserService {
   async getHello(): Promise<User> {
     return await this.userRepository.save(
       this.userRepository.create({
-        username: 'test',
-        email: 'test@test.test',
+        username: 'test2',
+        email: 'test@test2.test',
         password: 'test',
       }),
     );
