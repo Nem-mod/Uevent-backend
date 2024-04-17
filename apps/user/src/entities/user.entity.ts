@@ -13,6 +13,9 @@ export class User extends AbstractEntity {
   @Column({ type: 'varchar', length: 72 })
   password!: string;
 
+  @Column({ type: 'bool', default: false })
+  verified!: boolean;
+
   @OneToMany(
     () => OrganizationMember,
     (organizationMembership) => organizationMembership.user,

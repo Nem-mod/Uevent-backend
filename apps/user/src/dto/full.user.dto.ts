@@ -4,5 +4,5 @@ import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 
 export class FullUserDto extends IntersectionType(
   PartialType(UpdateUserDto),
-  AbstractEntity,
+  PartialType(AbstractEntity),
 ) {}

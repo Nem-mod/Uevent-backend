@@ -6,7 +6,6 @@ import {
   FindOneOptions,
   FindOptionsWhere,
 } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 
 export abstract class BaseTypeormRepository<T extends AbstractEntity>
@@ -54,14 +53,9 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
     return this.entity.save(data);
   }
 
-  async update(id: number, data: T): Promise<T> {
-    try {
-      const property = await this.findOneById(id);
-      data.id = id;
-      return this.save(data);
-    } catch (err) {
-      throw new NotFoundException(`Property with id ${id} not found`);
-    }
+  async update(id: number, data: DeepPartial<T>): Promise<T> {
+    await this.entity.update(id, data as any);
+    return await this.findOneById(id);
   }
 
   delete(filter: FindOptionsWhere<T>): Promise<void> {
