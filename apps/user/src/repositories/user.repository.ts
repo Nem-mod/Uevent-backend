@@ -1,4 +1,4 @@
-import { BaseTypeormRepository } from '@app/common/database/base/base.typeorm.repository';
+import { BaseTypeormRepository } from '@app/common/database/typeorm/base.typeorm.repository';
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { IUserRepository } from '../interfaces/user.repository.interface';

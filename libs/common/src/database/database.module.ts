@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { ConnectTypeormModule } from '@app/common/database/connect.typeorm.module';
+import { ConnectTypeormModule } from '@app/common/database/typeorm/connect.typeorm.module';
 
 @Module({
   imports: [ConnectTypeormModule],

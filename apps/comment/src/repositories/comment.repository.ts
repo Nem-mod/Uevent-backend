@@ -1,4 +1,4 @@
-import { BaseTypeormRepository } from '@app/common/database/base/base.typeorm.repository';
+import { BaseTypeormRepository } from '@app/common/database/typeorm/base.typeorm.repository';
 import { ICommentRepository } from '../interfaces/comment.repository.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
