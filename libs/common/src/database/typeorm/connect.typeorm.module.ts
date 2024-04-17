@@ -13,6 +13,7 @@ import { ConfigModule } from '@app/common/config/config.module';
 import { Position } from '../../../../../apps/position/src/entities/position.entity';
 import { Format } from '../../../../../apps/event/src/entities/format.entity';
 import { Theme } from '../../../../../apps/event/src/entities/theme.entity';
+import { OrganizationRole } from '../../../../../apps/organization/src/entities/organization.role.entity';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Theme } from '../../../../../apps/event/src/entities/theme.entity';
           Event,
           Organization,
           OrganizationMember,
+          OrganizationRole,
           Ticket,
           Comment,
           Position,
