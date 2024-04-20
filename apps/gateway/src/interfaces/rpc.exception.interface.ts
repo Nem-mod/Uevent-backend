@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 
 export interface IRpcException {
-  code: HttpStatus;
-  message: string;
+  response: string | object;
+  status: HttpStatus;
+  options?: object;
 }

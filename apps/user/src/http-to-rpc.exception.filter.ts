@@ -2,6 +2,7 @@ import {
   ArgumentsHost,
   Catch,
   HttpException,
+  HttpStatus,
   RpcExceptionFilter,
 } from '@nestjs/common';
 import { throwError } from 'rxjs';
@@ -12,8 +13,9 @@ import { IRpcException } from './interfaces/rpc.exception.interface';
 export class HttpToRpcExceptionFilter implements RpcExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const rpcExceptionBody: IRpcException = {
-      code: exception.getStatus(),
-      message: exception.message,
+      response: exception.getResponse(),
+      status: exception.getStatus() as HttpStatus,
+      options: { cause: exception.cause },
     };
     const rpcException = new RpcException(rpcExceptionBody);
 

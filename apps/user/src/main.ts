@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
+import { PgHttpTypeormExceptionInterceptor } from '@app/common/database/typeorm/exceptions/postgres/pg-http.typeorm.exception.interceptor';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(ConfigModule);
@@ -30,12 +31,11 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
-
+  app.useGlobalInterceptors(new PgHttpTypeormExceptionInterceptor());
   app.useGlobalFilters(new HttpToRpcExceptionFilter());
-
   app.useLogger(app.get(Logger));
 
   await app.listen();
   await appContext.close();
 }
-bootstrap(); //TODO: create tocken service with redis
+bootstrap(); //TODO: create token service with redis

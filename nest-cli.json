@@ -124,6 +124,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/analytic/tsconfig.app.json"
       }
+    },
+    "token": {
+      "type": "application",
+      "root": "apps/token",
+      "entryFile": "main",
+      "sourceRoot": "apps/token/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/token/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

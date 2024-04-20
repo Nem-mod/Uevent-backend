@@ -5,21 +5,19 @@ import {
   Param,
   ParseIntPipe,
   Patch,
-  UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { FullUserDto } from './dto/full-user.dto';
-import { PostgresTypeormFilter } from '@app/common/database/typeorm/exceptions/postgres/postgres.typeorm.filter';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { MessagePattern } from '@nestjs/microservices';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller()
-@UseFilters(new PostgresTypeormFilter())
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @MessagePattern({ cmd: 'createUser' })
-  async createUser(user: any): Promise<FullUserDto> {
+  async createUser(user: CreateUserDto): Promise<FullUserDto> {
     return await this.userService.createUser(user);
   }
 

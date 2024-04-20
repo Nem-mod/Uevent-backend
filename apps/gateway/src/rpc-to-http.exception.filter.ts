@@ -1,4 +1,9 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { IRpcException } from './interfaces/rpc.exception.interface';
 
@@ -7,9 +12,14 @@ export class RpcToHttpExceptionFilter implements ExceptionFilter {
   catch(exception: RpcException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
+    let exceptionBody = exception.getError() as IRpcException;
 
-    const status = (exception.getError() as IRpcException).code;
+    if (exceptionBody.status) {
+      response.status(exceptionBody.status).json(exceptionBody.response);
+    } else {
+      const httpError = new InternalServerErrorException();
 
-    response.status(status).json(exception.getError());
+      response.status(httpError.getStatus()).json(httpError.getResponse());
+    }
   }
 }
