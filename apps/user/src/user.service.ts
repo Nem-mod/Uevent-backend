@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from './interfaces/user.repository.interface';
-import { CreateUserDto } from './dto/create.user.dto';
-import { FullUserDto } from './dto/full.user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { FullUserDto } from './dto/full-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
-import { UpdateUserDto } from './dto/update.user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {

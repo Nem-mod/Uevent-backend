@@ -8,9 +8,9 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { FullUserDto } from './dto/full.user.dto';
+import { FullUserDto } from './dto/full-user.dto';
 import { PostgresTypeormFilter } from '@app/common/database/typeorm/exceptions/postgres/postgres.typeorm.filter';
-import { UpdateUserDto } from './dto/update.user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()

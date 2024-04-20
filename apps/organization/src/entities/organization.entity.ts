@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 import { Validate } from 'class-validator';
 import { Position } from '../../../position/src/entities/position.entity';
-import { OrganizationMember } from './organization.member.entity';
+import { OrganizationMember } from './organization-member.entity';
 
 @Entity()
 export class Organization extends AbstractEntity {

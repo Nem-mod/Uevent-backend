@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { CreateUserGatewayDto } from './dto/create.user.gateway.dto';
+import { CreateUserGatewayDto } from './dto/create-user.gateway.dto';
 import { catchError } from 'rxjs';
 
 @Injectable()

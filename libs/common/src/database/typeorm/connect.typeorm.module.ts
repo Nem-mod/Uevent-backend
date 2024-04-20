@@ -6,13 +6,13 @@ import { Event } from '../../../../../apps/event/src/entities/event.entity';
 import { Organization } from '../../../../../apps/organization/src/entities/organization.entity';
 import { Ticket } from '../../../../../apps/ticket/src/entities/ticket.entity';
 import { Comment } from '../../../../../apps/comment/src/entities/comment.entity';
-import { OrganizationMember } from '../../../../../apps/organization/src/entities/organization.member.entity';
+import { OrganizationMember } from '../../../../../apps/organization/src/entities/organization-member.entity';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { ConfigModule } from '@app/common/config/config.module';
 import { Position } from '../../../../../apps/position/src/entities/position.entity';
 import { Format } from '../../../../../apps/event/src/entities/format.entity';
 import { Theme } from '../../../../../apps/event/src/entities/theme.entity';
-import { OrganizationRole } from '../../../../../apps/organization/src/entities/organization.role.entity';
+import { OrganizationRole } from '../../../../../apps/organization/src/entities/organization-role.entity';
 
 @Module({
   imports: [

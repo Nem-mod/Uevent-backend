@@ -5,7 +5,7 @@ import { ConfigModule } from '@app/common/config/config.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { HttpToRpcExceptionFilter } from './http.to.rpc.exception.filter';
+import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(ConfigModule);
