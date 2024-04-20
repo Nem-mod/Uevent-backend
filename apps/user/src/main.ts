@@ -1,11 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { UserModule } from './user.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConfigModule } from '@app/common/config/config.module';
+import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import * as cookieParser from 'cookie-parser';
+import { HttpToRpcExceptionFilter } from './http.to.rpc.exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(UserModule);
+  const appContext = await NestFactory.createApplicationContext(ConfigModule);
+  const configService = appContext.get(ConfigService);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    UserModule,
+    {
+      transport:
+        Transport[
+          configService.get('services.user.transport') as keyof Transport
+        ],
+      options: configService.get(
+        'services.user.options',
+      ) as MicroserviceOptions,
+    },
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -15,19 +31,11 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new HttpToRpcExceptionFilter());
+
   app.useLogger(app.get(Logger));
 
-  app.enableCors({
-    credentials: true,
-    origin: true,
-  });
-
-  app.enableVersioning({
-    type: VersioningType.URI,
-  });
-
-  app.use(cookieParser());
-
-  await app.listen(3001);
+  await app.listen();
+  await appContext.close();
 }
-bootstrap();
+bootstrap(); //TODO: create tocken service with redis

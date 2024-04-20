@@ -1,19 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { GatewayModule } from './gateway.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { VersioningType } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
+import { ConfigService } from '@nestjs/config';
+import { RpcExceptionToHttpExceptionFilter } from './rpc.to.http.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
+  const configService = app.get(ConfigService);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      stopAtFirstError: true,
-      whitelist: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
+  app.useGlobalFilters(new RpcExceptionToHttpExceptionFilter());
 
   app.useLogger(app.get(Logger));
 
@@ -28,6 +25,6 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  await app.listen(5000); //TODO: Read from yaml config
+  await app.listen(configService.get('services.gateway.port'));
 }
 bootstrap();

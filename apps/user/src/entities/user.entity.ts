@@ -20,5 +20,5 @@ export class User extends AbstractEntity {
     () => OrganizationMember,
     (organizationMembership) => organizationMembership.user,
   )
-  organizationMemberships: OrganizationMember[];
+  organizationMemberships: OrganizationMember[]; //TODO: createdAt for analytic
 }

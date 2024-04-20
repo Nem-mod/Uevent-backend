@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Gateway } from '../../../../../apps/gateway/src/entities/gateway.entity';
 import { User } from '../../../../../apps/user/src/entities/user.entity';
 import { Event } from '../../../../../apps/event/src/entities/event.entity';
 import { Organization } from '../../../../../apps/organization/src/entities/organization.entity';
@@ -24,7 +23,6 @@ import { OrganizationRole } from '../../../../../apps/organization/src/entities/
         url: configService.get(`db.postgres.uri`),
         synchronize: configService.get('stage') === 'develop',
         entities: [
-          Gateway,
           User,
           Event,
           Organization,
