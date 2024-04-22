@@ -1,4 +1,4 @@
-import { BaseMailType } from '../interfaces/base.mail-type';
+import { BaseMailTypeSendgrid } from '../interfaces/base.mail-type.sendgrid';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SendGridService } from '@anchan828/nest-sendgrid';
@@ -8,7 +8,7 @@ import { UserVerificationMailDto } from '../dto/user-verification/user-verificat
 import { UserVerificationTemplateDataDto } from '../dto/user-verification/user-verification.template-data.dto';
 
 @Injectable()
-export class UserVerificationMail extends BaseMailType {
+export class UserVerificationMail extends BaseMailTypeSendgrid {
   protected emailTemplate: string;
 
   constructor(

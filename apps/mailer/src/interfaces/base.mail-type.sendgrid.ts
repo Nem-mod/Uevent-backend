@@ -1,7 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 import { SendGridService } from '@anchan828/nest-sendgrid';
+import { IBaseMailType } from './base.mail-type.interface';
 
-export abstract class BaseMailType {
+export abstract class BaseMailTypeSendgrid implements IBaseMailType {
   protected abstract emailTemplate: string;
   protected readonly apiKey: string;
   protected readonly sender: string;
@@ -20,7 +21,7 @@ export abstract class BaseMailType {
 
   abstract generateJwt(payload: object): string;
 
-  protected async prepareReturnLink(
+  async prepareReturnLink(
     payload: object,
     returnLink: string,
   ): Promise<string> {
@@ -31,7 +32,7 @@ export abstract class BaseMailType {
 
   abstract setTemplateData(mailInfo: object): object;
 
-  protected async sendMail(email: string, templateData: object): Promise<void> {
+  async sendMail(email: string, templateData: object): Promise<void> {
     await this.sendGridService.send({
       to: email,
       from: this.sender,
@@ -40,7 +41,7 @@ export abstract class BaseMailType {
     });
   }
 
-  protected async execute(mailInfo: object): Promise<void> {
+  async execute(mailInfo: object): Promise<void> {
     const payload = this.extractPayload(mailInfo);
 
     mailInfo['returnUrl'] = await this.prepareReturnLink(

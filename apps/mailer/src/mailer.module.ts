@@ -19,6 +19,9 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [MailerController],
-  providers: [MailerService, UserVerificationMail],
+  providers: [
+    MailerService,
+    { provide: 'UserVerificationMail', useClass: UserVerificationMail },
+  ],
 })
 export class MailerModule {}
