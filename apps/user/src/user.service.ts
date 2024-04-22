@@ -37,11 +37,19 @@ export class UserService {
     return this.sanitizeUser(user);
   }
 
-  async updateUser(id: number, user: UpdateUserDto) {
+  async getAllUsers(): Promise<FullUserDto[]> {
+    return await this.userRepository.findAll();
+  }
+
+  async updateUser(id: number, user: UpdateUserDto): Promise<FullUserDto> {
     user = this.sanitizeUser(user);
 
     const updatedUser: FullUserDto = await this.userRepository.update(id, user);
 
     return this.sanitizeUser(updatedUser);
+  }
+
+  async deleteUser(id: number) {
+    await this.userRepository.delete({ id });
   }
 }

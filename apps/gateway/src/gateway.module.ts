@@ -9,6 +9,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { UserGatewayController } from './user/user.gateway.controller';
 import { UserGatewayService } from './user/user.gateway.service';
+import { MailerGatewayService } from './mailer/mailer.gateway.service';
+import { MailerGatewayController } from './mailer/mailer.gateway.controller';
 
 @Module({
   imports: [
@@ -28,9 +30,22 @@ import { UserGatewayService } from './user/user.gateway.service';
           ) as MicroserviceOptions,
         }),
       },
+      {
+        inject: [ConfigService],
+        name: 'MAILER_SERVICE',
+        useFactory: async (configService: ConfigService) => ({
+          transport:
+            Transport[
+              configService.get('services.mailer.transport') as keyof Transport
+            ],
+          options: configService.get(
+            'services.mailer.options',
+          ) as MicroserviceOptions,
+        }),
+      },
     ]),
   ],
-  providers: [UserGatewayService],
-  controllers: [UserGatewayController],
+  providers: [UserGatewayService, MailerGatewayService],
+  controllers: [UserGatewayController, MailerGatewayController],
 })
 export class GatewayModule {}

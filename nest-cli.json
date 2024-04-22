@@ -71,15 +71,6 @@
         "tsConfigPath": "apps/ticket/tsconfig.app.json"
       }
     },
-    "email": {
-      "type": "application",
-      "root": "apps/email",
-      "entryFile": "main",
-      "sourceRoot": "apps/email/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/email/tsconfig.app.json"
-      }
-    },
     "comment": {
       "type": "application",
       "root": "apps/comment",
@@ -132,6 +123,15 @@
       "sourceRoot": "apps/token/src",
       "compilerOptions": {
         "tsConfigPath": "apps/token/tsconfig.app.json"
+      }
+    },
+    "mailer": {
+      "type": "application",
+      "root": "apps/mailer",
+      "entryFile": "main",
+      "sourceRoot": "apps/mailer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mailer/tsconfig.app.json"
       }
     }
   },

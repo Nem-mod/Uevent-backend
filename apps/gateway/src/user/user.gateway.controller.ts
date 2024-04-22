@@ -1,4 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { CreateUserGatewayDto } from './dto/create-user.gateway.dto';
 import { UserGatewayService } from './user.gateway.service';
 
@@ -11,12 +21,17 @@ export class UserGatewayController {
 
   @Post(`register`)
   async registerUser(@Body() user: CreateUserGatewayDto) {
-    try {
-      return this.userGatewayService.registerUser(user);
-    } catch (err) {
-      console.log('here');
-      console.log(err.getStatus());
-      console.log(err.message);
-    }
+    return this.userGatewayService.registerUser(user);
+  }
+
+  @Get()
+  async getAllUsers() {
+    return await this.userGatewayService.getAllUsers();
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    await this.userGatewayService.deleteUser(id);
   }
 }

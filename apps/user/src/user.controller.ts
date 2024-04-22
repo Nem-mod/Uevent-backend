@@ -9,7 +9,7 @@ import {
 import { UserService } from './user.service';
 import { FullUserDto } from './dto/full-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller()
@@ -34,8 +34,13 @@ export class UserController {
     return await this.userService.getUser(id);
   }
 
-  // @Delete(':id')
-  // async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
-  //   return await this.userService.deleteUser(id);
-  // }
+  @MessagePattern({ cmd: 'getAllUsers' })
+  async getAllUsers(): Promise<FullUserDto[]> {
+    return await this.userService.getAllUsers();
+  }
+
+  @EventPattern('user.deleted')
+  async deleteUser(id: number): Promise<void> {
+    return await this.userService.deleteUser(id);
+  }
 }

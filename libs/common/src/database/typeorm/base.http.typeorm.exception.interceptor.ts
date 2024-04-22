@@ -11,7 +11,7 @@ import { TypeORMError } from 'typeorm';
 export abstract class BaseHttpTypeormExceptionInterceptor
   implements NestInterceptor
 {
-  codeToHandler: Record<string, IBaseExceptionHandler>;
+  abstract codeToHandler: Record<string, IBaseExceptionHandler>;
 
   abstract getCode(exception: TypeORMError): string;
 
@@ -20,6 +20,7 @@ export abstract class BaseHttpTypeormExceptionInterceptor
       catchError((typeOrmException) => {
         if (!(typeOrmException instanceof TypeORMError)) throw typeOrmException;
 
+        // console.error(typeOrmException);
         throw (
           this.codeToHandler[this.getCode(typeOrmException)]?.handle(
             typeOrmException,

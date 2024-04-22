@@ -16,4 +16,16 @@ export class UserGatewayService {
       }),
     );
   }
+
+  async getAllUsers() {
+    return this.userClient.send({ cmd: 'getAllUsers' }, {}).pipe(
+      catchError((val) => {
+        throw new RpcException(val);
+      }),
+    );
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    this.userClient.emit('user.deleted', id);
+  }
 }
