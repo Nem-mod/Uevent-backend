@@ -20,8 +20,6 @@ export abstract class BaseMailType {
 
   abstract generateJwt(payload: object): string;
 
-  abstract setTemplateData(mailInfo: object): object;
-
   protected async prepareReturnLink(
     payload: object,
     returnLink: string,
@@ -30,6 +28,8 @@ export abstract class BaseMailType {
     returnLink = returnLink.replace(this.replaceWord, token);
     return returnLink;
   }
+
+  abstract setTemplateData(mailInfo: object): object;
 
   protected async sendMail(email: string, templateData: object): Promise<void> {
     await this.sendGridService.send({
@@ -42,9 +42,13 @@ export abstract class BaseMailType {
 
   protected async execute(mailInfo: object): Promise<void> {
     const payload = this.extractPayload(mailInfo);
-    const templateData = this.setTemplateData(mailInfo);
 
-    await this.prepareReturnLink(payload, mailInfo['returnUrl']);
+    mailInfo['returnUrl'] = await this.prepareReturnLink(
+      payload,
+      mailInfo['returnUrl'],
+    );
+
+    const templateData = this.setTemplateData(mailInfo);
 
     await this.sendMail(mailInfo['email'], templateData);
   }
