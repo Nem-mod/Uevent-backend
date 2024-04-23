@@ -20,15 +20,18 @@ import { MailerGatewayController } from './mailer/mailer.gateway.controller';
       {
         inject: [ConfigService],
         name: 'USER_SERVICE',
-        useFactory: async (configService: ConfigService) => ({
-          transport:
-            Transport[
-              configService.get('services.user.transport') as keyof Transport
-            ],
-          options: configService.get(
-            'services.user.options',
-          ) as MicroserviceOptions,
-        }),
+        useFactory: async (configService: ConfigService) => {
+          console.log(configService);
+          return {
+            transport:
+              Transport[
+                configService.get('services.user.transport') as keyof Transport
+              ],
+            options: configService.get(
+              'services.user.options',
+            ) as MicroserviceOptions,
+          };
+        },
       },
       {
         inject: [ConfigService],
@@ -40,6 +43,19 @@ import { MailerGatewayController } from './mailer/mailer.gateway.controller';
             ],
           options: configService.get(
             'services.mailer.options',
+          ) as MicroserviceOptions,
+        }),
+      },
+      {
+        inject: [ConfigService],
+        name: 'TOKEN_SERVICE',
+        useFactory: async (configService: ConfigService) => ({
+          transport:
+            Transport[
+              configService.get('services.token.transport') as keyof Transport
+            ],
+          options: configService.get(
+            'services.token.options',
           ) as MicroserviceOptions,
         }),
       },

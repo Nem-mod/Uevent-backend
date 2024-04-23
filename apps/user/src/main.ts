@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
-import { PgHttpTypeormExceptionInterceptor } from '@app/common/database/typeorm/exceptions/postgres/pg-http.typeorm.exception.interceptor';
+import { PgHttpTypeormExceptionInterceptor } from '@app/common/database/typeorm/postgres/exceptions/postgres/pg-http.typeorm.exception.interceptor';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(ConfigModule);

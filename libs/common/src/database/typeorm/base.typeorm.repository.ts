@@ -59,6 +59,6 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
   }
 
   async delete(filter: FindOptionsWhere<T>): Promise<void> {
-    this.entity.delete(filter);
+    await this.entity.delete(filter);
   }
 }

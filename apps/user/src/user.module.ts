@@ -3,7 +3,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ConfigModule } from '@app/common/config/config.module';
 import { LoggerModule } from '@app/common/logger/logger.module';
-import { DatabaseModule } from '@app/common/database/database.module';
+import { PgTypeormModule } from '@app/common/database/typeorm/postgres/pg.typeorm.module';
 import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
 
@@ -11,8 +11,8 @@ import { UserRepository } from './repositories/user.repository';
   imports: [
     ConfigModule,
     LoggerModule,
-    DatabaseModule,
-    DatabaseModule.forFeature([User]),
+    PgTypeormModule,
+    PgTypeormModule.forFeature([User]),
   ],
   controllers: [UserController],
   providers: [

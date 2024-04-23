@@ -4,14 +4,14 @@ import { CommentService } from './comment.service';
 import { CommentRepository } from './repositories/comment.repository';
 import { ConfigModule } from '@app/common/config/config.module';
 import { LoggerModule } from '@app/common/logger/logger.module';
-import { DatabaseModule } from '@app/common/database/database.module';
+import { PgTypeormModule } from '@app/common/database/typeorm/postgres/pg.typeorm.module';
 
 @Module({
   imports: [
     ConfigModule,
     LoggerModule,
-    DatabaseModule,
-    DatabaseModule.forFeature([Comment]),
+    PgTypeormModule,
+    PgTypeormModule.forFeature([Comment]),
   ],
   controllers: [CommentController],
   providers: [

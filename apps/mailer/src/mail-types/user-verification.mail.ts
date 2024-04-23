@@ -31,7 +31,7 @@ export class UserVerificationMail extends BaseMailTypeSendgrid {
   }
 
   generateJwt(payload: UserVerificationPayloadDto): string {
-    return JSON.stringify(payload);
+    return JSON.stringify(payload); // TODO: return jwt id and put it in payload
   }
 
   setTemplateData(
