@@ -1,7 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { createClient, RedisClientOptions } from 'redis';
 import { Schema, Repository } from 'redis-om';
-import { NestjsRedisOmModuleAsyncOptions } from '@app/common/database/redis-om/module/nest.redis-om.module.async-options.type';
 
 @Module({})
 export class NestRedisOmModule {
@@ -25,16 +24,35 @@ export class NestRedisOmModule {
     };
   }
 
-  static async forRootAsync(
-    options: NestjsRedisOmModuleAsyncOptions,
-  ): Promise<DynamicModule> {
-    console.log(options.inject);
-    return {
-      ...(await this.forRoot(
-        options.schemas,
-        await options.useFactory(options.inject),
-      )),
-      // imports: options.imports || [],
-    };
-  }
+  // static forRootAsync(
+  //   options: NestjsRedisOmModuleAsyncOptions,
+  // ): DynamicModule {
+  //   const redisProvider: Provider = {
+  //     inject: [NEST_REDISOM_MODULE_OPTIONS],
+  //     provide: NEST_REDISOM_TOKEN,
+  //     useFactory: async (options: RedisClientOptions) => new NestRedisOmService(options)
+  //   }
+  // }
 }
+
+// public static forRootAsync(
+//   options: HttpClientModuleAsyncOptions
+// ): DynamicModule {
+//   const provider: Provider = {
+//     inject: [HTTP_CLIENT_MODULE_OPTIONS],
+//     provide: HTTP_CLIENT_TOKEN,
+//     useFactory: async (options: HttpClientModuleOptions) =>
+//       getHttpClientModuleOptions(options),
+//   };
+//
+//   return {
+//     module: HttpClientModule,
+//     imports: options.imports,
+//     providers: [{
+//       provide: HTTP_CLIENT_MODULE_OPTIONS,
+//       useFactory: options.useFactory,
+//       inject: options.inject || [],
+//     }, provider],
+//     exports: [provider],
+//   };
+// }
