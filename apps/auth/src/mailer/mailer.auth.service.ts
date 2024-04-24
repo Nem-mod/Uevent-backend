@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UserVerificationMailDto } from './dto/user-verification.mail.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import {IVerificationUserMail} from "./interfaces/verification.user.mail.interface";
 
 @Injectable()
 export class MailerAuthService {
@@ -8,7 +8,7 @@ export class MailerAuthService {
     @Inject('MAILER_SERVICE') private readonly mailerClient: ClientProxy,
   ) {}
 
-  async userEmailVerification(mailInfo: UserVerificationMailDto) {
+  async userEmailVerification(mailInfo: IVerificationUserMail) {
     this.mailerClient.emit('user.verification', mailInfo);
   }
 }

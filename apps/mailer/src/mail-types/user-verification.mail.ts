@@ -38,7 +38,7 @@ export class UserVerificationMail extends BaseMailTypeSendgrid {
     mailInfo: UserVerificationMailDto,
   ): UserVerificationTemplateDataDto {
     return {
-      link: mailInfo.returnUrl,
+      link: mailInfo.returnLink,
     };
   }
 

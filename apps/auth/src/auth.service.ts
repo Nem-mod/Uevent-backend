@@ -3,7 +3,8 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, lastValueFrom } from 'rxjs';
 import { IUser } from './interfaces/user.interface';
 import { MailerAuthService } from './mailer/mailer.auth.service';
-import { UserVerificationMailDto } from './mailer/dto/user-verification.mail.dto';
+import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
+import { IVerificationUserMail } from './mailer/interfaces/verification.user.mail.interface';
 
 @Injectable()
 export class AuthService {
@@ -12,15 +13,17 @@ export class AuthService {
     private readonly mailerAuthService: MailerAuthService,
   ) {}
 
-  async sendUserVerifyEmail(
-    mailInfo: UserVerificationMailDto,
-  ): Promise<boolean> {
-    const user: IUser = await this.getUserById(mailInfo.id);
+  async sendUserVerifyEmail(baseMailInfo: IBaseUserMail): Promise<boolean> {
+    const user: IUser = await this.getUserById(baseMailInfo.id);
 
     if (user.verified) return false;
-    mailInfo.email = user.email;
 
-    await this.mailerAuthService.userEmailVerification(mailInfo);
+    const fullMailInfo: IVerificationUserMail = {
+      ...baseMailInfo,
+      email: user.email,
+    };
+
+    await this.mailerAuthService.userEmailVerification(fullMailInfo);
 
     return true;
   }

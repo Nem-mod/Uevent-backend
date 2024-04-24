@@ -6,5 +6,5 @@ export class BaseMailDto {
 
   @IsString()
   @IsNotEmpty() // TODO: Check for replace word
-  returnUrl: string;
+  returnLink: string;
 }

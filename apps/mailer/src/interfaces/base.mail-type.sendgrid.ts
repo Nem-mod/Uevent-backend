@@ -44,9 +44,9 @@ export abstract class BaseMailTypeSendgrid implements IBaseMailType {
   async execute(mailInfo: object): Promise<void> {
     const payload = await this.extractPayload(mailInfo);
 
-    mailInfo['returnUrl'] = await this.prepareReturnLink(
+    mailInfo['returnLink'] = await this.prepareReturnLink(
       payload,
-      mailInfo['returnUrl'],
+      mailInfo['returnLink'],
     );
 
     const templateData = this.setTemplateData(mailInfo);

@@ -1,15 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { UserVerificationMailDto } from './mailer/dto/user-verification.mail.dto';
+import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'sendUserVerifyEmail' })
-  async sendUserVerifyEmail(mailInfo: UserVerificationMailDto) {
-    console.log(mailInfo);
-    return await this.authService.sendUserVerifyEmail(mailInfo);
+  async sendUserVerifyEmail(baseMailInfo: IBaseUserMail) {
+    return await this.authService.sendUserVerifyEmail(baseMailInfo);
   }
 }

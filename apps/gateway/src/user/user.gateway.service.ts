@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { CreateUserGatewayDto } from './dto/create-user.gateway.dto';
+import { ICreateUserGateway } from './interfaces/create-user.gateway.interface';
 import { catchError, lastValueFrom } from 'rxjs';
 import { FullUserDto } from '../../../user/src/dto/full-user.dto';
 
@@ -10,7 +10,7 @@ export class UserGatewayService {
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
   ) {}
 
-  async registerUser(user: CreateUserGatewayDto) {
+  async registerUser(user: ICreateUserGateway) {
     return lastValueFrom(
       this.userClient.send<FullUserDto>({ cmd: 'createUser' }, user).pipe(
         catchError((val) => {

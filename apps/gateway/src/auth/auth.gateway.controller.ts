@@ -1,7 +1,7 @@
 import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AuthGatewayService } from './auth.gateway.service';
-import { ReturnUrlDto } from './dto/return-url.dto';
-import { UserSendEmailDto } from './dto/user.send-email.dto';
+import { IReturnLink } from './interfaces/return-link.interface';
+import { IBaseUserMail } from './interfaces/base.user.mail.interface';
 
 @Controller({
   version: '1',
@@ -13,13 +13,12 @@ export class AuthGatewayController {
   @Post('user/:id/send/verify')
   async userSendVerifyEmail(
     @Param('id', ParseIntPipe) userId: number,
-    @Body() returnLink: ReturnUrlDto,
+    @Body() returnLink: IReturnLink,
   ) {
-    const userSendEmail: UserSendEmailDto = {
+    const userSendEmail: IBaseUserMail = {
       id: userId,
-      returnUrl: returnLink.returnUrl,
+      returnLink: returnLink.returnLink,
     };
-    console.log(userSendEmail);
     return await this.authGatewayService.userSendVerifyEmail(userSendEmail);
   }
 }
