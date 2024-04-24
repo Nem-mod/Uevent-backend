@@ -18,8 +18,11 @@ export abstract class BaseHttpTypeormExceptionInterceptor
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((typeOrmException) => {
+        // console.log('in typeorm interceptor before');
+        // console.error(typeOrmException);
         if (!(typeOrmException instanceof TypeORMError)) throw typeOrmException;
 
+        // console.log('in typeorm interceptor');
         // console.error(typeOrmException);
         throw (
           this.codeToHandler[this.getCode(typeOrmException)]?.handle(

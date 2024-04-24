@@ -9,7 +9,9 @@ export class MailerController {
   constructor(private readonly mailerService: MailerService) {}
 
   @EventPattern('user.verification')
-  async sendUserVerificationEmail(mailInfo: UserVerificationMailDto) {
+  async sendUserVerificationEmail(
+    mailInfo: UserVerificationMailDto,
+  ): Promise<void> {
     await this.mailerService.userEmailVerification(mailInfo);
   }
 }

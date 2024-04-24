@@ -8,7 +8,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'sendUserVerifyEmail' })
-  async sendUserVerifyEmail(baseMailInfo: IBaseUserMail) {
-    return await this.authService.sendUserVerifyEmail(baseMailInfo);
+  async sendUserVerifyEmail(baseMailInfo: IBaseUserMail): Promise<boolean> {
+    await this.authService.sendUserVerifyEmail(baseMailInfo);
+    return true;
   }
 }

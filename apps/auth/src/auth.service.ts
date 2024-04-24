@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, lastValueFrom } from 'rxjs';
 import { IUser } from './interfaces/user.interface';
@@ -13,10 +13,10 @@ export class AuthService {
     private readonly mailerAuthService: MailerAuthService,
   ) {}
 
-  async sendUserVerifyEmail(baseMailInfo: IBaseUserMail): Promise<boolean> {
+  async sendUserVerifyEmail(baseMailInfo: IBaseUserMail): Promise<void> {
     const user: IUser = await this.getUserById(baseMailInfo.id);
 
-    if (user.verified) return false;
+    if (user.verified) throw new ForbiddenException('User is already verified');
 
     const fullMailInfo: IVerificationUserMail = {
       ...baseMailInfo,
@@ -24,8 +24,6 @@ export class AuthService {
     };
 
     await this.mailerAuthService.userEmailVerification(fullMailInfo);
-
-    return true;
   }
 
   async getUserById(id: number) {

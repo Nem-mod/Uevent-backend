@@ -10,7 +10,9 @@ export class MailerService {
     private readonly userVerificationMail: IBaseMailType,
   ) {}
 
-  async userEmailVerification(mailInfo: UserVerificationMailDto) {
+  async userEmailVerification(
+    mailInfo: UserVerificationMailDto,
+  ): Promise<void> {
     await this.userVerificationMail.execute(mailInfo);
   }
 }

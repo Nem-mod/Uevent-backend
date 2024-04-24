@@ -29,8 +29,8 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
     return this.entity.find(filter);
   }
 
-  findOneById(id: number): Promise<T> {
-    return this.entity.findOneBy({ id } as FindOptionsWhere<T>);
+  async findOneById(id: number): Promise<T> {
+    return await this.entity.findOneBy({ id } as FindOptionsWhere<T>);
   }
 
   preload(data: DeepPartial<T>): Promise<T> {

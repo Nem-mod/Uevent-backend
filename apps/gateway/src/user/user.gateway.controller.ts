@@ -11,33 +11,30 @@ import {
 } from '@nestjs/common';
 import { ICreateUserGateway } from './interfaces/create-user.gateway.interface';
 import { UserGatewayService } from './user.gateway.service';
-import { AuthGatewayService } from '../auth/auth.gateway.service';
+import { IFullUserGateway } from './interfaces/full-user.gateway.interface';
 
 @Controller({
   version: '1',
   path: 'users',
 })
 export class UserGatewayController {
-  constructor(
-    private readonly userGatewayService: UserGatewayService,
-    private readonly authGatewayService: AuthGatewayService,
-  ) {}
+  constructor(private readonly userGatewayService: UserGatewayService) {}
 
   @Post(`register`)
-  async registerUser(@Body() user: ICreateUserGateway) {
-    const newUser = await this.userGatewayService.registerUser(user);
-    // await this.authGatewayService.sendUserVerifyEmail(newUser.id);
-    return newUser;
+  async registerUser(
+    @Body() user: ICreateUserGateway,
+  ): Promise<IFullUserGateway> {
+    return await this.userGatewayService.registerUser(user);
   }
 
   @Get()
-  async getAllUsers() {
+  async getAllUsers(): Promise<IFullUserGateway[]> {
     return await this.userGatewayService.getAllUsers();
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.userGatewayService.deleteUser(id);
   }
 }

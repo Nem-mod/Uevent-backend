@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { IUserRepository } from './interfaces/user.repository.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FullUserDto } from './dto/full-user.dto';
@@ -34,6 +34,9 @@ export class UserService {
 
   async getUser(id: number): Promise<FullUserDto> {
     const user: FullUserDto = await this.userRepository.findOneById(id);
+
+    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+
     return this.sanitizeUser(user);
   }
 
@@ -49,7 +52,7 @@ export class UserService {
     return this.sanitizeUser(updatedUser);
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: number): Promise<void> {
     await this.userRepository.delete({ id });
   }
 }

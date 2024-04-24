@@ -1,4 +1,12 @@
-import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { AuthGatewayService } from './auth.gateway.service';
 import { IReturnLink } from './interfaces/return-link.interface';
 import { IBaseUserMail } from './interfaces/base.user.mail.interface';
@@ -11,6 +19,7 @@ export class AuthGatewayController {
   constructor(private readonly authGatewayService: AuthGatewayService) {}
 
   @Post('user/:id/send/verify')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async userSendVerifyEmail(
     @Param('id', ParseIntPipe) userId: number,
     @Body() returnLink: IReturnLink,
