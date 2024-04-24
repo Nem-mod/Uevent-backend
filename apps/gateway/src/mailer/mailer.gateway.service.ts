@@ -15,10 +15,19 @@ export class MailerGatewayService {
   }
 
   async testToken() {
-    return this.tokenClient.send({ cmd: 'tokenTest' }, {}).pipe(
-      catchError((val) => {
-        throw new RpcException(val);
-      }),
-    );
+    return this.tokenClient
+      .send(
+        { role: 'user', token: 'verify', cmd: 'verifyAndClear' },
+        {
+          token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0IjoidGVzdCIsInV1aWQiOiJjZDllMmU0MC1kNDBmLTRlZjgtOTY1NC03NTFjZTg2MmZkMTQiLCJpYXQiOjE3MTM5MTkwNjYsImV4cCI6MTcxMzkyOTg2Nn0.96SlzfurAkn-LzYUQuc6f7ARHnq5O3ybnAdHO98x_rU',
+          id: 2,
+        },
+      )
+      .pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      );
   }
 }
