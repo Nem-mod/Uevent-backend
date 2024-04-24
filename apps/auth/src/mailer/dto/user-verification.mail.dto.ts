@@ -9,12 +9,13 @@ import {
 export class UserVerificationMailDto {
   @IsOptional()
   @IsNumber()
-  userId: number;
+  id: number;
 
+  @IsOptional()
   @IsEmail()
   email: string;
 
   @IsString()
   @IsNotEmpty()
-  returnLink: string;
+  returnUrl: string;
 }

@@ -11,17 +11,23 @@ import {
 } from '@nestjs/common';
 import { CreateUserGatewayDto } from './dto/create-user.gateway.dto';
 import { UserGatewayService } from './user.gateway.service';
+import { AuthGatewayService } from '../auth/auth.gateway.service';
 
 @Controller({
   version: '1',
   path: 'users',
 })
 export class UserGatewayController {
-  constructor(private readonly userGatewayService: UserGatewayService) {}
+  constructor(
+    private readonly userGatewayService: UserGatewayService,
+    private readonly authGatewayService: AuthGatewayService,
+  ) {}
 
   @Post(`register`)
   async registerUser(@Body() user: CreateUserGatewayDto) {
-    return this.userGatewayService.registerUser(user);
+    const newUser = await this.userGatewayService.registerUser(user);
+    // await this.authGatewayService.sendUserVerifyEmail(newUser.id);
+    return newUser;
   }
 
   @Get()

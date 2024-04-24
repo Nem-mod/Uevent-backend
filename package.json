@@ -40,7 +40,7 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
     "js-yaml": "^4.1.0",
-    "lodash-es": "^4.17.21",
+    "lodash": "^4.17.21",
     "nestjs-pino": "^4.0.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",

@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { UserVerificationPayloadDto } from '../dto/user-verification/user-verification.payload.dto';
-import * as _ from 'lodash-es';
 import { UserVerificationMailDto } from '../dto/user-verification/user-verification.mail.dto';
 import { UserVerificationTemplateDataDto } from '../dto/user-verification/user-verification.template-data.dto';
+import * as _ from 'lodash';
 
 @Injectable()
 export class UserVerificationMail extends BaseMailTypeSendgrid {
@@ -21,9 +21,9 @@ export class UserVerificationMail extends BaseMailTypeSendgrid {
     );
   }
 
-  extractPayload(
+  async extractPayload(
     mailInfo: UserVerificationMailDto,
-  ): UserVerificationPayloadDto {
+  ): Promise<UserVerificationPayloadDto> {
     return _.pick(
       mailInfo,
       Object.getOwnPropertyNames(new UserVerificationPayloadDto()),

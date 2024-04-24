@@ -9,8 +9,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { UserGatewayController } from './user/user.gateway.controller';
 import { UserGatewayService } from './user/user.gateway.service';
-import { MailerGatewayService } from './mailer/mailer.gateway.service';
-import { MailerGatewayController } from './mailer/mailer.gateway.controller';
+import { AuthGatewayController } from './auth/auth.gateway.controller';
+import { AuthGatewayService } from './auth/auth.gateway.service';
 
 @Module({
   imports: [
@@ -21,7 +21,6 @@ import { MailerGatewayController } from './mailer/mailer.gateway.controller';
         inject: [ConfigService],
         name: 'USER_SERVICE',
         useFactory: async (configService: ConfigService) => {
-          console.log(configService);
           return {
             transport:
               Transport[
@@ -35,33 +34,22 @@ import { MailerGatewayController } from './mailer/mailer.gateway.controller';
       },
       {
         inject: [ConfigService],
-        name: 'MAILER_SERVICE',
-        useFactory: async (configService: ConfigService) => ({
-          transport:
-            Transport[
-              configService.get('services.mailer.transport') as keyof Transport
-            ],
-          options: configService.get(
-            'services.mailer.options',
-          ) as MicroserviceOptions,
-        }),
-      },
-      {
-        inject: [ConfigService],
-        name: 'TOKEN_SERVICE',
-        useFactory: async (configService: ConfigService) => ({
-          transport:
-            Transport[
-              configService.get('services.token.transport') as keyof Transport
-            ],
-          options: configService.get(
-            'services.token.options',
-          ) as MicroserviceOptions,
-        }),
+        name: 'AUTH_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get('services.auth.transport') as keyof Transport
+              ],
+            options: configService.get(
+              'services.auth.options',
+            ) as MicroserviceOptions,
+          };
+        },
       },
     ]),
   ],
-  providers: [UserGatewayService, MailerGatewayService],
-  controllers: [UserGatewayController, MailerGatewayController],
+  providers: [UserGatewayService, AuthGatewayService],
+  controllers: [UserGatewayController, AuthGatewayController],
 })
 export class GatewayModule {}

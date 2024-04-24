@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-} from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 import { FullUserDto } from './dto/full-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -29,8 +22,8 @@ export class UserController {
     return await this.userService.updateUser(id, user);
   }
 
-  @Get(':id')
-  async getUser(@Param('id', ParseIntPipe) id: number): Promise<FullUserDto> {
+  @MessagePattern({ cmd: 'getUserById' })
+  async getUser(id: number): Promise<FullUserDto> {
     return await this.userService.getUser(id);
   }
 

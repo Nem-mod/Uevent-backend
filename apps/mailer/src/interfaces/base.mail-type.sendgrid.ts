@@ -17,7 +17,7 @@ export abstract class BaseMailTypeSendgrid implements IBaseMailType {
     this.replaceWord = this.configService.get('api.sendgrid.replaceWord');
   }
 
-  abstract extractPayload(mailInfo: object): object;
+  abstract extractPayload(mailInfo: object): Promise<object>;
 
   abstract generateJwt(payload: object): string;
 
@@ -42,7 +42,7 @@ export abstract class BaseMailTypeSendgrid implements IBaseMailType {
   }
 
   async execute(mailInfo: object): Promise<void> {
-    const payload = this.extractPayload(mailInfo);
+    const payload = await this.extractPayload(mailInfo);
 
     mailInfo['returnUrl'] = await this.prepareReturnLink(
       payload,

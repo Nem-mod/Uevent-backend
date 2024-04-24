@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
-export class UserVerificationPayloadDto {
+export class UserIdDto {
   @IsNumber()
   @IsNotEmpty()
-  id: number = null;
+  id: number;
 }

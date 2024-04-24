@@ -7,7 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
-  // TODO: Connect Redis, create table for unexpired tokens. Create functions for creating, deleting tokens and finding tokens. Delete expired tokens
+  // TODO: add exception filter and create interceptor
   const appContext = await NestFactory.createApplicationContext(ConfigModule);
   const configService = appContext.get(ConfigService);
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
