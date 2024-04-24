@@ -55,4 +55,11 @@ export class UserService {
   async deleteUser(id: number): Promise<void> {
     await this.userRepository.delete({ id });
   }
+
+  async setVerifyUser(id: number): Promise<void> {
+    const user: FullUserDto = await this.getUser(id);
+
+    user.verified = true;
+    await this.updateUser(user.id, user);
+  }
 }

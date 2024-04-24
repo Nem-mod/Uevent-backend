@@ -5,12 +5,15 @@ import { IUser } from './interfaces/user.interface';
 import { MailerAuthService } from './mailer/mailer.auth.service';
 import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
 import { IVerificationUserMail } from './mailer/interfaces/verification.user.mail.interface';
+import { ITokenAndUserId } from './token/interfaces/token-and-user-id.token.interface';
+import { TokenAuthService } from './token/token.auth.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
     private readonly mailerAuthService: MailerAuthService,
+    private readonly tokenAuthService: TokenAuthService,
   ) {}
 
   async sendUserVerifyEmail(baseMailInfo: IBaseUserMail): Promise<void> {
@@ -26,7 +29,14 @@ export class AuthService {
     await this.mailerAuthService.userEmailVerification(fullMailInfo);
   }
 
-  async getUserById(id: number) {
+  async validateUserVerifyToken(userToken: ITokenAndUserId): Promise<boolean> {
+    if (!(await this.tokenAuthService.verifyAndClear(userToken))) return false;
+
+    await this.setUserVerified(userToken.id);
+    return true;
+  }
+
+  async getUserById(id: number): Promise<IUser> {
     return await lastValueFrom(
       this.userClient.send<IUser>({ cmd: 'getUserById' }, id).pipe(
         catchError((val) => {
@@ -34,5 +44,9 @@ export class AuthService {
         }),
       ),
     );
+  }
+
+  async setUserVerified(id: number): Promise<void> {
+    this.userClient.emit<IUser>('setVerifyUser', id);
   }
 }

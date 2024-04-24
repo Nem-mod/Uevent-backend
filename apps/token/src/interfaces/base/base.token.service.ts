@@ -4,6 +4,7 @@ import { Entity, Repository } from 'redis-om';
 import { v4 as uuid } from 'uuid';
 import { ITokenPayload } from '../token-payload.interface';
 import { IAbstractTokens } from './base.abstract.tokens.interface';
+import { BadRequestException } from '@nestjs/common';
 
 export abstract class BaseTokenService implements IBaseTokenService {
   abstract signOptions: JwtSignOptions;
@@ -55,7 +56,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     return token;
   }
 
-  async verify(token: string, id: string): Promise<boolean> {
+  async verify(token: string, id: string): Promise<void> {
     const savedTokensUuid = await this.getEntityById(id);
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
@@ -65,13 +66,13 @@ export abstract class BaseTokenService implements IBaseTokenService {
         this.signOptions,
       );
 
-      return savedTokensUuidData.uuids.includes(payload.uuid);
+      if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw Error();
     } catch (err) {
-      return false;
+      throw new BadRequestException('Invalid token');
     }
   }
 
-  async verifyAndClear(token: string, id: string): Promise<boolean> {
+  async verifyAndClear(token: string, id: string): Promise<void> {
     const savedTokensUuid = await this.getEntityById(id);
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
@@ -81,18 +82,16 @@ export abstract class BaseTokenService implements IBaseTokenService {
         this.signOptions,
       );
 
-      if (!savedTokensUuidData.uuids.includes(payload.uuid)) return false;
+      if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
 
       savedTokensUuidData.uuids = [];
       await this.repository.save(savedTokensUuid);
-
-      return true;
     } catch (err) {
-      return false;
+      throw new BadRequestException('Invalid token');
     }
   }
 
-  async verifyAndRemove(token: string, id: string): Promise<boolean> {
+  async verifyAndRemove(token: string, id: string): Promise<void> {
     const savedTokensUuid = await this.getEntityById(id);
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
@@ -102,16 +101,14 @@ export abstract class BaseTokenService implements IBaseTokenService {
         this.signOptions,
       );
 
-      if (!savedTokensUuidData.uuids.includes(payload.uuid)) return false;
+      if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
 
       savedTokensUuidData.uuids = savedTokensUuidData.uuids.filter(
         (uuid) => uuid !== payload.uuid,
       );
       await this.repository.save(savedTokensUuid);
-
-      return true;
     } catch (err) {
-      return false;
+      throw new BadRequestException('Invalid token');
     }
   }
 }

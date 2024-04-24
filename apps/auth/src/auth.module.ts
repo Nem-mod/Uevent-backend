@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@app/common/config/config.module';
 import { LoggerModule } from '@app/common/logger/logger.module';
 import { MailerAuthService } from './mailer/mailer.auth.service';
+import { TokenAuthService } from './token/token.auth.service';
 
 @Module({
   imports: [
@@ -58,6 +59,6 @@ import { MailerAuthService } from './mailer/mailer.auth.service';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, MailerAuthService],
+  providers: [AuthService, MailerAuthService, TokenAuthService],
 })
 export class AuthModule {}

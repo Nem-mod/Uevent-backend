@@ -32,8 +32,13 @@ export class UserController {
     return await this.userService.getAllUsers();
   }
 
-  @EventPattern('user.deleted')
+  @EventPattern('deleteUser')
   async deleteUser(id: number): Promise<void> {
-    return await this.userService.deleteUser(id);
+    await this.userService.deleteUser(id);
+  }
+
+  @EventPattern('setVerifyUser')
+  async setVerifyUser(id: number): Promise<void> {
+    await this.userService.setVerifyUser(id);
   }
 }

@@ -15,14 +15,17 @@ export abstract class BaseTokenController implements IBaseTokenController {
   }
 
   async verify(obj: TokenAndIdDto): Promise<boolean> {
-    return await this.tokenService.verify(obj.token, obj.id);
+    await this.tokenService.verify(obj.token, obj.id);
+    return true;
   }
 
   async verifyAndClear(obj: TokenAndIdDto): Promise<boolean> {
-    return await this.tokenService.verifyAndClear(obj.token, obj.id);
+    await this.tokenService.verifyAndClear(obj.token, obj.id);
+    return true;
   }
 
   async verifyAndRemove(obj: TokenAndIdDto): Promise<boolean> {
-    return await this.tokenService.verifyAndRemove(obj.token, obj.id);
+    await this.tokenService.verifyAndRemove(obj.token, obj.id);
+    return true;
   }
 }

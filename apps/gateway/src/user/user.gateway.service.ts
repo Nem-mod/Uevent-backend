@@ -31,6 +31,6 @@ export class UserGatewayService {
   }
 
   async deleteUser(id: number): Promise<void> {
-    this.userClient.emit('user.deleted', id);
+    this.userClient.emit('deleteUser', id);
   }
 }
