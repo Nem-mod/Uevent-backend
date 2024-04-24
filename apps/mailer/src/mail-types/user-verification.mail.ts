@@ -14,6 +14,7 @@ export class UserVerificationMail extends BaseMailTypeSendgrid {
   constructor(
     protected readonly configService: ConfigService,
     protected readonly sendGridService: SendGridService,
+    // @Inject('TOKEN_SERVICE') private readonly tokenClient: ClientProxy,
   ) {
     super(configService, sendGridService);
     this.emailTemplate = this.configService.get(
@@ -30,8 +31,17 @@ export class UserVerificationMail extends BaseMailTypeSendgrid {
     ) as UserVerificationPayloadDto;
   }
 
-  generateJwt(payload: UserVerificationPayloadDto): string {
-    return JSON.stringify(payload); // TODO: return jwt id and put it in payload
+  async generateJwt(payload: UserVerificationPayloadDto): Promise<string> {
+    return JSON.stringify(payload);
+    // return await lastValueFrom(
+    //   this.tokenClient
+    //     .send({ role: 'user', token: 'verify', cmd: 'signAndClear' }, payload)
+    //     .pipe(
+    //       catchError((val) => {
+    //         throw new RpcException(val);
+    //       }),
+    //     ),
+    // );
   }
 
   setTemplateData(

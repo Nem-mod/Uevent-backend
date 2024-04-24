@@ -19,13 +19,13 @@ export abstract class BaseMailTypeSendgrid implements IBaseMailType {
 
   abstract extractPayload(mailInfo: object): Promise<object>;
 
-  abstract generateJwt(payload: object): string;
+  abstract generateJwt(payload: object): Promise<string>;
 
   async prepareReturnLink(
     payload: object,
     returnLink: string,
   ): Promise<string> {
-    const token = this.generateJwt(payload); // TODO: Change to jwt service call
+    const token = await this.generateJwt(payload);
     returnLink = returnLink.replace(this.replaceWord, token);
     return returnLink;
   }

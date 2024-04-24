@@ -17,6 +17,23 @@ import { ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    // ClientsModule.registerAsync([
+    //   {
+    //     inject: [ConfigService],
+    //     name: 'TOKEN_SERVICE',
+    //     useFactory: async (configService: ConfigService) => {
+    //       return {
+    //         transport:
+    //           Transport[
+    //             configService.get('services.token.transport') as keyof Transport
+    //           ],
+    //         options: configService.get(
+    //           'services.token.options',
+    //         ) as MicroserviceOptions,
+    //       };
+    //     },
+    //   },
+    // ]),
   ],
   controllers: [MailerController],
   providers: [

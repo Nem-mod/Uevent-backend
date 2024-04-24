@@ -1,17 +1,17 @@
 import { Controller } from '@nestjs/common';
 import { MailerService } from './mailer.service';
-import { EventPattern } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import { UserVerificationMailDto } from './dto/user-verification/user-verification.mail.dto';
 
 @Controller()
 export class MailerController {
-  // TODO: Maybe create user and org dtos for specify emails
   constructor(private readonly mailerService: MailerService) {}
 
-  @EventPattern('user.verification')
+  @MessagePattern({ role: 'user', mail: 'verification', cmd: 'send' })
   async sendUserVerificationEmail(
     mailInfo: UserVerificationMailDto,
-  ): Promise<void> {
+  ): Promise<boolean> {
     await this.mailerService.userEmailVerification(mailInfo);
+    return true;
   }
 }
