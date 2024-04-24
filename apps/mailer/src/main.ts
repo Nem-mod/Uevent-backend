@@ -4,12 +4,10 @@ import { ConfigModule } from '@app/common/config/config.module';
 import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
-import { PgHttpTypeormExceptionInterceptor } from '@app/common/database/typeorm/postgres/exceptions/postgres/pg-http.typeorm.exception.interceptor';
 import { Logger } from 'nestjs-pino';
 import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
 
 async function bootstrap() {
-  // TODO: Create mailer with interface and one file for one email type. One controller endpoint (eventpattern) for one email type
   const appContext = await NestFactory.createApplicationContext(ConfigModule);
   const configService = appContext.get(ConfigService);
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -32,7 +30,6 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
-  app.useGlobalInterceptors(new PgHttpTypeormExceptionInterceptor());
   app.useGlobalFilters(new HttpToRpcExceptionFilter());
   app.useLogger(app.get(Logger));
 

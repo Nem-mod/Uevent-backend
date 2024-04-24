@@ -5,9 +5,9 @@ import { Logger } from 'nestjs-pino';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@app/common/config/config.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
 
 async function bootstrap() {
-  // TODO: add exception filter and create interceptor
   const appContext = await NestFactory.createApplicationContext(ConfigModule);
   const configService = appContext.get(ConfigService);
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -30,8 +30,7 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
-  // app.useGlobalInterceptors(new PgHttpTypeormExceptionInterceptor());
-  // app.useGlobalFilters(new HttpToRpcExceptionFilter());
+  app.useGlobalFilters(new HttpToRpcExceptionFilter());
   app.useLogger(app.get(Logger));
 
   await app.listen();
