@@ -7,38 +7,38 @@ import { PayloadAndIdDto } from '../../dto/payload-and-id.dto';
 import { TokenAndIdDto } from '../../dto/token-and-id.dto';
 
 @Controller()
-export class UserRefreshTokensController
+export class UserAccessTokensController
   extends BaseTokenController
   implements IBaseTokenController
 {
   constructor(
-    @Inject('refreshService')
-    private readonly userRefreshTokensService: IBaseTokenService,
+    @Inject('accessService')
+    private readonly userAccessTokensService: IBaseTokenService,
   ) {
-    super(userRefreshTokensService);
+    super(userAccessTokensService);
   }
 
-  @MessagePattern({ role: 'user', token: 'refresh', cmd: 'signAndPush' })
+  @MessagePattern({ role: 'user', token: 'access', cmd: 'signAndPush' })
   async signAndPush(obj: PayloadAndIdDto): Promise<string> {
     return await super.signAndPush(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'refresh', cmd: 'signAndClear' })
+  @MessagePattern({ role: 'user', token: 'access', cmd: 'signAndClear' })
   async signAndClear(obj: PayloadAndIdDto): Promise<string> {
     return await super.signAndClear(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'refresh', cmd: 'verify' })
+  @MessagePattern({ role: 'user', token: 'access', cmd: 'verify' })
   async verify(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verify(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'refresh', cmd: 'verifyAndClear' })
+  @MessagePattern({ role: 'user', token: 'access', cmd: 'verifyAndClear' })
   async verifyAndClear(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verifyAndClear(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'refresh', cmd: 'verifyAndRemove' })
+  @MessagePattern({ role: 'user', token: 'access', cmd: 'verifyAndRemove' })
   async verifyAndRemove(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verifyAndRemove(obj);
   }

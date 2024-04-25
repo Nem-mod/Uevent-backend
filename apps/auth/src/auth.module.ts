@@ -11,6 +11,7 @@ import { ConfigModule } from '@app/common/config/config.module';
 import { LoggerModule } from '@app/common/logger/logger.module';
 import { MailerAuthService } from './mailer/mailer.auth.service';
 import { TokenAuthService } from './token/token.auth.service';
+import { UserAuthService } from './user/user.auth.service';
 
 @Module({
   imports: [
@@ -59,6 +60,11 @@ import { TokenAuthService } from './token/token.auth.service';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, MailerAuthService, TokenAuthService],
+  providers: [
+    AuthService,
+    UserAuthService,
+    MailerAuthService,
+    TokenAuthService,
+  ],
 })
 export class AuthModule {}

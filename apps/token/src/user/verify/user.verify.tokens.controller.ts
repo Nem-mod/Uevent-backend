@@ -12,7 +12,7 @@ export class UserVerifyTokensController
   implements IBaseTokenController
 {
   constructor(
-    @Inject('IBaseTokenService')
+    @Inject('verifyService')
     private readonly userVerifyTokensService: IBaseTokenService,
   ) {
     super(userVerifyTokensService);

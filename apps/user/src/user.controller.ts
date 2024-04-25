@@ -4,6 +4,7 @@ import { FullUserDto } from './dto/full-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller()
 export class UserController {
@@ -22,9 +23,19 @@ export class UserController {
     return await this.userService.updateUser(id, user);
   }
 
+  @MessagePattern({ cmd: 'verifyUser' })
+  async verifyUser(@Body() login: LoginDto): Promise<FullUserDto> {
+    return await this.userService.verifyUser(login);
+  }
+
   @MessagePattern({ cmd: 'getUserById' })
-  async getUser(id: number): Promise<FullUserDto> {
-    return await this.userService.getUser(id);
+  async getUserById(id: number): Promise<FullUserDto> {
+    return await this.userService.getUserById(id);
+  }
+
+  @MessagePattern({ cmd: 'getUserByEmail' })
+  async getUserByEmail(email: string): Promise<FullUserDto> {
+    return await this.userService.getUserByEmail(email);
   }
 
   @MessagePattern({ cmd: 'getAllUsers' })

@@ -1,11 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IntersectionType } from '@nestjs/swagger';
+import { TokenDto } from './token.dto';
+import { IdDto } from './id.dto';
 
-export class TokenAndIdDto {
-  @IsString()
-  @IsNotEmpty()
-  token: string;
-
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-}
+export class TokenAndIdDto extends IntersectionType(TokenDto, IdDto) {}

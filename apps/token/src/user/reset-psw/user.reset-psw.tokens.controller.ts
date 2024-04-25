@@ -12,7 +12,7 @@ export class UserResetPswTokensController
   implements IBaseTokenController
 {
   constructor(
-    @Inject('IBaseTokenService')
+    @Inject('resetPswService')
     private readonly userResetPswTokensService: IBaseTokenService,
   ) {
     super(userResetPswTokensService);

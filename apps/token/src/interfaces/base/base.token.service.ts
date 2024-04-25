@@ -56,17 +56,22 @@ export abstract class BaseTokenService implements IBaseTokenService {
     return token;
   }
 
+  async verifyTokenSignature(token: string): Promise<ITokenPayload> {
+    try {
+      return this.jwtService.verify(token, this.signOptions);
+    } catch (err) {
+      throw new BadRequestException('Invalid token');
+    }
+  }
+
   async verify(token: string, id: string): Promise<void> {
     const savedTokensUuid = await this.getEntityById(id);
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
     try {
-      const payload: ITokenPayload = this.jwtService.verify(
-        token,
-        this.signOptions,
-      );
+      const payload: ITokenPayload = await this.verifyTokenSignature(token);
 
-      if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw Error();
+      if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
     } catch (err) {
       throw new BadRequestException('Invalid token');
     }
@@ -77,10 +82,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
     try {
-      const payload: ITokenPayload = this.jwtService.verify(
-        token,
-        this.signOptions,
-      );
+      const payload: ITokenPayload = await this.verifyTokenSignature(token);
 
       if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
 
@@ -96,10 +98,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
     try {
-      const payload: ITokenPayload = this.jwtService.verify(
-        token,
-        this.signOptions,
-      );
+      const payload: ITokenPayload = await this.verifyTokenSignature(token);
 
       if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
 

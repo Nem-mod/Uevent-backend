@@ -1,10 +1,16 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { IUserRepository } from './interfaces/user.repository.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FullUserDto } from './dto/full-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class UserService {
@@ -32,10 +38,42 @@ export class UserService {
     return this.sanitizeUser(newUser);
   }
 
-  async getUser(id: number): Promise<FullUserDto> {
+  async verifyUser(login: LoginDto) {
+    try {
+      console.log(login);
+      const user: FullUserDto = await this.getUserByEmail(login.email, false);
+
+      if (bcrypt.compareSync(login.password, user.password))
+        return this.sanitizeUser(user);
+    } catch (err) {}
+    throw new UnauthorizedException('Wrong email or password');
+  }
+
+  async getUserById(
+    id: number,
+    withSanitize: boolean = true,
+  ): Promise<FullUserDto> {
     const user: FullUserDto = await this.userRepository.findOneById(id);
 
-    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+    if (!user) throw new NotFoundException(`User with id '${id}' not found`);
+
+    if (!withSanitize) return user;
+
+    return this.sanitizeUser(user);
+  }
+
+  async getUserByEmail(
+    email: string,
+    withSanitize: boolean = true,
+  ): Promise<FullUserDto> {
+    const user: FullUserDto = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!user)
+      throw new NotFoundException(`User with email '${email}' not found`);
+
+    if (!withSanitize) return user;
 
     return this.sanitizeUser(user);
   }
@@ -57,7 +95,7 @@ export class UserService {
   }
 
   async setVerifyUser(id: number): Promise<void> {
-    const user: FullUserDto = await this.getUser(id);
+    const user: FullUserDto = await this.getUserById(id);
 
     user.verified = true;
     await this.updateUser(user.id, user);

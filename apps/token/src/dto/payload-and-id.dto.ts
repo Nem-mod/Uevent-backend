@@ -1,10 +1,7 @@
-import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { IsObject } from 'class-validator';
+import { IdDto } from './id.dto';
 
-export class PayloadAndIdDto {
+export class PayloadAndIdDto extends IdDto {
   @IsObject()
   payload: object;
-
-  @IsString()
-  @IsNotEmpty()
-  id: string;
 }

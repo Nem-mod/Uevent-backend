@@ -7,18 +7,24 @@ import { UserVerifyTokensService } from './user/verify/user.verify.tokens.servic
 import { JwtModule } from '@nestjs/jwt';
 import { UserRefreshTokensService } from './user/refresh/user.refresh.tokens.service';
 import { UserResetPswTokensService } from './user/reset-psw/user.reset-psw.tokens.service';
+import { UserAccessTokensService } from './user/access/user.access.tokens.service';
+import { UserAccessTokensController } from './user/access/user.access.tokens.controller';
+import { UserRefreshTokensController } from './user/refresh/user.refresh.tokens.controller';
+import { UserResetPswTokensController } from './user/reset-psw/user.reset-psw.tokens.controller';
 
 @Module({
   imports: [ConfigModule, LoggerModule, JwtModule, RedisRedisOmModule],
   controllers: [
     UserVerifyTokensController,
-    UserRefreshTokensService,
-    UserResetPswTokensService,
+    UserAccessTokensController,
+    UserRefreshTokensController,
+    UserResetPswTokensController,
   ],
   providers: [
-    { provide: 'IBaseTokenService', useClass: UserVerifyTokensService },
-    { provide: 'IBaseTokenService', useClass: UserRefreshTokensService },
-    { provide: 'IBaseTokenService', useClass: UserResetPswTokensService },
+    { provide: 'verifyService', useClass: UserVerifyTokensService },
+    { provide: 'accessService', useClass: UserAccessTokensService },
+    { provide: 'refreshService', useClass: UserRefreshTokensService },
+    { provide: 'resetPswService', useClass: UserResetPswTokensService },
   ],
 })
 export class TokenModule {}
