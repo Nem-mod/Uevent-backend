@@ -72,6 +72,6 @@ export class AuthGatewayController {
       refreshToken: req.cookies.refreshToken,
       accessToken: req.cookies.accessToken,
     };
-    await this.authGatewayService.logout(authTokens);
+    await this.authGatewayService.logout(authTokens, res);
   }
 }

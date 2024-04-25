@@ -40,7 +40,6 @@ export class UserService {
 
   async verifyUser(login: LoginDto) {
     try {
-      console.log(login);
       const user: FullUserDto = await this.getUserByEmail(login.email, false);
 
       if (bcrypt.compareSync(login.password, user.password))

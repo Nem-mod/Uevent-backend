@@ -50,12 +50,15 @@ export class AuthGatewayService {
     );
 
     res.cookie('accessToken', authTokens.accessToken, openCookieOptions);
-    res.cookie('refreshToken', authTokens.accessToken, httponlyCookieOptions);
+    res.cookie('refreshToken', authTokens.refreshToken, httponlyCookieOptions);
 
     return user;
   }
 
-  async logout(authTokens: IAuthTokens) {
+  async logout(authTokens: IAuthTokens, res: ResponseType): Promise<void> {
     this.authClient.emit('logout', authTokens);
+
+    res.clearCookie('accessToken', openCookieOptions);
+    res.clearCookie('refreshToken', httponlyCookieOptions);
   }
 }

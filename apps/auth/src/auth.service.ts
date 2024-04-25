@@ -3,7 +3,7 @@ import { IUser } from './user/interfaces/user.interface';
 import { MailerAuthService } from './mailer/mailer.auth.service';
 import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
 import { IVerificationUserMail } from './mailer/interfaces/verification.user.mail.interface';
-import { ITokenAndUserId } from './token/interfaces/token-and-id.interface';
+import { ITokenAndId } from './token/interfaces/token-and-id.interface';
 import { TokenAuthService } from './token/token.auth.service';
 import { UserAuthService } from './user/user.auth.service';
 import { ILogin } from './user/interfaces/login.interface';
@@ -31,7 +31,7 @@ export class AuthService {
     await this.mailerAuthService.userEmailVerification(fullMailInfo);
   }
 
-  async validateUserVerifyToken(userToken: ITokenAndUserId): Promise<boolean> {
+  async validateUserVerifyToken(userToken: ITokenAndId): Promise<boolean> {
     if (!(await this.tokenAuthService.verifyVerifyTokenAndClear(userToken)))
       return false;
 
@@ -44,11 +44,8 @@ export class AuthService {
 
     if (!user.verified) throw new ForbiddenException('User is not verified');
 
-    console.log('here');
     const authTokens: IAuthTokens =
       await this.tokenAuthService.signAuthTokensAndPush(user.id);
-
-    console.log(authTokens);
 
     return { user, authTokens };
   }

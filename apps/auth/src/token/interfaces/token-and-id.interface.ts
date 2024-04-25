@@ -1,5 +1,5 @@
 import { IId } from './id.interface';
 
-export interface ITokenAndUserId extends IId {
+export interface ITokenAndId extends IId {
   token: string;
 }

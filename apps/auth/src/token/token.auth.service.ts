@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ITokenAndUserId } from './interfaces/token-and-id.interface';
+import { ITokenAndId } from './interfaces/token-and-id.interface';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
@@ -12,9 +12,7 @@ export class TokenAuthService {
     @Inject('TOKEN_SERVICE') private readonly tokenClient: ClientProxy,
   ) {}
 
-  async verifyVerifyTokenAndClear(
-    userToken: ITokenAndUserId,
-  ): Promise<boolean> {
+  async verifyVerifyTokenAndClear(userToken: ITokenAndId): Promise<boolean> {
     return await lastValueFrom(
       this.tokenClient
         .send<boolean>(
@@ -82,28 +80,32 @@ export class TokenAuthService {
           ),
       );
 
-      console.log(id);
-
-      // this.tokenClient
-      //   .send<string>(
-      //     { role: 'user', token: 'access', cmd: 'verifyAndRemove' },
-      //     { token: accessToken, id },
-      //   )
-      //   .pipe(
-      //     catchError((val) => {
-      //       throw new RpcException(val);
-      //     }),
-      //   );
-      // this.tokenClient
-      //   .send<string>(
-      //     { role: 'user', token: 'refresh', cmd: 'verifyAndRemove' },
-      //     { token: refreshToken, id },
-      //   )
-      //   .pipe(
-      //     catchError((val) => {
-      //       throw new RpcException(val);
-      //     }),
-      //   );
+      await lastValueFrom(
+        this.tokenClient
+          .send<boolean>(
+            { role: 'user', token: 'access', cmd: 'verifyAndRemove' },
+            { token: accessToken, id } as ITokenAndId,
+          )
+          .pipe(
+            catchError((val) => {
+              // TODO: Log error
+              throw new RpcException(val);
+            }),
+          ),
+      );
+      await lastValueFrom(
+        this.tokenClient
+          .send<boolean>(
+            { role: 'user', token: 'refresh', cmd: 'verifyAndRemove' },
+            { token: refreshToken, id } as ITokenAndId,
+          )
+          .pipe(
+            catchError((val) => {
+              // TODO: Log error
+              throw new RpcException(val);
+            }),
+          ),
+      );
     } catch (err) {}
   }
 }

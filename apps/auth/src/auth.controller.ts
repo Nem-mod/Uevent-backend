@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
-import { ITokenAndUserId } from './token/interfaces/token-and-id.interface';
+import { ITokenAndId } from './token/interfaces/token-and-id.interface';
 import { ILogin } from './user/interfaces/login.interface';
 import { IUserAndAuthTokens } from './interfaces/user-and-auth-tokens.interface';
 import { IAuthTokens } from './token/interfaces/auth-tokens.interface';
@@ -18,7 +18,7 @@ export class AuthController {
   }
 
   @MessagePattern({ cmd: 'validateUserVerifyToken' })
-  async validateUserVerifyToken(userToken: ITokenAndUserId): Promise<boolean> {
+  async validateUserVerifyToken(userToken: ITokenAndId): Promise<boolean> {
     return await this.authService.validateUserVerifyToken(userToken);
   }
 
