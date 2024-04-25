@@ -10,6 +10,7 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthGatewayService } from './auth.gateway.service';
 import { IReturnLink } from './interfaces/return-link.interface';
@@ -20,6 +21,7 @@ import { ILogin } from './interfaces/login.interface';
 import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
 import { Request as RequestType, Response as ResponseType } from 'express';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
+import { RefreshJwtAuthGuard } from '../guards/refresh-jwt-auth.guard';
 
 @Controller({
   version: '1',
@@ -73,5 +75,11 @@ export class AuthGatewayController {
       accessToken: req.cookies.accessToken,
     };
     await this.authGatewayService.logout(authTokens, res);
+  }
+
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('user/refresh')
+  async refreshToken(): Promise<IFullUserGateway> {
+    return null;
   }
 }

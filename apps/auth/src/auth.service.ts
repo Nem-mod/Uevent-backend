@@ -39,6 +39,20 @@ export class AuthService {
     return true;
   }
 
+  async validateAccessToken(accessToken: string): Promise<IUser> {
+    const userId: number =
+      await this.tokenAuthService.validateAccessToken(accessToken);
+
+    return await this.userAuthService.getUserById(userId);
+  }
+
+  async validateRefreshToken(refreshToken: string): Promise<IUser> {
+    const userId: number =
+      await this.tokenAuthService.validateRefreshToken(refreshToken);
+
+    return await this.userAuthService.getUserById(userId);
+  }
+
   async login(login: ILogin): Promise<IUserAndAuthTokens> {
     const user: IUser = await this.userAuthService.verifyUser(login);
 

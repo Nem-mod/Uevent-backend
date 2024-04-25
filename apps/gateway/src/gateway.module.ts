@@ -11,6 +11,10 @@ import { UserGatewayController } from './user/user.gateway.controller';
 import { UserGatewayService } from './user/user.gateway.service';
 import { AuthGatewayController } from './auth/auth.gateway.controller';
 import { AuthGatewayService } from './auth/auth.gateway.service';
+import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
+import { AccessJwtAuthGuard } from './guards/access-jwt-auth.guard';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 
 @Module({
   imports: [
@@ -49,7 +53,14 @@ import { AuthGatewayService } from './auth/auth.gateway.service';
       },
     ]),
   ],
-  providers: [UserGatewayService, AuthGatewayService],
+  providers: [
+    UserGatewayService,
+    AuthGatewayService,
+    JwtAccessStrategy,
+    AccessJwtAuthGuard,
+    JwtRefreshStrategy,
+    RefreshJwtAuthGuard,
+  ],
   controllers: [UserGatewayController, AuthGatewayController],
 })
 export class GatewayModule {}

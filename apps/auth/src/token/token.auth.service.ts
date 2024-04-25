@@ -108,4 +108,64 @@ export class TokenAuthService {
       );
     } catch (err) {}
   }
+
+  async validateAccessToken(accessToken: string): Promise<number> {
+    const { id }: IId = await lastValueFrom(
+      this.tokenClient
+        .send<IId>(
+          { role: 'user', token: 'access', cmd: 'decode' },
+          accessToken,
+        )
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+
+    await lastValueFrom(
+      this.tokenClient
+        .send<boolean>({ role: 'user', token: 'access', cmd: 'verify' }, {
+          token: accessToken,
+          id,
+        } as ITokenAndId)
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+
+    return id;
+  }
+
+  async validateRefreshToken(refreshToken: string): Promise<number> {
+    const { id }: IId = await lastValueFrom(
+      this.tokenClient
+        .send<IId>(
+          { role: 'user', token: 'refresh', cmd: 'decode' },
+          refreshToken,
+        )
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+
+    await lastValueFrom(
+      this.tokenClient
+        .send<boolean>({ role: 'user', token: 'refresh', cmd: 'verify' }, {
+          token: refreshToken,
+          id,
+        } as ITokenAndId)
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+
+    return id;
+  }
 }

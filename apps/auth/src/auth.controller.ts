@@ -6,6 +6,7 @@ import { ITokenAndId } from './token/interfaces/token-and-id.interface';
 import { ILogin } from './user/interfaces/login.interface';
 import { IUserAndAuthTokens } from './interfaces/user-and-auth-tokens.interface';
 import { IAuthTokens } from './token/interfaces/auth-tokens.interface';
+import { IUser } from './user/interfaces/user.interface';
 
 @Controller()
 export class AuthController {
@@ -28,7 +29,17 @@ export class AuthController {
   }
 
   @EventPattern('logout')
-  async logout(authTokens: IAuthTokens) {
+  async logout(authTokens: IAuthTokens): Promise<void> {
     await this.authService.logout(authTokens);
+  }
+
+  @MessagePattern({ cmd: 'validateAccessToken' })
+  async validateAccessToken(accessToken: string): Promise<IUser> {
+    return await this.authService.validateAccessToken(accessToken);
+  }
+
+  @MessagePattern({ cmd: 'validateRefreshToken' })
+  async validateRefreshToken(refreshToken: string): Promise<IUser> {
+    return await this.authService.validateRefreshToken(refreshToken);
   }
 }
