@@ -58,11 +58,6 @@ export class TokenAuthService {
         ),
     );
 
-    console.log({
-      accessToken,
-      refreshToken,
-    });
-
     return {
       accessToken,
       refreshToken,

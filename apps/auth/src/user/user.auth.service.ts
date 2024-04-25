@@ -31,13 +31,15 @@ export class UserAuthService {
   }
 
   async verifyUser(login: ILogin): Promise<IUser> {
-    const { req: RequestType, ...loginWithoutReq } = login;
+    const { req, res, ...loginWithoutReqRes } = login;
     return await lastValueFrom(
-      this.userClient.send<IUser>({ cmd: 'verifyUser' }, loginWithoutReq).pipe(
-        catchError((val) => {
-          throw new RpcException(val);
-        }),
-      ),
+      this.userClient
+        .send<IUser>({ cmd: 'verifyUser' }, loginWithoutReqRes)
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
     );
   }
 

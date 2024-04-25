@@ -8,6 +8,7 @@ import { TokenAuthService } from './token/token.auth.service';
 import { UserAuthService } from './user/user.auth.service';
 import { ILogin } from './user/interfaces/login.interface';
 import { IAuthTokens } from './token/interfaces/auth-tokens.interface';
+import { IUserAndAuthTokens } from './interfaces/user-and-auth-tokens.interface';
 
 @Injectable()
 export class AuthService {
@@ -38,14 +39,17 @@ export class AuthService {
     return true;
   }
 
-  async login(login: ILogin): Promise<IUser> {
+  async login(login: ILogin): Promise<IUserAndAuthTokens> {
     const user: IUser = await this.userAuthService.verifyUser(login);
 
     if (!user.verified) throw new ForbiddenException('User is not verified');
 
+    console.log('here');
     const authTokens: IAuthTokens =
       await this.tokenAuthService.signAuthTokensAndPush(user.id);
 
-    return user;
+    console.log(authTokens);
+
+    return { user, authTokens };
   }
 }
