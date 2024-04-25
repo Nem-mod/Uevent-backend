@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ITokenAndUserId } from './interfaces/token-and-user-id.interface';
+import { ITokenAndUserId } from './interfaces/token-and-id.interface';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
 import { IPayloadAndId } from './interfaces/payload-and-id.interface';
+import { IId } from './interfaces/id.interface';
 
 @Injectable()
 export class TokenAuthService {
@@ -62,5 +63,47 @@ export class TokenAuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async removeAuthTokens(authTokens: IAuthTokens): Promise<void> {
+    const { accessToken, refreshToken } = authTokens;
+
+    try {
+      const { id }: IId = await lastValueFrom(
+        this.tokenClient
+          .send<IId>(
+            { role: 'user', token: 'access', cmd: 'decode' },
+            accessToken,
+          )
+          .pipe(
+            catchError((val) => {
+              throw new RpcException(val);
+            }),
+          ),
+      );
+
+      console.log(id);
+
+      // this.tokenClient
+      //   .send<string>(
+      //     { role: 'user', token: 'access', cmd: 'verifyAndRemove' },
+      //     { token: accessToken, id },
+      //   )
+      //   .pipe(
+      //     catchError((val) => {
+      //       throw new RpcException(val);
+      //     }),
+      //   );
+      // this.tokenClient
+      //   .send<string>(
+      //     { role: 'user', token: 'refresh', cmd: 'verifyAndRemove' },
+      //     { token: refreshToken, id },
+      //   )
+      //   .pipe(
+      //     catchError((val) => {
+      //       throw new RpcException(val);
+      //     }),
+      //   );
+    } catch (err) {}
   }
 }

@@ -3,7 +3,7 @@ import { IUser } from './user/interfaces/user.interface';
 import { MailerAuthService } from './mailer/mailer.auth.service';
 import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
 import { IVerificationUserMail } from './mailer/interfaces/verification.user.mail.interface';
-import { ITokenAndUserId } from './token/interfaces/token-and-user-id.interface';
+import { ITokenAndUserId } from './token/interfaces/token-and-id.interface';
 import { TokenAuthService } from './token/token.auth.service';
 import { UserAuthService } from './user/user.auth.service';
 import { ILogin } from './user/interfaces/login.interface';
@@ -51,5 +51,9 @@ export class AuthService {
     console.log(authTokens);
 
     return { user, authTokens };
+  }
+
+  async logout(authTokens: IAuthTokens) {
+    await this.tokenAuthService.removeAuthTokens(authTokens);
   }
 }

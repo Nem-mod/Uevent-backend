@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Req,
   Res,
 } from '@nestjs/common';
 import { AuthGatewayService } from './auth.gateway.service';
@@ -16,7 +18,8 @@ import { IToken } from './interfaces/token.interface';
 import { IBaseUserToken } from './interfaces/base/base.user.token.interface';
 import { ILogin } from './interfaces/login.interface';
 import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
-import { Response as ResponseType } from 'express';
+import { Request as RequestType, Response as ResponseType } from 'express';
+import { IAuthTokens } from './interfaces/auth-tokens.interface';
 
 @Controller({
   version: '1',
@@ -57,5 +60,18 @@ export class AuthGatewayController {
     @Res({ passthrough: true }) res: ResponseType,
   ): Promise<IFullUserGateway> {
     return await this.authGatewayService.login(login, res);
+  }
+
+  @Delete('user/logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(
+    @Req() req: RequestType,
+    @Res({ passthrough: true }) res: ResponseType,
+  ): Promise<void> {
+    const authTokens: IAuthTokens = {
+      refreshToken: req.cookies.refreshToken,
+      accessToken: req.cookies.accessToken,
+    };
+    await this.authGatewayService.logout(authTokens);
   }
 }

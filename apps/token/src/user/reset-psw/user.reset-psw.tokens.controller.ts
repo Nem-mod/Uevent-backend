@@ -28,6 +28,11 @@ export class UserResetPswTokensController
     return await super.signAndClear(obj);
   }
 
+  @MessagePattern({ role: 'user', token: 'reset-psw', cmd: 'decode' })
+  async decode(token: string): Promise<object> {
+    return await super.decode(token);
+  }
+
   @MessagePattern({ role: 'user', token: 'reset-psw', cmd: 'verify' })
   async verify(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verify(obj);

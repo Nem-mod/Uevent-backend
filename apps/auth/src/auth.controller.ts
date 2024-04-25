@@ -1,10 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { IBaseUserMail } from './mailer/interfaces/base.user.mail.interface';
-import { ITokenAndUserId } from './token/interfaces/token-and-user-id.interface';
+import { ITokenAndUserId } from './token/interfaces/token-and-id.interface';
 import { ILogin } from './user/interfaces/login.interface';
 import { IUserAndAuthTokens } from './interfaces/user-and-auth-tokens.interface';
+import { IAuthTokens } from './token/interfaces/auth-tokens.interface';
 
 @Controller()
 export class AuthController {
@@ -24,5 +25,10 @@ export class AuthController {
   @MessagePattern({ cmd: 'login' })
   async login(login: ILogin): Promise<IUserAndAuthTokens> {
     return await this.authService.login(login);
+  }
+
+  @EventPattern('logout')
+  async logout(authTokens: IAuthTokens) {
+    await this.authService.logout(authTokens);
   }
 }

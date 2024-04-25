@@ -56,6 +56,14 @@ export abstract class BaseTokenService implements IBaseTokenService {
     return token;
   }
 
+  async decode(token: string): Promise<object> {
+    try {
+      return this.jwtService.decode(token);
+    } catch (err) {
+      throw new BadRequestException('Unable to decode token');
+    }
+  }
+
   async verifyTokenSignature(token: string): Promise<ITokenPayload> {
     try {
       return this.jwtService.verify(token, this.signOptions);

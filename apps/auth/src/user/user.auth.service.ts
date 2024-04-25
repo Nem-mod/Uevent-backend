@@ -31,19 +31,16 @@ export class UserAuthService {
   }
 
   async verifyUser(login: ILogin): Promise<IUser> {
-    const { req, res, ...loginWithoutReqRes } = login;
     return await lastValueFrom(
-      this.userClient
-        .send<IUser>({ cmd: 'verifyUser' }, loginWithoutReqRes)
-        .pipe(
-          catchError((val) => {
-            throw new RpcException(val);
-          }),
-        ),
+      this.userClient.send<IUser>({ cmd: 'verifyUser' }, login).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
     );
   }
 
   async setUserVerified(id: number): Promise<void> {
-    this.userClient.emit<IUser>('setVerifyUser', id);
+    this.userClient.emit('setVerifyUser', id);
   }
 }

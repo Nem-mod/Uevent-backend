@@ -11,3 +11,9 @@ export const httponlyCookieOptions: CookieOptions = {
   // sameSite: 'none',
   // domain: process.env.FRONTEND_DOMAIN
 };
+
+export const openCookieOptions: CookieOptions = {
+  httpOnly: false,
+  expires: new Date(new Date().getTime() + year),
+  sameSite: `none`,
+};

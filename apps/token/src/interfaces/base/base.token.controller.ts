@@ -14,6 +14,10 @@ export abstract class BaseTokenController implements IBaseTokenController {
     return await this.tokenService.signAndClear(obj.payload, obj.id);
   }
 
+  async decode(token: string): Promise<object> {
+    return await this.tokenService.decode(token);
+  }
+
   async verify(obj: TokenAndIdDto): Promise<boolean> {
     await this.tokenService.verify(obj.token, obj.id);
     return true;

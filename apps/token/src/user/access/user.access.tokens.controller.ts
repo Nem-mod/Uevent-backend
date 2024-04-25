@@ -28,6 +28,11 @@ export class UserAccessTokensController
     return await super.signAndClear(obj);
   }
 
+  @MessagePattern({ role: 'user', token: 'access', cmd: 'decode' })
+  async decode(token: string): Promise<object> {
+    return await super.decode(token);
+  }
+
   @MessagePattern({ role: 'user', token: 'access', cmd: 'verify' })
   async verify(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verify(obj);
