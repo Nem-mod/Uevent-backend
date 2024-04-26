@@ -13,6 +13,7 @@ export class CreateOrganizationDto {
   @IsString()
   email?: string;
 
+  @IsOptional()
   @IsString()
   phoneNumber?: string;
 

@@ -11,12 +11,12 @@ import { UserGatewayController } from './user/user.gateway.controller';
 import { UserGatewayService } from './user/user.gateway.service';
 import { AuthGatewayController } from './auth/auth.gateway.controller';
 import { AuthGatewayService } from './auth/auth.gateway.service';
-import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
-import { AccessJwtAuthGuard } from './guards/access-jwt-auth.guard';
-import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
-import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { LocalStrategy } from './strategies/local.strategy';
+import { JwtAccessStrategy } from './gateway/strategies/jwt-access.strategy';
+import { AccessJwtAuthGuard } from './gateway/guards/access-jwt-auth.guard';
+import { JwtRefreshStrategy } from './gateway/strategies/jwt-refresh.strategy';
+import { RefreshJwtAuthGuard } from './gateway/guards/refresh-jwt-auth.guard';
+import { LocalAuthGuard } from './gateway/guards/local-auth.guard';
+import { LocalStrategy } from './gateway/strategies/local.strategy';
 import { OrganizationGatewayService } from './organization/organization.gateway.service';
 import { OrganizationGatewayController } from './organization/organization.gateway.controller';
 

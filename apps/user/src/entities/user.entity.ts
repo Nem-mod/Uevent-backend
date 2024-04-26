@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
-import { OrganizationMember } from '../../../organization/src/entities/organization-member.entity';
+import { OrganizationMember } from '../../../organization/src/member/entities/organization-member.entity';
 
 @Entity()
 export class User extends AbstractEntity {

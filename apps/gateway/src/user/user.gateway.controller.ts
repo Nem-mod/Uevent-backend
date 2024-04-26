@@ -13,8 +13,8 @@ import {
 import { ICreateUserGateway } from './interfaces/create-user.gateway.interface';
 import { UserGatewayService } from './user.gateway.service';
 import { IFullUserGateway } from './interfaces/full-user.gateway.interface';
-import { AccessJwtAuthGuard } from '../guards/access-jwt-auth.guard';
-import { ReqUser } from '../decorators/user.decorator';
+import { AccessJwtAuthGuard } from '../gateway/guards/access-jwt-auth.guard';
+import { ReqUser } from '../gateway/decorators/user.decorator';
 
 @Controller({
   version: '1',

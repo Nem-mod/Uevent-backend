@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { IRpcException } from './interfaces/rpc.exception.interface';
+import { IRpcException } from './gateway/interfaces/rpc.exception.interface';
 
 @Catch(RpcException)
 export class RpcToHttpExceptionFilter implements ExceptionFilter {
