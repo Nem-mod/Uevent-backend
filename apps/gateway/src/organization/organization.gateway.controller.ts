@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { OrganizationGatewayService } from './organization.gateway.service';
 import { ICreateOrganizationGateway } from './interfaces/create-organization.gateway.interface';
 import { IFullOrganizationGateway } from './interfaces/full-organization.gateway.interface';
@@ -23,5 +31,14 @@ export class OrganizationGatewayController {
   ): Promise<IFullOrganizationGateway> {
     org.owner = user.id;
     return await this.organizationGatewayService.register(org);
+  }
+
+  @UseGuards(AccessJwtAuthGuard)
+  @Delete(':id')
+  async delete(
+    @ReqUser() user: IFullUserGateway,
+    @Param('id', ParseIntPipe) orgId: number,
+  ) {
+    return await this.organizationGatewayService.delete(orgId, user.id);
   }
 }

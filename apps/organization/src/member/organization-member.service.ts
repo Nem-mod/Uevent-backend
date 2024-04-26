@@ -24,4 +24,25 @@ export class OrganizationMemberService {
       }),
     );
   }
+
+  async getUserMembers(userId: number): Promise<IOrganizationMember[]> {
+    return await this.organizationMemberRepository.findAll({
+      where: { user: userId },
+    });
+  }
+
+  async getUserMembersInOrganization(orgId: number, userId: number) {
+    return await this.organizationMemberRepository.findAll({
+      where: { user: { id: userId }, organization: { id: orgId } },
+    });
+  }
+
+  async getUserRolesInOrganization(
+    orgId: number,
+    userId: number,
+  ): Promise<string[]> {
+    const members: IOrganizationMember[] =
+      await this.getUserMembersInOrganization(orgId, userId);
+    return members.map((member) => member.role.name);
+  }
 }
