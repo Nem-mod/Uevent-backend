@@ -11,3 +11,56 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+
+  user:
+      build:
+        context: .
+        dockerfile: apps/user/Dockerfile
+        target: development
+      restart: unless-stopped
+      command: pnpm run start:dev user
+      ports:
+        - 3001:3001
+      volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+
+  auth:
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+      target: development
+    restart: unless-stopped
+    command: pnpm run start:dev auth
+    ports:
+      - 3002:3002
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mailer:
+    build:
+      context: .
+      dockerfile: apps/mailer/Dockerfile
+      target: development
+    restart: unless-stopped
+    command: pnpm run start:dev mailer
+    ports:
+      - 3003:3003
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+
+  token:
+    build:
+      context: .
+      dockerfile: apps/token/Dockerfile
+      target: development
+    restart: unless-stopped
+    command: pnpm run start:dev token
+    ports:
+      - 3004:3004
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
