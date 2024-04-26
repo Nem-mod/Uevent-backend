@@ -7,11 +7,13 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  Post,
+  Post, Req, UseGuards,
 } from '@nestjs/common';
 import { ICreateUserGateway } from './interfaces/create-user.gateway.interface';
 import { UserGatewayService } from './user.gateway.service';
 import { IFullUserGateway } from './interfaces/full-user.gateway.interface';
+import {Request as RequestType} from "express";
+import {AccessJwtAuthGuard} from "../guards/access-jwt-auth.guard";
 
 @Controller({
   version: '1',
@@ -37,4 +39,12 @@ export class UserGatewayController {
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.userGatewayService.deleteUser(id);
   }
+
+  @UseGuards(AccessJwtAuthGuard)
+  @Get('me')
+  async getMe(@Req() req: RequestType): Promise<IFullUserGateway> {
+    // @ts-ignore
+    return req.user;
+  }
+
 }
