@@ -14,6 +14,7 @@ export const httponlyCookieOptions: CookieOptions = {
 
 export const openCookieOptions: CookieOptions = {
   httpOnly: false,
+  secure: true,
   expires: new Date(new Date().getTime() + year),
   sameSite: `none`,
 };
