@@ -1,0 +1,5 @@
+start cmd.exe /c "pnpm run start:dev gateway"
+start cmd.exe /c "pnpm run start:dev auth"
+start cmd.exe /c "pnpm run start:dev mailer"
+start cmd.exe /c "pnpm run start:dev token"
+start cmd.exe /c "pnpm run start:dev user"
