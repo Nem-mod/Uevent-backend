@@ -33,6 +33,11 @@ export class UserResetPswTokensController
     return await super.decode(token);
   }
 
+  @MessagePattern({ role: 'user', token: 'reset-psw', cmd: 'remove' })
+  async remove(obj: TokenAndIdDto): Promise<boolean> {
+    return await super.remove(obj);
+  }
+
   @MessagePattern({ role: 'user', token: 'reset-psw', cmd: 'verify' })
   async verify(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verify(obj);

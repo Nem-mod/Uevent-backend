@@ -72,6 +72,27 @@ export abstract class BaseTokenService implements IBaseTokenService {
     }
   }
 
+  async remove(token: string, id: string): Promise<boolean> {
+    const savedTokensUuid = await this.getEntityById(id);
+    const savedTokensUuidData = this.getEntityData(savedTokensUuid);
+    const dataLenBeforeRemove = savedTokensUuidData.uuids.length;
+
+    try {
+      const payload: ITokenPayload = (await this.decode(
+        token,
+      )) as ITokenPayload;
+
+      savedTokensUuidData.uuids = savedTokensUuidData.uuids.filter(
+        (uuid) => uuid !== payload.uuid,
+      );
+      await this.repository.save(savedTokensUuid);
+
+      return dataLenBeforeRemove !== savedTokensUuidData.uuids.length;
+    } catch (err) {
+      throw new BadRequestException('Invalid token');
+    }
+  }
+
   async verify(token: string, id: string): Promise<void> {
     const savedTokensUuid = await this.getEntityById(id);
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);

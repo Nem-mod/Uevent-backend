@@ -33,6 +33,11 @@ export class UserRefreshTokensController
     return await super.decode(token);
   }
 
+  @MessagePattern({ role: 'user', token: 'refresh', cmd: 'remove' })
+  async remove(obj: TokenAndIdDto): Promise<boolean> {
+    return await super.remove(obj);
+  }
+
   @MessagePattern({ role: 'user', token: 'refresh', cmd: 'verify' })
   async verify(obj: TokenAndIdDto): Promise<boolean> {
     return await super.verify(obj);

@@ -81,12 +81,11 @@ export class TokenAuthService {
 
     try {
       await lastValueFrom(
-        // TODO: what if token is expired? it is doesn't deleted. Create function to remove token without verify
         this.tokenClient
-          .send<boolean>(
-            { role: 'user', token: 'access', cmd: 'verifyAndRemove' },
-            { token: accessToken, id } as ITokenAndId,
-          )
+          .send<boolean>({ role: 'user', token: 'access', cmd: 'remove' }, {
+            token: accessToken,
+            id,
+          } as ITokenAndId)
           .pipe(
             catchError(() => {
               // TODO: Log error
@@ -97,10 +96,10 @@ export class TokenAuthService {
       );
       await lastValueFrom(
         this.tokenClient
-          .send<boolean>(
-            { role: 'user', token: 'refresh', cmd: 'verifyAndRemove' },
-            { token: refreshToken, id } as ITokenAndId,
-          )
+          .send<boolean>({ role: 'user', token: 'refresh', cmd: 'remove' }, {
+            token: refreshToken,
+            id,
+          } as ITokenAndId)
           .pipe(
             catchError(() => {
               // TODO: Log error

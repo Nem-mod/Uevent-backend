@@ -13,6 +13,7 @@ export interface IBaseTokenService {
   // signAndRemove(payload: any, id: string): Promise<string>;
 
   decode(token: string): Promise<object>;
+  remove(token: string, id: string): Promise<boolean>;
 
   verify(token: string, id: string): Promise<void>;
   verifyAndClear(token: string, id: string): Promise<void>;
