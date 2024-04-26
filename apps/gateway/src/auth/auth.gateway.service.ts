@@ -8,6 +8,7 @@ import { IAuthTokens } from './interfaces/auth-tokens.interface';
 import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
 import { httponlyCookieOptions, openCookieOptions } from '../cookie.options';
 import { Response as ResponseType } from 'express';
+import { IFullUserGatewayAndAuthTokens } from './interfaces/full-user-gateway-and-auth-tokens.interface';
 
 @Injectable()
 export class AuthGatewayService {
@@ -35,13 +36,18 @@ export class AuthGatewayService {
     );
   }
 
+  async setAuthCookies(
+    authTokens: IAuthTokens,
+    res: ResponseType,
+  ): Promise<void> {
+    res.cookie('accessToken', authTokens.accessToken, openCookieOptions);
+    res.cookie('refreshToken', authTokens.refreshToken, httponlyCookieOptions);
+  }
+
   async login(login: ILogin, res: ResponseType): Promise<IFullUserGateway> {
     const { user, authTokens } = await lastValueFrom(
       this.authClient
-        .send<{
-          user: IFullUserGateway;
-          authTokens: IAuthTokens;
-        }>({ cmd: 'login' }, login)
+        .send<IFullUserGatewayAndAuthTokens>({ cmd: 'login' }, login)
         .pipe(
           catchError((val) => {
             throw new RpcException(val);
@@ -49,16 +55,43 @@ export class AuthGatewayService {
         ),
     );
 
-    res.cookie('accessToken', authTokens.accessToken, openCookieOptions);
-    res.cookie('refreshToken', authTokens.refreshToken, httponlyCookieOptions);
+    await this.setAuthCookies(authTokens, res);
 
     return user;
+  }
+
+  async clearAuthCookies(res: ResponseType): Promise<void> {
+    res.clearCookie('accessToken', openCookieOptions);
+    res.clearCookie('refreshToken', httponlyCookieOptions);
   }
 
   async logout(authTokens: IAuthTokens, res: ResponseType): Promise<void> {
     this.authClient.emit('logout', authTokens);
 
-    res.clearCookie('accessToken', openCookieOptions);
-    res.clearCookie('refreshToken', httponlyCookieOptions);
+    await this.clearAuthCookies(res);
+  }
+
+  async refreshTokens(
+    authTokens: IAuthTokens,
+    res: ResponseType,
+  ): Promise<IFullUserGateway> {
+    const newAuthTokensAndUser: IFullUserGatewayAndAuthTokens =
+      await lastValueFrom(
+        this.authClient
+          .send<IFullUserGatewayAndAuthTokens>(
+            { cmd: 'refreshTokens' },
+            authTokens,
+          )
+          .pipe(
+            catchError((val) => {
+              throw new RpcException(val);
+            }),
+          ),
+      );
+
+    await this.clearAuthCookies(res);
+    await this.setAuthCookies(newAuthTokensAndUser.authTokens, res);
+
+    return newAuthTokensAndUser.user;
   }
 }

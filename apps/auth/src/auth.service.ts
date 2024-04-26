@@ -9,6 +9,7 @@ import { UserAuthService } from './user/user.auth.service';
 import { ILogin } from './user/interfaces/login.interface';
 import { IAuthTokens } from './token/interfaces/auth-tokens.interface';
 import { IUserAndAuthTokens } from './interfaces/user-and-auth-tokens.interface';
+import { IAuthTokensAndId } from './token/interfaces/auth-tokens-and-id.interface';
 
 @Injectable()
 export class AuthService {
@@ -64,7 +65,26 @@ export class AuthService {
     return { user, authTokens };
   }
 
-  async logout(authTokens: IAuthTokens) {
+  async logout(authTokens: IAuthTokens): Promise<void> {
     await this.tokenAuthService.removeAuthTokens(authTokens);
+  }
+
+  async refreshAuthTokens(
+    authTokens: IAuthTokens,
+  ): Promise<IUserAndAuthTokens> {
+    const newAuthTokensAndId: IAuthTokensAndId =
+      await this.tokenAuthService.refreshAuthTokens(authTokens);
+
+    const user: IUser = await this.userAuthService.getUserById(
+      newAuthTokensAndId.id,
+    );
+
+    return {
+      user,
+      authTokens: {
+        accessToken: newAuthTokensAndId.accessToken,
+        refreshToken: newAuthTokensAndId.refreshToken,
+      },
+    };
   }
 }

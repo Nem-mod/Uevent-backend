@@ -42,4 +42,11 @@ export class AuthController {
   async validateRefreshToken(refreshToken: string): Promise<IUser> {
     return await this.authService.validateRefreshToken(refreshToken);
   }
+
+  @MessagePattern({ cmd: 'refreshTokens' })
+  async refreshAuthTokens(
+    authTokens: IAuthTokens,
+  ): Promise<IUserAndAuthTokens> {
+    return await this.authService.refreshAuthTokens(authTokens);
+  }
 }

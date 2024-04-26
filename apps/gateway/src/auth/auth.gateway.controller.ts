@@ -79,7 +79,15 @@ export class AuthGatewayController {
 
   @UseGuards(RefreshJwtAuthGuard)
   @Post('user/refresh')
-  async refreshToken(): Promise<IFullUserGateway> {
-    return null;
+  async refreshToken(
+    @Req() req: RequestType,
+    @Res({ passthrough: true }) res: ResponseType,
+  ): Promise<IFullUserGateway> {
+    const authTokens: IAuthTokens = {
+      refreshToken: req.cookies.refreshToken,
+      accessToken: req.cookies.accessToken,
+    };
+
+    return await this.authGatewayService.refreshTokens(authTokens, res);
   }
 }

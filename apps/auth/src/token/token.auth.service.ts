@@ -5,6 +5,7 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
 import { IPayloadAndId } from './interfaces/payload-and-id.interface';
 import { IId } from './interfaces/id.interface';
+import { IAuthTokensAndId } from './interfaces/auth-tokens-and-id.interface';
 
 @Injectable()
 export class TokenAuthService {
@@ -63,33 +64,34 @@ export class TokenAuthService {
     };
   }
 
-  async removeAuthTokens(authTokens: IAuthTokens): Promise<void> {
+  async removeAuthTokens(authTokens: IAuthTokens): Promise<number> {
     const { accessToken, refreshToken } = authTokens;
+    const { id }: IId = await lastValueFrom(
+      this.tokenClient
+        .send<IId>(
+          { role: 'user', token: 'access', cmd: 'decode' },
+          accessToken,
+        )
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
 
     try {
-      const { id }: IId = await lastValueFrom(
-        this.tokenClient
-          .send<IId>(
-            { role: 'user', token: 'access', cmd: 'decode' },
-            accessToken,
-          )
-          .pipe(
-            catchError((val) => {
-              throw new RpcException(val);
-            }),
-          ),
-      );
-
       await lastValueFrom(
+        // TODO: what if token is expired? it is doesn't deleted. Create function to remove token without verify
         this.tokenClient
           .send<boolean>(
             { role: 'user', token: 'access', cmd: 'verifyAndRemove' },
             { token: accessToken, id } as ITokenAndId,
           )
           .pipe(
-            catchError((val) => {
+            catchError(() => {
               // TODO: Log error
-              throw new RpcException(val);
+              return null;
+              // throw new RpcException(val);
             }),
           ),
       );
@@ -100,13 +102,16 @@ export class TokenAuthService {
             { token: refreshToken, id } as ITokenAndId,
           )
           .pipe(
-            catchError((val) => {
+            catchError(() => {
               // TODO: Log error
-              throw new RpcException(val);
+              return null;
+              // throw new RpcException(val);
             }),
           ),
       );
     } catch (err) {}
+
+    return id;
   }
 
   async validateAccessToken(accessToken: string): Promise<number> {
@@ -167,5 +172,13 @@ export class TokenAuthService {
     );
 
     return id;
+  }
+
+  async refreshAuthTokens(authTokens: IAuthTokens): Promise<IAuthTokensAndId> {
+    const id = await this.removeAuthTokens(authTokens);
+
+    const newAuthTokens: IAuthTokens = await this.signAuthTokensAndPush(id);
+
+    return { ...newAuthTokens, id };
   }
 }
