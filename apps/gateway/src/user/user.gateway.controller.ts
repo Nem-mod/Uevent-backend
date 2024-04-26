@@ -7,13 +7,14 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  Post, Req, UseGuards,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ICreateUserGateway } from './interfaces/create-user.gateway.interface';
 import { UserGatewayService } from './user.gateway.service';
 import { IFullUserGateway } from './interfaces/full-user.gateway.interface';
-import {Request as RequestType} from "express";
-import {AccessJwtAuthGuard} from "../guards/access-jwt-auth.guard";
+import { AccessJwtAuthGuard } from '../guards/access-jwt-auth.guard';
+import { ReqUser } from '../decorators/user.decorator';
 
 @Controller({
   version: '1',
@@ -42,8 +43,7 @@ export class UserGatewayController {
 
   @UseGuards(AccessJwtAuthGuard)
   @Get('me')
-  async getMe(@Req() req: RequestType): Promise<IFullUserGateway> {
-    return req.user as IFullUserGateway;
+  async getMe(@ReqUser() user: IFullUserGateway): Promise<IFullUserGateway> {
+    return user;
   }
-
 }
