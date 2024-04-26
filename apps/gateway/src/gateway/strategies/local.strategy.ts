@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
+import { IFullUserGateway } from '../../user/interfaces/full-user.gateway.interface';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, lastValueFrom } from 'rxjs';
-import { ILogin } from '../auth/interfaces/login.interface';
+import { ILogin } from '../../auth/interfaces/login.interface';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

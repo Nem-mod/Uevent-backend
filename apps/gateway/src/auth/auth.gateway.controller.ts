@@ -21,7 +21,7 @@ import { ILogin } from './interfaces/login.interface';
 import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
 import { Request as RequestType, Response as ResponseType } from 'express';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
-import { RefreshJwtAuthGuard } from '../guards/refresh-jwt-auth.guard';
+import { RefreshJwtAuthGuard } from '../gateway/guards/refresh-jwt-auth.guard';
 
 @Controller({
   version: '1',

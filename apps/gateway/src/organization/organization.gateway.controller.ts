@@ -2,9 +2,9 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { OrganizationGatewayService } from './organization.gateway.service';
 import { ICreateOrganizationGateway } from './interfaces/create-organization.gateway.interface';
 import { IFullOrganizationGateway } from './interfaces/full-organization.gateway.interface';
-import { AccessJwtAuthGuard } from '../guards/access-jwt-auth.guard';
+import { AccessJwtAuthGuard } from '../gateway/guards/access-jwt-auth.guard';
 import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
-import { ReqUser } from '../decorators/user.decorator';
+import { ReqUser } from '../gateway/decorators/user.decorator';
 
 @Controller({
   version: '1',

@@ -1,6 +1,6 @@
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 import { Column, Entity, ManyToMany, ManyToOne, JoinTable } from 'typeorm';
-import { Organization } from '../../../organization/src/entities/organization.entity';
+import { Organization } from '../../../organization/src/organization/entities/organization.entity';
 import { Theme } from './theme.entity';
 import { Format } from './format.entity';
 import { Position } from '../../../position/src/entities/position.entity';
