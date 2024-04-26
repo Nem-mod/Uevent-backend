@@ -17,7 +17,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(email: string, password: string): Promise<IFullUserGateway> {
-    // TODO: create guard and use it authGateway
     const login: ILogin = { email, password };
     return await lastValueFrom(
       this.authClient.send({ cmd: 'login' }, login).pipe(

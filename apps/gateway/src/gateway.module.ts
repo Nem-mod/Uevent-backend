@@ -15,6 +15,8 @@ import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { AccessJwtAuthGuard } from './guards/access-jwt-auth.guard';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
@@ -60,6 +62,8 @@ import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
     AccessJwtAuthGuard,
     JwtRefreshStrategy,
     RefreshJwtAuthGuard,
+    LocalStrategy,
+    LocalAuthGuard,
   ],
   controllers: [UserGatewayController, AuthGatewayController],
 })
