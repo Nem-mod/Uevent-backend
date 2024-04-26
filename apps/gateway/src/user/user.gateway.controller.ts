@@ -43,8 +43,7 @@ export class UserGatewayController {
   @UseGuards(AccessJwtAuthGuard)
   @Get('me')
   async getMe(@Req() req: RequestType): Promise<IFullUserGateway> {
-    // @ts-ignore
-    return req.user;
+    return req.user as IFullUserGateway;
   }
 
 }
