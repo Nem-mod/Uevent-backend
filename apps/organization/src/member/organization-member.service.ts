@@ -27,7 +27,7 @@ export class OrganizationMemberService {
 
   async getUserMembers(userId: number): Promise<IOrganizationMember[]> {
     return await this.organizationMemberRepository.findAll({
-      where: { user: userId },
+      where: { user: { id: userId } },
     });
   }
 

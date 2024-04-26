@@ -6,10 +6,10 @@ import { OrganizationRole } from '../../role/entities/organization-role.entity';
 
 @Entity()
 export class OrganizationMember extends AbstractEntity {
-  @ManyToOne(() => Organization)
+  @ManyToOne(() => Organization, { eager: true })
   organization!: Organization;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   user!: User;
 
   @ManyToOne(() => OrganizationRole, { eager: true })

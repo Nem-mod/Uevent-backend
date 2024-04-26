@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -40,5 +41,13 @@ export class OrganizationGatewayController {
     @Param('id', ParseIntPipe) orgId: number,
   ) {
     return await this.organizationGatewayService.delete(orgId, user.id);
+  }
+
+  @UseGuards(AccessJwtAuthGuard)
+  @Get()
+  async getUserOrganizations(
+    @ReqUser() user: IFullUserGateway,
+  ): Promise<IFullOrganizationGateway[]> {
+    return await this.organizationGatewayService.getUserOrganizations(user.id);
   }
 }

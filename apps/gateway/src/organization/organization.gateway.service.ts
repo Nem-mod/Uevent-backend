@@ -32,4 +32,16 @@ export class OrganizationGatewayService {
       ),
     );
   }
+
+  async getUserOrganizations(
+    userId: number,
+  ): Promise<IFullOrganizationGateway[]> {
+    return await lastValueFrom(
+      this.organizationClient.send({ cmd: 'list' }, userId).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
+    );
+  }
 }

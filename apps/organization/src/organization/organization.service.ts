@@ -5,6 +5,7 @@ import { Organization } from './entities/organization.entity';
 import { IOrganizationRepository } from './interfaces/organization.repository.interface';
 import { User } from '../../../user/src/entities/user.entity';
 import { OrganizationMemberService } from '../member/organization-member.service';
+import { IOrganizationMember } from '../member/interfaces/organization-member.interface';
 
 @Injectable()
 export class OrganizationService {
@@ -33,5 +34,12 @@ export class OrganizationService {
     const user = { id: userId } as User;
 
     await this.organizationMemberService.setOwner(org, user);
+  }
+
+  async getUserOrganizations(userId: number): Promise<FullOrganizationDto[]> {
+    const members: IOrganizationMember[] =
+      await this.organizationMemberService.getUserMembers(userId);
+
+    return members.map((member) => member.organization);
   }
 }
