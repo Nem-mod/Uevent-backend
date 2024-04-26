@@ -17,6 +17,8 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LocalStrategy } from './strategies/local.strategy';
+import { OrganizationGatewayService } from './organization/organization.gateway.service';
+import { OrganizationGatewayController } from './organization/organization.gateway.controller';
 
 @Module({
   imports: [
@@ -53,6 +55,23 @@ import { LocalStrategy } from './strategies/local.strategy';
           };
         },
       },
+      {
+        inject: [ConfigService],
+        name: 'ORGANIZATION_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get(
+                  'services.organization.transport',
+                ) as keyof Transport
+              ],
+            options: configService.get(
+              'services.organization.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
     ]),
   ],
   providers: [
@@ -64,7 +83,12 @@ import { LocalStrategy } from './strategies/local.strategy';
     RefreshJwtAuthGuard,
     LocalStrategy,
     LocalAuthGuard,
+    OrganizationGatewayService,
   ],
-  controllers: [UserGatewayController, AuthGatewayController],
+  controllers: [
+    UserGatewayController,
+    AuthGatewayController,
+    OrganizationGatewayController,
+  ],
 })
 export class GatewayModule {}
