@@ -18,7 +18,7 @@ export class HttpToRpcExceptionFilter implements RpcExceptionFilter {
       options: { cause: exception.cause },
     };
     const rpcException = new RpcException(rpcExceptionBody);
-
+    console.log(rpcExceptionBody);
     return throwError(() => rpcException.getError());
   }
 }
