@@ -14,4 +14,9 @@ export class EventController {
     // TODO: Rename startTime to start
     return await this.eventService.create(event);
   }
+
+  @MessagePattern({ cmd: 'getEventById'})
+  async getById(@Body() { id } : { id: number }) {
+    return await this.eventService.getById(id);
+  }
 }

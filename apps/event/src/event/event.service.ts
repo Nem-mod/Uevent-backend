@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { IEventRepository } from './interfaces/event.repository.interface';
 import { FullEventDto } from './dto/full-event.dto';
@@ -33,5 +33,22 @@ export class EventService {
       },
       relations: ['organization'],
     });
+  }
+
+  async getById(id: number): Promise<FullEventDto> {
+     const event: FullEventDto = await this.eventRepository.findOne({
+      where: { id: id },
+      select: {
+        organization: {
+          id: true,
+        },
+      },
+      relations: ['organization'],
+    })
+    console.log(event);
+    if (!event) {
+      throw new NotFoundException(`Not found event with id=${id}`);
+    }
+    return event;
   }
 }
