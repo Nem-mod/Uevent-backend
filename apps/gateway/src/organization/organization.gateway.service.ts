@@ -56,7 +56,11 @@ export class OrganizationGatewayService {
           { cmd: 'createEvent' },
           { ...orgAndUserIds, event },
         )
-        .pipe(),
+        .pipe(
+            catchError((val) => {
+                throw new RpcException(val);
+            }),
+        ),
     );
   }
 }
