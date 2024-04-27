@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 import { User } from '../../../user/src/entities/user.entity';
-import { Event } from '../../../event/src/entities/event.entity';
+import { Event } from '../../../event/src/event/entities/event.entity';
 
 @Entity()
 export class Comment extends AbstractEntity {

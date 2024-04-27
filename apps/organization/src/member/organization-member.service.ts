@@ -41,6 +41,7 @@ export class OrganizationMemberService {
     orgId: number,
     userId: number,
   ): Promise<string[]> {
+    // TODO: on invalid org id throw error
     const members: IOrganizationMember[] =
       await this.getUserMembersInOrganization(orgId, userId);
     return members.map((member) => member.role.name);

@@ -6,6 +6,7 @@ import { OrganizationMember } from '../../member/entities/organization-member.en
 
 @Entity()
 export class Organization extends AbstractEntity {
+  // TODO: on delete set events relation to null
   @Column({ type: 'varchar', length: 200, unique: true })
   name!: string;
 

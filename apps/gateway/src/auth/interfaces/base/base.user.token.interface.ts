@@ -1,4 +1,4 @@
 import { IToken } from '../token.interface';
-import { IUserId } from '../user-id.interface';
+import { IId } from '../id.interface';
 
-export interface IBaseUserToken extends IUserId, IToken {}
+export interface IBaseUserToken extends IId, IToken {}

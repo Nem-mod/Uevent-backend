@@ -12,6 +12,13 @@ import { OrganizationMemberService } from './member/organization-member.service'
 import { OrganizationRoleService } from './role/organization-role.service';
 import { OrganizationMember } from './member/entities/organization-member.entity';
 import { OrganizationRole } from './role/entities/organization-role.entity';
+import { EventOrganizationService } from './event/event.organization.service';
+import {
+  ClientsModule,
+  MicroserviceOptions,
+  Transport,
+} from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -23,12 +30,30 @@ import { OrganizationRole } from './role/entities/organization-role.entity';
       OrganizationMember,
       OrganizationRole,
     ]),
+    ClientsModule.registerAsync([
+      {
+        inject: [ConfigService],
+        name: 'EVENT_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get('services.event.transport') as keyof Transport
+              ],
+            options: configService.get(
+              'services.event.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
+    ]),
   ],
   controllers: [OrganizationController],
   providers: [
     OrganizationService,
     OrganizationMemberService,
     OrganizationRoleService,
+    EventOrganizationService,
     { provide: `IOrganizationRepository`, useClass: OrganizationRepository },
     {
       provide: `IOrganizationMemberRepository`,

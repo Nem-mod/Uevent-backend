@@ -16,6 +16,9 @@ import { IFullOrganizationGateway } from './interfaces/full-organization.gateway
 import { AccessJwtAuthGuard } from '../gateway/guards/access-jwt-auth.guard';
 import { IFullUserGateway } from '../user/interfaces/full-user.gateway.interface';
 import { ReqUser } from '../gateway/decorators/user.decorator';
+import { ICreateEventGateway } from './interfaces/create-event.gateway.interface';
+import { IFullEventGateway } from './interfaces/full-event.gateway.interface';
+import { IOrgIdAndUserId } from './interfaces/org-id-and-user-id.interface';
 
 @Controller({
   version: '1',
@@ -52,5 +55,23 @@ export class OrganizationGatewayController {
     @ReqUser() user: IFullUserGateway,
   ): Promise<IFullOrganizationGateway[]> {
     return await this.organizationGatewayService.getUserOrganizations(user.id);
+  }
+
+  @UseGuards(AccessJwtAuthGuard)
+  @Post(':id/event')
+  async createEvent(
+    @ReqUser() user: IFullUserGateway,
+    @Param('id', ParseIntPipe) orgId: number,
+    @Body() event: ICreateEventGateway,
+  ): Promise<IFullEventGateway> {
+    const orgAndUserIds: IOrgIdAndUserId = {
+      userId: user.id,
+      orgId,
+    };
+
+    return await this.organizationGatewayService.createEvent(
+      orgAndUserIds,
+      event,
+    );
   }
 }

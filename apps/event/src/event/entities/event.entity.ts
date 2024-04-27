@@ -1,9 +1,9 @@
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 import { Column, Entity, ManyToMany, ManyToOne, JoinTable } from 'typeorm';
-import { Organization } from '../../../organization/src/organization/entities/organization.entity';
-import { Theme } from './theme.entity';
-import { Format } from './format.entity';
-import { Position } from '../../../position/src/entities/position.entity';
+import { Organization } from '../../../../organization/src/organization/entities/organization.entity';
+import { Theme } from '../../theme/entities/theme.entity';
+import { Format } from '../../format/entities/format.entity';
+import { Position } from '../../../../position/src/entities/position.entity';
 
 @Entity()
 export class Event extends AbstractEntity {
@@ -29,7 +29,7 @@ export class Event extends AbstractEntity {
   @JoinTable()
   themes: Theme[];
 
-  @ManyToOne(() => Format, { eager: true })
+  @ManyToOne(() => Format, { eager: true, nullable: true })
   format: Format;
 
   @ManyToOne(() => Position)

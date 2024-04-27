@@ -6,6 +6,9 @@ import { IOrganizationRepository } from './interfaces/organization.repository.in
 import { User } from '../../../user/src/entities/user.entity';
 import { OrganizationMemberService } from '../member/organization-member.service';
 import { IOrganizationMember } from '../member/interfaces/organization-member.interface';
+import { ICreateEventOrganizationRequest } from './interfaces/create-event.organization.request.interface';
+import { EventOrganizationService } from '../event/event.organization.service';
+import { IFullEvent } from '../event/interfaces/full-event.interface';
 
 @Injectable()
 export class OrganizationService {
@@ -13,6 +16,7 @@ export class OrganizationService {
     @Inject('IOrganizationRepository')
     private readonly organizationRepository: IOrganizationRepository,
     private readonly organizationMemberService: OrganizationMemberService,
+    private readonly eventOrganizationService: EventOrganizationService,
   ) {}
 
   async create(org: CreateOrganizationDto): Promise<FullOrganizationDto> {
@@ -44,8 +48,12 @@ export class OrganizationService {
   }
 
   async delete(id: number): Promise<void> {
-    console.log(id);
-    console.log(await this.organizationRepository.findOneById(id));
     await this.organizationRepository.delete({ id });
+  }
+
+  async createEvent(
+    idsAndEvent: ICreateEventOrganizationRequest,
+  ): Promise<IFullEvent> {
+    return await this.eventOrganizationService.createEvent(idsAndEvent);
   }
 }
