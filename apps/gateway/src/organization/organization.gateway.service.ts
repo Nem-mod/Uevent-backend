@@ -23,14 +23,8 @@ export class OrganizationGatewayService {
     );
   }
 
-  async delete(orgId: number, userId: number) {
-    await lastValueFrom(
-      this.organizationClient.send({ cmd: 'delete' }, { orgId, userId }).pipe(
-        catchError((val) => {
-          throw new RpcException(val);
-        }),
-      ),
-    );
+  async delete(orgId: number, userId: number): Promise<void> {
+    this.organizationClient.emit('deleteOrganization', { orgId, userId });
   }
 
   async getUserOrganizations(

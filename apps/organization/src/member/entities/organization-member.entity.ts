@@ -6,7 +6,7 @@ import { OrganizationRole } from '../../role/entities/organization-role.entity';
 
 @Entity()
 export class OrganizationMember extends AbstractEntity {
-  @ManyToOne(() => Organization, { eager: true })
+  @ManyToOne(() => Organization, { eager: true, onDelete: 'CASCADE' })
   organization!: Organization;
 
   @ManyToOne(() => User, { eager: true })

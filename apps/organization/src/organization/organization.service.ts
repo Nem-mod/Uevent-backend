@@ -40,6 +40,12 @@ export class OrganizationService {
     const members: IOrganizationMember[] =
       await this.organizationMemberService.getUserMembers(userId);
 
-    return members.map((member) => member.organization);
+    return members.map((member) => member.organization); // TODO: fetch user role in this organization. Add it in interfaces
+  }
+
+  async delete(id: number): Promise<void> {
+    console.log(id);
+    console.log(await this.organizationRepository.findOneById(id));
+    await this.organizationRepository.delete({ id });
   }
 }

@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -36,11 +38,12 @@ export class OrganizationGatewayController {
 
   @UseGuards(AccessJwtAuthGuard)
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @ReqUser() user: IFullUserGateway,
     @Param('id', ParseIntPipe) orgId: number,
-  ) {
-    return await this.organizationGatewayService.delete(orgId, user.id);
+  ): Promise<void> {
+    await this.organizationGatewayService.delete(orgId, user.id);
   }
 
   @UseGuards(AccessJwtAuthGuard)
