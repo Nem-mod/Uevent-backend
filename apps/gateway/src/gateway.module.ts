@@ -19,6 +19,8 @@ import { LocalAuthGuard } from './gateway/guards/local-auth.guard';
 import { LocalStrategy } from './gateway/strategies/local.strategy';
 import { OrganizationGatewayService } from './organization/organization.gateway.service';
 import { OrganizationGatewayController } from './organization/organization.gateway.controller';
+import { EventGatewayController } from './event/event.gateway.controller';
+import { EventGatewayService } from './event/event.gateway.service';
 
 @Module({
   imports: [
@@ -72,6 +74,21 @@ import { OrganizationGatewayController } from './organization/organization.gatew
           };
         },
       },
+      {
+        inject: [ConfigService],
+        name: 'EVENT_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+                Transport[
+                    configService.get('services.event.transport') as keyof Transport
+                    ],
+            options: configService.get(
+                'services.event.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
     ]),
   ],
   providers: [
@@ -84,11 +101,13 @@ import { OrganizationGatewayController } from './organization/organization.gatew
     LocalStrategy,
     LocalAuthGuard,
     OrganizationGatewayService,
+    EventGatewayService
   ],
   controllers: [
     UserGatewayController,
     AuthGatewayController,
     OrganizationGatewayController,
+    EventGatewayController
   ],
 })
 export class GatewayModule {}
