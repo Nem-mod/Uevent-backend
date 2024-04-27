@@ -33,6 +33,16 @@ export class OrganizationService {
     return organization;
   }
 
+  async getUserRolesInOrganization(
+    orgId: number,
+    userId: number,
+  ): Promise<string[]> {
+    return await this.organizationMemberService.getUserRolesInOrganization(
+      orgId,
+      userId,
+    );
+  }
+
   async setOwner(orgId: number, userId: number): Promise<void> {
     const org = { id: orgId } as Organization;
     const user = { id: userId } as User;

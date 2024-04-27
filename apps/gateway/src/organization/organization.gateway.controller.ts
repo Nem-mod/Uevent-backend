@@ -19,6 +19,8 @@ import { ReqUser } from '../gateway/decorators/user.decorator';
 import { ICreateEventGateway } from './interfaces/create-event.gateway.interface';
 import { IFullEventGateway } from './interfaces/full-event.gateway.interface';
 import { IOrgIdAndUserId } from './interfaces/org-id-and-user-id.interface';
+import { OrganizationRole } from '../gateway/decorators/organization-role.decorator';
+import { OrganizationRoleGuard } from '../gateway/guards/organization-role.guard';
 
 @Controller({
   version: '1',
@@ -57,11 +59,12 @@ export class OrganizationGatewayController {
     return await this.organizationGatewayService.getUserOrganizations(user.id);
   }
 
-  @UseGuards(AccessJwtAuthGuard)
-  @Post(':id/event')
+  @OrganizationRole('owner')
+  @UseGuards(AccessJwtAuthGuard, OrganizationRoleGuard)
+  @Post(':orgId/event')
   async createEvent(
     @ReqUser() user: IFullUserGateway,
-    @Param('id', ParseIntPipe) orgId: number,
+    @Param('orgId', ParseIntPipe) orgId: number,
     @Body() event: ICreateEventGateway,
   ): Promise<IFullEventGateway> {
     const orgAndUserIds: IOrgIdAndUserId = {

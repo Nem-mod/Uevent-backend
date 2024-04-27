@@ -2,16 +2,19 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { OrganizationMemberService } from '../../member/organization-member.service';
+import { catchError, lastValueFrom } from 'rxjs';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class OrganizationRoleGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly organizationMemberService: OrganizationMemberService,
+    @Inject('ORGANIZATION_SERVICE')
+    private readonly organizationClient: ClientProxy,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -22,15 +25,20 @@ export class OrganizationRoleGuard implements CanActivate {
 
     if (!roles) return true;
 
-    const req = context.switchToRpc().getData();
-    const userId = req.userId;
-    const orgId = req.orgId;
+    const req = context.switchToHttp().getRequest();
+    console.log(req.user, req.params.orgId);
+    const userId = req.user.id;
+    const orgId = req.params.orgId;
 
-    const userRoles =
-      await this.organizationMemberService.getUserRolesInOrganization(
-        orgId,
-        userId,
-      );
+    const userRoles = await lastValueFrom(
+      this.organizationClient
+        .send({ cmd: 'getUserRolesInOrganization' }, { orgId, userId })
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
 
     if (!roles.some((role) => userRoles.includes(role)))
       throw new ForbiddenException(
