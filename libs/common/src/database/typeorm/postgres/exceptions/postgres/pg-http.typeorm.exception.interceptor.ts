@@ -4,9 +4,11 @@ import { FilterConflictHandler } from '@app/common/database/typeorm/postgres/exc
 import { Catch } from '@nestjs/common';
 import { TypeORMError } from 'typeorm';
 import { DatabaseError } from 'pg';
+import { FilterNotFoundHandler } from '@app/common/database/typeorm/postgres/exceptions/postgres/filter.not-found.handler';
 
 const codeToHandler: Record<string, IBaseExceptionHandler> = {
   23505: new FilterConflictHandler(),
+  23503: new FilterNotFoundHandler(),
 };
 
 @Catch(TypeORMError)
