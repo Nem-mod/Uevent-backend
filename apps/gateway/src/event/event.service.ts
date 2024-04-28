@@ -12,7 +12,7 @@ export class EventService {
 
   async getEventById(id: number): Promise<IEvent> {
     return await lastValueFrom(
-      this.eventClient.send<IEvent>({ cmd: 'getEventById' }, { id }).pipe(
+      this.eventClient.send<IEvent>({ cmd: 'getEventById' },  id ).pipe(
         catchError((val) => {
           throw new RpcException(val);
         }),
