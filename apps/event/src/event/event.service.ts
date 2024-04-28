@@ -4,6 +4,7 @@ import { IEventRepository } from './interfaces/event.repository.interface';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { FormatService } from '../format/format.service';
 import { ThemeService } from '../theme/theme.service';
+import { IEventQueryInterface } from './interfaces/event.query.interface';
 
 @Injectable()
 export class EventService {
@@ -47,5 +48,22 @@ export class EventService {
     }
 
     return event;
+  }
+
+  async getEvents(query: IEventQueryInterface): Promise<{ data: FullEventDto[], count: number}> {
+    const take = query.offset || 10;
+    const skip = query.page || 0;
+    const events = await this.eventRepository.findAndCount({
+      take: take,
+      skip: skip,
+      select: {
+        organization: {
+          id: true,
+        },
+      },
+      relations: ['organization'],
+    });
+    return events;
+
   }
 }

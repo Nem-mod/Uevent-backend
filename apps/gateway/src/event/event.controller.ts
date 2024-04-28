@@ -4,7 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Post,
+  Post, Query,
   UseGuards,
 } from '@nestjs/common';
 import { EventService } from './event.service';
@@ -25,6 +25,13 @@ export class EventController {
     @Param('id', ParseIntPipe) eventId: number,
   ): Promise<IEvent> {
     return await this.eventGatewayService.getEventById(eventId);
+  }
+
+  @Get()
+  async getEvents(
+      @Query() query,
+  ) {
+    return await this.eventGatewayService.getEvents(query);
   }
 
   @OrganizationRole('owner')

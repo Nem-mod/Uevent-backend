@@ -31,4 +31,14 @@ export class EventService {
       ),
     );
   }
+
+  async getEvents(query) {
+      return await lastValueFrom(
+          this.eventClient.send<IEvent>({ cmd: 'getEvents' }, query).pipe(
+              catchError((val) => {
+                  throw new RpcException(val);
+              }),
+          ),
+      );
+  }
 }
