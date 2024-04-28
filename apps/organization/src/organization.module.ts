@@ -12,7 +12,6 @@ import { OrganizationMemberService } from './member/organization-member.service'
 import { OrganizationRoleService } from './role/organization-role.service';
 import { OrganizationMember } from './member/entities/organization-member.entity';
 import { OrganizationRole } from './role/entities/organization-role.entity';
-import { EventOrganizationService } from './event/event.organization.service';
 import {
   ClientsModule,
   MicroserviceOptions,
@@ -53,7 +52,6 @@ import { ConfigService } from '@nestjs/config';
     OrganizationService,
     OrganizationMemberService,
     OrganizationRoleService,
-    EventOrganizationService,
     { provide: `IOrganizationRepository`, useClass: OrganizationRepository },
     {
       provide: `IOrganizationMemberRepository`,

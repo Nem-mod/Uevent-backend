@@ -4,7 +4,7 @@ import { VersioningType } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
-import { RpcToHttpExceptionFilter } from './rpc-to-http.exception.filter';
+import { RpcToHttpExceptionFilter } from './common/rpc-to-http.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);

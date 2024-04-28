@@ -3,7 +3,7 @@ import { EventModule } from './event.module';
 import { Logger } from 'nestjs-pino';
 import { ValidationPipe } from '@nestjs/common';
 import { PgHttpTypeormExceptionInterceptor } from '@app/common/database/typeorm/postgres/exceptions/postgres/pg-http.typeorm.exception.interceptor';
-import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
+import { HttpToRpcExceptionFilter } from './event/http-to-rpc.exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@app/common/config/config.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';

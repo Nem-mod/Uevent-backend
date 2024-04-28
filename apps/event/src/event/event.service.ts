@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateEventDto } from './dto/create-event.dto';
+import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { IEventRepository } from './interfaces/event.repository.interface';
-import { FullEventDto } from './dto/full-event.dto';
+import { FullEventDto } from './interfaces/dto/full-event.dto';
 
 @Injectable()
 export class EventService {
@@ -24,19 +24,11 @@ export class EventService {
       }),
     );
 
-    return await this.eventRepository.findOne({
-      where: { id: newEvent.id },
-      select: {
-        organization: {
-          id: true,
-        },
-      },
-      relations: ['organization'],
-    });
+    return await this.getById(newEvent.id);
   }
 
   async getById(id: number): Promise<FullEventDto> {
-     const event: FullEventDto = await this.eventRepository.findOne({
+    const event: FullEventDto = await this.eventRepository.findOne({
       where: { id: id },
       select: {
         organization: {
@@ -44,11 +36,12 @@ export class EventService {
         },
       },
       relations: ['organization'],
-    })
-    console.log(event);
+    });
+
     if (!event) {
       throw new NotFoundException(`Not found event with id=${id}`);
     }
+
     return event;
   }
 }

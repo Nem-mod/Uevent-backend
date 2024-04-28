@@ -1,7 +1,7 @@
 import { IBaseTokenController } from './base.token.controller.interface';
 import { IBaseTokenService } from './base.token.service.interface';
-import { TokenAndIdDto } from '../../dto/token-and-id.dto';
-import { PayloadAndIdDto } from '../../dto/payload-and-id.dto';
+import { TokenAndIdDto } from '../dto/token-and-id.dto';
+import { PayloadAndIdDto } from '../dto/payload-and-id.dto';
 
 export abstract class BaseTokenController implements IBaseTokenController {
   protected constructor(protected readonly tokenService: IBaseTokenService) {}
@@ -22,17 +22,17 @@ export abstract class BaseTokenController implements IBaseTokenController {
     return await this.tokenService.remove(obj.token, obj.id);
   }
 
-  async verify(obj: TokenAndIdDto): Promise<boolean> {
+  async verify(obj: TokenAndIdDto): Promise<true> {
     await this.tokenService.verify(obj.token, obj.id);
     return true;
   }
 
-  async verifyAndClear(obj: TokenAndIdDto): Promise<boolean> {
+  async verifyAndClear(obj: TokenAndIdDto): Promise<true> {
     await this.tokenService.verifyAndClear(obj.token, obj.id);
     return true;
   }
 
-  async verifyAndRemove(obj: TokenAndIdDto): Promise<boolean> {
+  async verifyAndRemove(obj: TokenAndIdDto): Promise<true> {
     await this.tokenService.verifyAndRemove(obj.token, obj.id);
     return true;
   }

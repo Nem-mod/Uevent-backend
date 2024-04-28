@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { UserVerificationMailDto } from './dto/user-verification/user-verification.mail.dto';
+import { UserVerificationMailDto } from './interfaces/dto/user-verification/user-verification.mail.dto';
 
 @Controller()
 export class MailerController {
@@ -10,7 +10,7 @@ export class MailerController {
   @MessagePattern({ role: 'user', mail: 'verification', cmd: 'send' })
   async sendUserVerificationEmail(
     mailInfo: UserVerificationMailDto,
-  ): Promise<boolean> {
+  ): Promise<true> {
     await this.mailerService.userEmailVerification(mailInfo);
     return true;
   }

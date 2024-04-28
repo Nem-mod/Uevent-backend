@@ -7,20 +7,20 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
-import { UserGatewayController } from './user/user.gateway.controller';
-import { UserGatewayService } from './user/user.gateway.service';
-import { AuthGatewayController } from './auth/auth.gateway.controller';
-import { AuthGatewayService } from './auth/auth.gateway.service';
-import { JwtAccessStrategy } from './gateway/strategies/jwt-access.strategy';
-import { AccessJwtAuthGuard } from './gateway/guards/access-jwt-auth.guard';
-import { JwtRefreshStrategy } from './gateway/strategies/jwt-refresh.strategy';
-import { RefreshJwtAuthGuard } from './gateway/guards/refresh-jwt-auth.guard';
-import { LocalAuthGuard } from './gateway/guards/local-auth.guard';
-import { LocalStrategy } from './gateway/strategies/local.strategy';
-import { OrganizationGatewayService } from './organization/organization.gateway.service';
-import { OrganizationGatewayController } from './organization/organization.gateway.controller';
-import { EventGatewayController } from './event/event.gateway.controller';
-import { EventGatewayService } from './event/event.gateway.service';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { OrganizationService } from './organization/organization.service';
+import { OrganizationController } from './organization/organization.controller';
+import { EventController } from './event/event.controller';
+import { EventService } from './event/event.service';
+import { LocalAuthGuard } from './common/guards/local-auth.guard';
+import { LocalStrategy } from './common/strategies/local.strategy';
+import { RefreshAuthGuard } from './common/guards/refresh-auth.guard';
+import { RefreshStrategy } from './common/strategies/refresh.strategy';
+import { AccessAuthGuard } from './common/guards/access-auth.guard';
+import { AccessStrategy } from './common/strategies/access.strategy';
 
 @Module({
   imports: [
@@ -80,11 +80,11 @@ import { EventGatewayService } from './event/event.gateway.service';
         useFactory: async (configService: ConfigService) => {
           return {
             transport:
-                Transport[
-                    configService.get('services.event.transport') as keyof Transport
-                    ],
+              Transport[
+                configService.get('services.event.transport') as keyof Transport
+              ],
             options: configService.get(
-                'services.event.options',
+              'services.event.options',
             ) as MicroserviceOptions,
           };
         },
@@ -92,22 +92,22 @@ import { EventGatewayService } from './event/event.gateway.service';
     ]),
   ],
   providers: [
-    UserGatewayService,
-    AuthGatewayService,
-    JwtAccessStrategy,
-    AccessJwtAuthGuard,
-    JwtRefreshStrategy,
-    RefreshJwtAuthGuard,
+    UserService,
+    AuthService,
+    AccessStrategy,
+    AccessAuthGuard,
+    RefreshStrategy,
+    RefreshAuthGuard,
     LocalStrategy,
     LocalAuthGuard,
-    OrganizationGatewayService,
-    EventGatewayService
+    OrganizationService,
+    EventService,
   ],
   controllers: [
-    UserGatewayController,
-    AuthGatewayController,
-    OrganizationGatewayController,
-    EventGatewayController
+    UserController,
+    AuthController,
+    OrganizationController,
+    EventController,
   ],
 })
 export class GatewayModule {}

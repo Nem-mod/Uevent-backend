@@ -5,12 +5,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { IUserRepository } from './interfaces/user.repository.interface';
-import { CreateUserDto } from './dto/create-user.dto';
-import { FullUserDto } from './dto/full-user.dto';
+import { CreateUserDto } from './interfaces/dto/create-user.dto';
+import { FullUserDto } from './interfaces/dto/full-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginDto } from './dto/login.dto';
+import { UpdateUserDto } from './interfaces/dto/update-user.dto';
+import { LoginDto } from './interfaces/dto/login.dto';
 
 @Injectable()
 export class UserService {

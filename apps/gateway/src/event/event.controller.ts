@@ -1,0 +1,39 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { EventService } from './event.service';
+import { IEvent } from './interfaces/event.interface';
+import { OrganizationRole } from '../common/decorators/organization-role.decorator';
+import { OrganizationRoleGuard } from '../common/guards/organization-role.guard';
+import { AccessAuthGuard } from '../common/guards/access-auth.guard';
+
+@Controller({
+  version: '1',
+  path: 'event',
+})
+export class EventController {
+  constructor(private readonly eventGatewayService: EventService) {}
+
+  @Get(':id')
+  async getEventById(
+    @Param('id', ParseIntPipe) eventId: number,
+  ): Promise<IEvent> {
+    return await this.eventGatewayService.getEventById(eventId);
+  }
+
+  @OrganizationRole('owner')
+  @UseGuards(AccessAuthGuard, OrganizationRoleGuard)
+  @Post(':orgId')
+  async createEvent(
+    @Param('orgId', ParseIntPipe) orgId: number,
+    @Body() event: IEvent,
+  ): Promise<IEvent> {
+    return await this.eventGatewayService.createEvent(orgId, event);
+  }
+}

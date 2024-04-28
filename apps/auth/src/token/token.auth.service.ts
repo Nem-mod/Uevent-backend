@@ -3,7 +3,7 @@ import { ITokenAndId } from './interfaces/token-and-id.interface';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
-import { IPayloadAndId } from './interfaces/payload-and-id.interface';
+import { IPayloadAndId } from './interfaces/payload-and-id';
 import { IId } from './interfaces/id.interface';
 import { IAuthTokensAndId } from './interfaces/auth-tokens-and-id.interface';
 
@@ -13,8 +13,8 @@ export class TokenAuthService {
     @Inject('TOKEN_SERVICE') private readonly tokenClient: ClientProxy,
   ) {}
 
-  async verifyVerifyTokenAndClear(userToken: ITokenAndId): Promise<boolean> {
-    return await lastValueFrom(
+  async verifyVerifyTokenAndClear(userToken: ITokenAndId): Promise<void> {
+    await lastValueFrom(
       this.tokenClient
         .send<boolean>(
           { role: 'user', token: 'verify', cmd: 'verifyAndClear' },
@@ -174,10 +174,10 @@ export class TokenAuthService {
   }
 
   async refreshAuthTokens(authTokens: IAuthTokens): Promise<IAuthTokensAndId> {
-    const id = await this.removeAuthTokens(authTokens);
+    const id: number = await this.removeAuthTokens(authTokens);
 
     const newAuthTokens: IAuthTokens = await this.signAuthTokensAndPush(id);
 
-    return { ...newAuthTokens, id };
+    return { authTokens: newAuthTokens, id };
   }
 }

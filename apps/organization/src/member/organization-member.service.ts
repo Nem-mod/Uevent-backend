@@ -14,13 +14,13 @@ export class OrganizationMemberService {
   ) {}
 
   async setOwner(org: Organization, user: User): Promise<IOrganizationMember> {
-    const ownerRole = await this.organizationRoleService.getOwnerRole();
+    const role = await this.organizationRoleService.getOwnerRole();
 
     return await this.organizationMemberRepository.save(
       this.organizationMemberRepository.create({
         organization: org,
         user: user,
-        role: ownerRole,
+        role,
       }),
     );
   }
@@ -31,7 +31,10 @@ export class OrganizationMemberService {
     });
   }
 
-  async getUserMembersInOrganization(orgId: number, userId: number) {
+  async getUserMembersInOrganization(
+    orgId: number,
+    userId: number,
+  ): Promise<IOrganizationMember[]> {
     return await this.organizationMemberRepository.findAll({
       where: { user: { id: userId }, organization: { id: orgId } },
     });
@@ -44,6 +47,7 @@ export class OrganizationMemberService {
     // TODO: on invalid org id throw error
     const members: IOrganizationMember[] =
       await this.getUserMembersInOrganization(orgId, userId);
-    return members.map((member) => member.role.name);
+
+    return members.map((member: IOrganizationMember) => member.role.name);
   }
 }

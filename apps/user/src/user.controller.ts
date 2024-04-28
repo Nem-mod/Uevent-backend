@@ -1,10 +1,9 @@
-import { Body, Controller, Param, ParseIntPipe, Patch } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
-import { FullUserDto } from './dto/full-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { FullUserDto } from './interfaces/dto/full-user.dto';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login.dto';
+import { CreateUserDto } from './interfaces/dto/create-user.dto';
+import { LoginDto } from './interfaces/dto/login.dto';
 
 @Controller()
 export class UserController {
@@ -15,16 +14,16 @@ export class UserController {
     return await this.userService.createUser(user);
   }
 
-  @Patch(':id')
-  async updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() user: UpdateUserDto,
-  ): Promise<FullUserDto> {
-    return await this.userService.updateUser(id, user);
-  }
+  // @Patch(':id')
+  // async updateUser(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body() user: UpdateUserDto,
+  // ): Promise<FullUserDto> {
+  //   return await this.userService.updateUser(id, user);
+  // }
 
   @MessagePattern({ cmd: 'verifyUser' })
-  async verifyUser(@Body() login: LoginDto): Promise<FullUserDto> {
+  async verifyUser(login: LoginDto): Promise<FullUserDto> {
     return await this.userService.verifyUser(login);
   }
 

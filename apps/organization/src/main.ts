@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { HttpToRpcExceptionFilter } from './http-to-rpc.exception.filter';
+import { HttpToRpcExceptionFilter } from './organization/http-to-rpc.exception.filter';
 import { PgHttpTypeormExceptionInterceptor } from '@app/common/database/typeorm/postgres/exceptions/postgres/pg-http.typeorm.exception.interceptor';
 
 async function bootstrap() {

@@ -2,7 +2,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { IBaseTokenService } from './base.token.service.interface';
 import { Entity, Repository } from 'redis-om';
 import { v4 as uuid } from 'uuid';
-import { ITokenPayload } from '../token-payload.interface';
+import { IBaseTokenPayload } from './base.token-payload.interface';
 import { IAbstractTokens } from './base.abstract.tokens.interface';
 import { BadRequestException } from '@nestjs/common';
 
@@ -64,7 +64,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     }
   }
 
-  async verifyTokenSignature(token: string): Promise<ITokenPayload> {
+  async verifyTokenSignature(token: string): Promise<IBaseTokenPayload> {
     try {
       return this.jwtService.verify(token, this.signOptions);
     } catch (err) {
@@ -78,9 +78,9 @@ export abstract class BaseTokenService implements IBaseTokenService {
     const dataLenBeforeRemove = savedTokensUuidData.uuids.length;
 
     try {
-      const payload: ITokenPayload = (await this.decode(
+      const payload: IBaseTokenPayload = (await this.decode(
         token,
-      )) as ITokenPayload;
+      )) as IBaseTokenPayload;
 
       savedTokensUuidData.uuids = savedTokensUuidData.uuids.filter(
         (uuid) => uuid !== payload.uuid,
@@ -98,7 +98,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
     try {
-      const payload: ITokenPayload = await this.verifyTokenSignature(token);
+      const payload: IBaseTokenPayload = await this.verifyTokenSignature(token);
 
       if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
     } catch (err) {
@@ -111,7 +111,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
     try {
-      const payload: ITokenPayload = await this.verifyTokenSignature(token);
+      const payload: IBaseTokenPayload = await this.verifyTokenSignature(token);
 
       if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
 
@@ -127,7 +127,7 @@ export abstract class BaseTokenService implements IBaseTokenService {
     const savedTokensUuidData = this.getEntityData(savedTokensUuid);
 
     try {
-      const payload: ITokenPayload = await this.verifyTokenSignature(token);
+      const payload: IBaseTokenPayload = await this.verifyTokenSignature(token);
 
       if (!savedTokensUuidData.uuids.includes(payload.uuid)) throw new Error();
 
