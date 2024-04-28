@@ -52,7 +52,7 @@ export class EventService {
 
   async getEvents(query: IEventQueryInterface): Promise<{ data: FullEventDto[], count: number}> {
     const take = query.offset || 10;
-    const skip = query.page || 0;
+    const skip = query.page * take || 0;
     const events = await this.eventRepository.findAndCount({
       take: take,
       skip: skip,
