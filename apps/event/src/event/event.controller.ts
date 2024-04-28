@@ -31,5 +31,10 @@ export class EventController {
     return await this.eventService.getFormats();
   }
 
+  @MessagePattern({ cmd: 'themes' })
+  async getThemes(): Promise<FullFormatDto[]> {
+    return await this.eventService.getThemes();
+  }
+
 
 }

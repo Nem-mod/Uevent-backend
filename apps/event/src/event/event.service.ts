@@ -6,6 +6,7 @@ import { FormatService } from '../format/format.service';
 import { ThemeService } from '../theme/theme.service';
 import { IEventQueryInterface } from './interfaces/event.query.interface';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
+import { FullThemeDto } from '../theme/interfaces/dto/full-theme.dto';
 
 @Injectable()
 export class EventService {
@@ -70,5 +71,9 @@ export class EventService {
 
   async getFormats(): Promise<FullFormatDto[]> {
     return await this.formatService.getAllFormats()
+  }
+
+  async getThemes(): Promise<FullThemeDto[]> {
+    return await this.themeService.getAllThemes()
   }
 }

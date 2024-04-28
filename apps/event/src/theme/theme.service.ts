@@ -7,4 +7,8 @@ export class ThemeService {
         @Inject('IThemeRepository')
         private readonly themeRepository: ThemeRepository
     ) {}
+
+    async getAllThemes() {
+        return await this.themeRepository.findAll();
+    }
 }

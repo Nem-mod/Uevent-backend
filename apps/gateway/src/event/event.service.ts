@@ -52,6 +52,15 @@ export class EventService {
         );
     }
 
+    async getThemes() {
+        return await lastValueFrom(
+            this.eventClient.send<IEvent>({ cmd: 'themes' }, {}).pipe(
+                catchError((val) => {
+                    throw new RpcException(val);
+                }),
+            ),
+        );
+    }
 
 
 }

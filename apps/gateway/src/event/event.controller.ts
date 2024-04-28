@@ -25,6 +25,10 @@ export class EventController {
     return await this.eventGatewayService.getFormats();
   }
 
+  @Get('themes')
+  async getAllThemes(){
+    return await this.eventGatewayService.getThemes();
+  }
   @Get(':id')
   async getEventById(
     @Param('id', ParseIntPipe) eventId: number,
