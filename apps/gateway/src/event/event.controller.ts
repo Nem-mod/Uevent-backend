@@ -22,12 +22,22 @@ import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
 export class EventController {
   constructor(private readonly eventGatewayService: EventService) {}
 
+  @Get('formats')
+  async getAllFormats(){
+    return await this.eventGatewayService.getFormats();
+  }
+
+  @Get('themes')
+  async getAllThemes(){
+    return await this.eventGatewayService.getThemes();
+  }
   @Get(':id')
   async getEventById(
     @Param('id', ParseIntPipe) eventId: number,
   ): Promise<IEvent> {
     return await this.eventGatewayService.getEventById(eventId);
   }
+
 
   @Get()
   async getEvents(@Query() query) {
@@ -46,4 +56,5 @@ export class EventController {
       eventAndTickets,
     );
   }
+
 }

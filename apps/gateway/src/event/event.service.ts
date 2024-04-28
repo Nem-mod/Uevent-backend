@@ -54,4 +54,26 @@ export class EventService {
       ),
     );
   }
+
+    async getFormats() {
+        return await lastValueFrom(
+            this.eventClient.send<IEvent>({ cmd: 'formats' }, {}).pipe(
+                catchError((val) => {
+                    throw new RpcException(val);
+                }),
+            ),
+        );
+    }
+
+    async getThemes() {
+        return await lastValueFrom(
+            this.eventClient.send<IEvent>({ cmd: 'themes' }, {}).pipe(
+                catchError((val) => {
+                    throw new RpcException(val);
+                }),
+            ),
+        );
+    }
+
+
 }
