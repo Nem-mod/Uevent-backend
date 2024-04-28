@@ -30,11 +30,11 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
   }
 
   async findAndCount(filter?: any): Promise<{ data: T[], count: number}> {
-    const data = await this.entity.findAndCount(filter);
+    const [result, total] = await this.entity.findAndCount(filter);
 
     return {
-      data: data[0],
-      count: data[1]
+      data: result,
+      count: total
     }
   }
 
