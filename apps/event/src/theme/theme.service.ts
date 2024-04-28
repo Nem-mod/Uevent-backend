@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ThemeRepository } from './repositories/theme.repository';
 
 @Injectable()
-export class ThemeService {}
+export class ThemeService {
+    constructor(
+        @Inject('IThemeRepository')
+        private readonly themeRepository: ThemeRepository
+    ) {}
+}

@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { FormatRepository } from './repositories/format.repository';
 
 @Injectable()
-export class FormatService {}
+export class FormatService {
+    constructor(
+       @Inject('IFormatRepository')
+       private readonly formatRepository: FormatRepository
+    ) {}
+}

@@ -2,12 +2,16 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { IEventRepository } from './interfaces/event.repository.interface';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
+import { FormatService } from '../format/format.service';
+import { ThemeService } from '../theme/theme.service';
 
 @Injectable()
 export class EventService {
   constructor(
     @Inject('IEventRepository')
     private readonly eventRepository: IEventRepository,
+    private readonly formatService: FormatService,
+    private readonly themeService: ThemeService
   ) {}
 
   async create(event: CreateEventDto): Promise<FullEventDto> {
