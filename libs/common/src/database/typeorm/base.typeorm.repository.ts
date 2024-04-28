@@ -29,6 +29,15 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
     return this.entity.find(filter);
   }
 
+  async findAndCount(filter?: any): Promise<{ data: T[], count: number}> {
+    const data = await this.entity.findAndCount(filter);
+
+    return {
+      data: data[0],
+      count: data[1]
+    }
+  }
+
   async findOneById(id: number): Promise<T> {
     return await this.entity.findOneBy({ id } as FindOptionsWhere<T>);
   }
