@@ -20,12 +20,18 @@ import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 export class EventController {
   constructor(private readonly eventGatewayService: EventService) {}
 
+  @Get('formats')
+  async getAllFormats(){
+    return await this.eventGatewayService.getFormats();
+  }
+
   @Get(':id')
   async getEventById(
     @Param('id', ParseIntPipe) eventId: number,
   ): Promise<IEvent> {
     return await this.eventGatewayService.getEventById(eventId);
   }
+
 
   @Get()
   async getEvents(
@@ -43,4 +49,5 @@ export class EventController {
   ): Promise<IEvent> {
     return await this.eventGatewayService.createEvent(orgId, event);
   }
+
 }

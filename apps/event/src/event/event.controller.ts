@@ -4,6 +4,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { IEventQueryInterface } from './interfaces/event.query.interface';
+import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 
 @Controller()
 export class EventController {
@@ -24,4 +25,11 @@ export class EventController {
   async getEvents(query: IEventQueryInterface): Promise<{ data: FullEventDto[], count: number}> {
     return await this.eventService.getEvents(query);
   }
+
+  @MessagePattern({ cmd: 'formats' })
+  async getFormats(): Promise<FullFormatDto[]> {
+    return await this.eventService.getFormats();
+  }
+
+
 }

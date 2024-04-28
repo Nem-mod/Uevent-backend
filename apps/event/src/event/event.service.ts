@@ -5,6 +5,7 @@ import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { FormatService } from '../format/format.service';
 import { ThemeService } from '../theme/theme.service';
 import { IEventQueryInterface } from './interfaces/event.query.interface';
+import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 
 @Injectable()
 export class EventService {
@@ -65,6 +66,9 @@ export class EventService {
       relations: ['organization'],
     });
     return events;
+  }
 
+  async getFormats(): Promise<FullFormatDto[]> {
+    return await this.formatService.getAllFormats()
   }
 }
