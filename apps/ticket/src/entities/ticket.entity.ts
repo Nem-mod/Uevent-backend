@@ -7,6 +7,9 @@ export class Ticket extends AbstractEntity {
   @Column({ type: 'int' })
   cost!: number;
 
+  @Column({ type: 'varchar', length: 20 })
+  type!: string;
+
   @Column({ type: 'text', nullable: true })
   description: string;
 

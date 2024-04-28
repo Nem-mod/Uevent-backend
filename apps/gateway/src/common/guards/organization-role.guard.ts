@@ -26,7 +26,6 @@ export class OrganizationRoleGuard implements CanActivate {
     if (!roles) return true;
 
     const req = context.switchToHttp().getRequest();
-    console.log(req.user, req.params.orgId);
     const userId = req.user.id;
     const orgId = req.params.orgId;
 

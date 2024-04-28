@@ -21,6 +21,8 @@ import { RefreshAuthGuard } from './common/guards/refresh-auth.guard';
 import { RefreshStrategy } from './common/strategies/refresh.strategy';
 import { AccessAuthGuard } from './common/guards/access-auth.guard';
 import { AccessStrategy } from './common/strategies/access.strategy';
+import { TicketService } from './ticket/ticket.service';
+import { TicketController } from './ticket/ticket.controller';
 
 @Module({
   imports: [
@@ -89,6 +91,23 @@ import { AccessStrategy } from './common/strategies/access.strategy';
           };
         },
       },
+      {
+        inject: [ConfigService],
+        name: 'TICKET_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get(
+                  'services.ticket.transport',
+                ) as keyof Transport
+              ],
+            options: configService.get(
+              'services.ticket.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
     ]),
   ],
   providers: [
@@ -102,12 +121,14 @@ import { AccessStrategy } from './common/strategies/access.strategy';
     LocalAuthGuard,
     OrganizationService,
     EventService,
+    TicketService,
   ],
   controllers: [
     UserController,
     AuthController,
     OrganizationController,
     EventController,
+    TicketController,
   ],
 })
 export class GatewayModule {}
