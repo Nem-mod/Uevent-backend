@@ -14,6 +14,7 @@ import { OrganizationRole } from '../common/decorators/organization-role.decorat
 import { OrganizationRoleGuard } from '../common/guards/organization-role.guard';
 import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
+import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 
 @Controller({
   version: '1',
@@ -23,12 +24,12 @@ export class EventController {
   constructor(private readonly eventGatewayService: EventService) {}
 
   @Get('formats')
-  async getAllFormats(){
+  async getAllFormats() {
     return await this.eventGatewayService.getFormats();
   }
 
   @Get('themes')
-  async getAllThemes(){
+  async getAllThemes() {
     return await this.eventGatewayService.getThemes();
   }
   @Get(':id')
@@ -38,9 +39,8 @@ export class EventController {
     return await this.eventGatewayService.getEventById(eventId);
   }
 
-
   @Get()
-  async getEvents(@Query() query) {
+  async getEvents(@Query() query: IEventSearchQuery) {
     return await this.eventGatewayService.getEvents(query);
   }
 
@@ -56,5 +56,4 @@ export class EventController {
       eventAndTickets,
     );
   }
-
 }

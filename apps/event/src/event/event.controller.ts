@@ -3,7 +3,7 @@ import { EventService } from './event.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
-import { IEventQueryInterface } from './interfaces/event.query.interface';
+import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 
 @Controller()
@@ -22,19 +22,20 @@ export class EventController {
   }
 
   @MessagePattern({ cmd: 'getEvents' })
-  async getEvents(query: IEventQueryInterface): Promise<{ data: FullEventDto[], count: number}> {
+  async getEvents(
+    query: IEventSearchQuery,
+  ): Promise<{ data: FullEventDto[]; count: number }> {
+    // TODO: create interface for this
     return await this.eventService.getEvents(query);
   }
 
-  @MessagePattern({ cmd: 'formats' })
+  @MessagePattern({ cmd: 'getAllFormats' })
   async getFormats(): Promise<FullFormatDto[]> {
     return await this.eventService.getFormats();
   }
 
-  @MessagePattern({ cmd: 'themes' })
+  @MessagePattern({ cmd: 'getAllThemes' })
   async getThemes(): Promise<FullFormatDto[]> {
     return await this.eventService.getThemes();
   }
-
-
 }

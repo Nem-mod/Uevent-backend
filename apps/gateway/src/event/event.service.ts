@@ -4,6 +4,7 @@ import { catchError, lastValueFrom } from 'rxjs';
 import { IEvent } from './interfaces/event.interface';
 import { TicketService } from '../ticket/ticket.service';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
+import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 
 @Injectable()
 export class EventService {
@@ -45,9 +46,10 @@ export class EventService {
     return createdEvent;
   }
 
-  async getEvents(query) {
+  async getEvents(query: IEventSearchQuery) {
     return await lastValueFrom(
-      this.eventClient.send<IEvent>({ cmd: 'getEvents' }, query).pipe(
+      this.eventClient.send<any>({ cmd: 'getEvents' }, query).pipe(
+        // TODO: Create interface for this
         catchError((val) => {
           throw new RpcException(val);
         }),
@@ -55,25 +57,23 @@ export class EventService {
     );
   }
 
-    async getFormats() {
-        return await lastValueFrom(
-            this.eventClient.send<IEvent>({ cmd: 'formats' }, {}).pipe(
-                catchError((val) => {
-                    throw new RpcException(val);
-                }),
-            ),
-        );
-    }
+  async getFormats() {
+    return await lastValueFrom(
+      this.eventClient.send<IEvent>({ cmd: 'getAllFormats' }, {}).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
+    );
+  }
 
-    async getThemes() {
-        return await lastValueFrom(
-            this.eventClient.send<IEvent>({ cmd: 'themes' }, {}).pipe(
-                catchError((val) => {
-                    throw new RpcException(val);
-                }),
-            ),
-        );
-    }
-
-
+  async getThemes() {
+    return await lastValueFrom(
+      this.eventClient.send<IEvent>({ cmd: 'getAllThemes' }, {}).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
+    );
+  }
 }

@@ -4,7 +4,7 @@ import { IEventRepository } from './interfaces/event.repository.interface';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { FormatService } from '../format/format.service';
 import { ThemeService } from '../theme/theme.service';
-import { IEventQueryInterface } from './interfaces/event.query.interface';
+import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 import { FullThemeDto } from '../theme/interfaces/dto/full-theme.dto';
 
@@ -14,7 +14,7 @@ export class EventService {
     @Inject('IEventRepository')
     private readonly eventRepository: IEventRepository,
     private readonly formatService: FormatService,
-    private readonly themeService: ThemeService
+    private readonly themeService: ThemeService,
   ) {}
 
   async create(event: CreateEventDto): Promise<FullEventDto> {
@@ -52,13 +52,15 @@ export class EventService {
     return event;
   }
 
-  async getEvents(query: IEventQueryInterface): Promise<{ data: FullEventDto[], count: number}> {
+  async getEvents(
+    query: IEventSearchQuery,
+  ): Promise<{ data: FullEventDto[]; count: number }> {
     const take = query.offset || 10;
     const skip = query.page * take || 0;
-    const events = await this.eventRepository.findAndCount({
+    return await this.eventRepository.findAndCount({
       take: take,
       skip: skip,
-      order: { startTime: 'DESC'},
+      order: { startTime: 'DESC' },
       select: {
         organization: {
           id: true,
@@ -66,14 +68,13 @@ export class EventService {
       },
       relations: ['organization'],
     });
-    return events;
   }
 
   async getFormats(): Promise<FullFormatDto[]> {
-    return await this.formatService.getAllFormats()
+    return await this.formatService.getAllFormats();
   }
 
   async getThemes(): Promise<FullThemeDto[]> {
-    return await this.themeService.getAllThemes()
+    return await this.themeService.getAllThemes();
   }
 }
