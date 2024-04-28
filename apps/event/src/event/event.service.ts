@@ -56,6 +56,7 @@ export class EventService {
     const events = await this.eventRepository.findAndCount({
       take: take,
       skip: skip,
+      order: { startTime: 'DESC'},
       select: {
         organization: {
           id: true,
