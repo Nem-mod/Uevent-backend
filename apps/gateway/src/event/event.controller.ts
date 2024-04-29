@@ -17,7 +17,7 @@ import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
 import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 import { TicketService } from '../ticket/ticket.service';
-import { ITicketStatistic } from '../ticket/interfaces/ticket-statistic.interface';
+import { IEventAndTicketsStatistic } from './interfaces/event-and-tickets-statistic.interface';
 
 @Controller({
   version: '1',
@@ -41,12 +41,12 @@ export class EventController {
   @Get(':id')
   async getEventById(
     @Param('id', ParseIntPipe) eventId: number,
-  ): Promise<{ event: IEvent; ticketsStatistic: ITicketStatistic[] }> {
+  ): Promise<IEventAndTicketsStatistic> {
     const event: IEvent = await this.eventGatewayService.getEventById(eventId);
     const ticketsStatistic =
       await this.ticketService.getTicketsStatisticsByEvent(eventId);
 
-    return { event, ticketsStatistic };
+    return { ...event, ticketsStatistic };
   }
 
   @Get()
