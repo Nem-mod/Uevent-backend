@@ -16,13 +16,18 @@ import { OrganizationRoleGuard } from '../common/guards/organization-role.guard'
 import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
 import { IEventSearchQuery } from './interfaces/event-search-query.interface';
+import { TicketService } from '../ticket/ticket.service';
+import { ITicketStatistic } from '../ticket/interfaces/ticket-statistic.interface';
 
 @Controller({
   version: '1',
   path: 'event',
 })
 export class EventController {
-  constructor(private readonly eventGatewayService: EventService) {}
+  constructor(
+    private readonly eventGatewayService: EventService,
+    private readonly ticketService: TicketService,
+  ) {}
 
   @Get('formats')
   async getAllFormats() {
@@ -36,8 +41,12 @@ export class EventController {
   @Get(':id')
   async getEventById(
     @Param('id', ParseIntPipe) eventId: number,
-  ): Promise<IEvent> {
-    return await this.eventGatewayService.getEventById(eventId);
+  ): Promise<{ event: IEvent; ticketsStatistic: ITicketStatistic[] }> {
+    const event: IEvent = await this.eventGatewayService.getEventById(eventId);
+    const ticketsStatistic =
+      await this.ticketService.getTicketsStatisticsByEvent(eventId);
+
+    return { event, ticketsStatistic };
   }
 
   @Get()
