@@ -13,6 +13,7 @@ import { OrganizationRoleGuard } from '../common/guards/organization-role.guard'
 import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 import { OrganizationRole } from '../common/decorators/organization-role.decorator';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
+import { ITicket } from './interfaces/ticket.interface';
 
 @Controller({
   version: '1',
@@ -20,6 +21,14 @@ import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 })
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
+
+  @Get('event/:id/type/:type')
+  async getAvailableTicketByType(
+    @Param('id', ParseIntPipe) eventId: number,
+    @Param('type') type: string,
+  ): Promise<ITicket> {
+    return await this.ticketService.getTicketByType(eventId, type);
+  }
 
   @Get('event/:id/stats')
   async getTicketsStatisticByEvent(

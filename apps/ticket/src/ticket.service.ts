@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ITicketRepository } from './interfaces/ticket.repository.interface';
 import { CreateTicketDto } from './interfaces/dto/create-ticket.dto';
 import { ITicket } from './interfaces/ticket.interface';
@@ -7,6 +7,7 @@ import { Ticket } from './entities/ticket.entity';
 import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
 import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
+import { SearchTicketTypeAndIdDto } from './interfaces/dto/search-ticket-type-and-id.dto';
 
 @Injectable()
 export class TicketService {
@@ -67,7 +68,37 @@ export class TicketService {
     return await this.ticketRepository.findAndCount({
       take: take,
       skip: skip,
+      where: {
+        event: { id: query.event },
+      },
       order: { id: 'DESC' },
     });
+  }
+
+  async getAvailableTicketByType(
+    typeAndEventId: SearchTicketTypeAndIdDto,
+  ): Promise<ITicket> {
+    const ticket: ITicket = await this.ticketRepository.findOne({
+      where: {
+        user: null,
+        type: typeAndEventId.type,
+        event: { id: typeAndEventId.id },
+      },
+    });
+
+    console.log(
+      await this.ticketRepository.findAll({
+        where: {
+          user: null,
+          type: typeAndEventId.type,
+          event: { id: typeAndEventId.id },
+        },
+      }),
+    );
+
+    if (!ticket)
+      throw new NotFoundException('Ticket with such type is sold out');
+
+    return ticket;
   }
 }

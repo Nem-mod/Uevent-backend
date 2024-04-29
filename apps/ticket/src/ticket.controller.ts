@@ -5,6 +5,8 @@ import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amo
 import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
 import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
+import { ITicket } from './interfaces/ticket.interface';
+import { SearchTicketTypeAndIdDto } from './interfaces/dto/search-ticket-type-and-id.dto';
 
 @Controller()
 export class TicketController {
@@ -33,6 +35,11 @@ export class TicketController {
   @MessagePattern({ cmd: 'connectTicketToUser' })
   async connectTicketToUser(ticketId: number, userId: number) {}
 
-  @MessagePattern({ cmd: 'getAvaliableTicketByType' })
-  async getAvaliableTicketByStatistic() {}
+  @MessagePattern({ cmd: 'getAvailableTicketByType' })
+  async getAvailableTicketByType(
+    typeAndEventId: SearchTicketTypeAndIdDto,
+  ): Promise<ITicket> {
+    console.log(typeAndEventId);
+    return await this.ticketService.getAvailableTicketByType(typeAndEventId);
+  }
 }
