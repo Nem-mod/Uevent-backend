@@ -5,6 +5,8 @@ import { ITicket } from './interfaces/ticket.interface';
 import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
 import { Ticket } from './entities/ticket.entity';
 import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
+import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
+import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 
 @Injectable()
 export class TicketService {
@@ -44,7 +46,9 @@ export class TicketService {
     return await this.ticketRepository.saveMany(ticket as unknown as Ticket[]);
   }
 
-  async getTicketsInfoByEvent(eventId: number): Promise<ITicketStatistic[]> {
+  async getTicketsStatisticByEvent(
+    eventId: number,
+  ): Promise<ITicketStatistic[]> {
     return await this.ticketRepository
       .createQueryBuilder('ticket')
       .select('ticket.type', 'type')
@@ -55,5 +59,15 @@ export class TicketService {
       .groupBy('ticket.type')
       .addGroupBy('ticket.cost')
       .getRawMany();
+  }
+
+  async getTickets(query: ITicketSearchQuery): Promise<ITicketSearchResponse> {
+    const take = query.offset || 10;
+    const skip = query.page * take || 0;
+    return await this.ticketRepository.findAndCount({
+      take: take,
+      skip: skip,
+      order: { id: 'DESC' },
+    });
   }
 }

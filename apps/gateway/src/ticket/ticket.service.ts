@@ -3,6 +3,8 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ITickets } from './interfaces/tickets.interface';
 import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
+import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
+import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 
 @Injectable()
 export class TicketService {
@@ -30,7 +32,18 @@ export class TicketService {
         .send<ITicketStatistic[]>({ cmd: 'getTicketsInfoByEvent' }, eventId)
         .pipe(
           catchError((val) => {
-            console.log(val);
+            throw new RpcException(val);
+          }),
+        ),
+    );
+  }
+
+  async getTickets(query: ITicketSearchQuery): Promise<ITicketSearchResponse> {
+    return await lastValueFrom(
+      this.ticketClient
+        .send<ITicketSearchResponse>({ cmd: 'getTickets' }, query)
+        .pipe(
+          catchError((val) => {
             throw new RpcException(val);
           }),
         ),

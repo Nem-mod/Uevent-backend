@@ -31,6 +31,7 @@ export class EventController {
     query: IEventSearchQuery,
   ): Promise<{ data: FullEventDto[]; count: number }> {
     // TODO: create interface for this
+    // TODO: implement filtration by organization
     return await this.eventService.getEvents(query);
   }
 

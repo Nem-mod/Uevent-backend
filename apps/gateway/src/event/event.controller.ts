@@ -50,7 +50,19 @@ export class EventController {
   }
 
   @Get()
-  async getEvents(@Query() query: IEventSearchQuery) {
+  async getEvents(@Query() query: IEventSearchQuery): Promise<any> {
+    // TODO: add interfaces
+    return await this.eventGatewayService.getEvents(query);
+  }
+
+  @OrganizationRole('owner', 'moderator')
+  @UseGuards(AccessAuthGuard, OrganizationRoleGuard)
+  @Get('organization/:orgId')
+  async getEventsByOrganization(
+    @Param('orgId', ParseIntPipe) orgId: number,
+    @Query() query: IEventSearchQuery,
+  ): Promise<any> {
+    query.organization = orgId;
     return await this.eventGatewayService.getEvents(query);
   }
 
