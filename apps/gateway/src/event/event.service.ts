@@ -38,12 +38,22 @@ export class EventService {
       ),
     );
 
-    await this.ticketService.createTickets(
-      eventAndTickets.tickets,
-      createdEvent.id,
-    ); // TODO: delete event on ticket error / create 'add tickets to event' endpoint
+    try {
+      await this.ticketService.createTickets(
+        eventAndTickets.tickets,
+        createdEvent.id,
+      ); // TODO: delete event on ticket error / create 'add tickets to event' endpoint
+    } catch (err) {
+      console.log('im herreeeeeeeeeeeeeeeeee');
+      await this.deleteEvent(createdEvent.id);
+      throw err;
+    }
 
     return createdEvent;
+  }
+
+  async deleteEvent(id: number): Promise<void> {
+    this.eventClient.emit('deleteEvent', id);
   }
 
   async getEvents(query: IEventSearchQuery) {

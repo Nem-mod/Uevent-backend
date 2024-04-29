@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { EventService } from './event.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { IEventSearchQuery } from './interfaces/event-search-query.interface';
@@ -14,6 +14,11 @@ export class EventController {
   async create(event: CreateEventDto): Promise<FullEventDto> {
     // TODO: Rename startTime to start
     return await this.eventService.create(event);
+  }
+
+  @EventPattern('deleteEvent')
+  async delete(id: number): Promise<void> {
+    await this.eventService.delete(id);
   }
 
   @MessagePattern({ cmd: 'getEventById' })

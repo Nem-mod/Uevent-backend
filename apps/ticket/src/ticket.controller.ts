@@ -9,9 +9,10 @@ export class TicketController {
 
   @MessagePattern({ cmd: 'createTickets' })
   async createTickets(
-    ticketsIndoAndId: CreateTicketsAmountAndIdDto,
+    ticketsInfoAndId: CreateTicketsAmountAndIdDto,
   ): Promise<true> {
-    await this.ticketService.createTickets(ticketsIndoAndId);
+    console.log(ticketsInfoAndId);
+    await this.ticketService.createTickets(ticketsInfoAndId);
     return true;
   }
 }

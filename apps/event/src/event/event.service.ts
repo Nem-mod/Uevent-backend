@@ -34,6 +34,10 @@ export class EventService {
     return await this.getById(newEvent.id);
   }
 
+  async delete(id: number): Promise<void> {
+    await this.eventRepository.delete({ id });
+  }
+
   async getById(id: number): Promise<FullEventDto> {
     const event: FullEventDto = await this.eventRepository.findOne({
       where: { id: id },
