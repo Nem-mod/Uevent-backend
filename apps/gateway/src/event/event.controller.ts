@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -55,5 +56,10 @@ export class EventController {
       orgId,
       eventAndTickets,
     );
+  }
+
+  @Delete(':id')
+  async deleteEvent(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.eventGatewayService.deleteEvent(id);
   }
 }

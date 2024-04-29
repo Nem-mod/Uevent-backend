@@ -19,6 +19,6 @@ export class Ticket extends AbstractEntity {
   @Column({ type: 'timestamptz', default: null, nullable: true })
   dateScanned: Date;
 
-  @ManyToOne(() => Event)
+  @ManyToOne(() => Event, { onDelete: 'SET NULL' })
   event: Event;
 }

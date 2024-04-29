@@ -44,7 +44,6 @@ export class EventService {
         createdEvent.id,
       ); // TODO: delete event on ticket error / create 'add tickets to event' endpoint
     } catch (err) {
-      console.log('im herreeeeeeeeeeeeeeeeee');
       await this.deleteEvent(createdEvent.id);
       throw err;
     }
