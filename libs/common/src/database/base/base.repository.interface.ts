@@ -9,9 +9,10 @@ export interface IBaseRepository<T> {
   findOneById(id: number | string): Promise<T>;
   findOne(filter: any): Promise<T>;
   findAll(filter?: any): Promise<T[]>;
-  findAndCount(filter?: any): Promise<{ data: T[], count: number}>;
+  findAndCount(filter?: any): Promise<{ data: T[]; count: number }>;
   remove(data: T): Promise<T>;
   removeAll(data: T[]): Promise<T[]>;
   update(id: number | string, data: DeepPartial<T>): Promise<T>;
   preload(data: DeepPartial<T>): Promise<T>;
+  createQueryBuilder(alias?: string): any;
 }

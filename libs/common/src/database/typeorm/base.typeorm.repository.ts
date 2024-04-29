@@ -29,13 +29,13 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
     return this.entity.find(filter);
   }
 
-  async findAndCount(filter?: any): Promise<{ data: T[], count: number}> {
+  async findAndCount(filter?: any): Promise<{ data: T[]; count: number }> {
     const [result, total] = await this.entity.findAndCount(filter);
 
     return {
       data: result,
-      count: total
-    }
+      count: total,
+    };
   }
 
   async findOneById(id: number): Promise<T> {
@@ -69,5 +69,9 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
 
   async delete(filter: FindOptionsWhere<T>): Promise<void> {
     await this.entity.delete(filter);
+  }
+
+  createQueryBuilder(alias?: string): any {
+    return this.entity.createQueryBuilder(alias);
   }
 }

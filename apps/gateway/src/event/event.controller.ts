@@ -45,7 +45,7 @@ export class EventController {
     return await this.eventGatewayService.getEvents(query);
   }
 
-  @OrganizationRole('owner')
+  @OrganizationRole('owner', 'moderator')
   @UseGuards(AccessAuthGuard, OrganizationRoleGuard)
   @Post(':orgId')
   async createEventWithTickets(
@@ -58,6 +58,8 @@ export class EventController {
     );
   }
 
+  @OrganizationRole('owner', 'moderator')
+  @UseGuards(AccessAuthGuard, OrganizationRoleGuard)
   @Delete(':id')
   async deleteEvent(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.eventGatewayService.deleteEvent(id);

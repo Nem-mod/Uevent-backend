@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 
 @Controller({
@@ -7,4 +7,9 @@ import { TicketService } from './ticket.service';
 })
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
+
+  @Get('event/:id')
+  async getTicketsInfoByEvent(@Param('id', ParseIntPipe) eventId: number) {
+    return this.ticketService.getTicketsStatisticsByEvent(eventId);
+  }
 }

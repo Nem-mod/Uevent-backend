@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
+import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
 
 @Controller()
 export class TicketController {
@@ -14,5 +15,10 @@ export class TicketController {
     console.log(ticketsInfoAndId);
     await this.ticketService.createTickets(ticketsInfoAndId);
     return true;
+  }
+
+  @MessagePattern({ cmd: 'getTicketsInfoByEvent' })
+  async getTicketsInfoByEvent(eventId: number): Promise<ITicketStatistic[]> {
+    return this.ticketService.getTicketsInfoByEvent(eventId);
   }
 }

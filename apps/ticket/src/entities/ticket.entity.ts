@@ -1,6 +1,7 @@
 import { AbstractEntity } from '@app/common/database/base/base.abstract.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Event } from '../../../event/src/event/entities/event.entity';
+import { User } from '../../../user/src/entities/user.entity';
 
 @Entity()
 export class Ticket extends AbstractEntity {
@@ -21,4 +22,7 @@ export class Ticket extends AbstractEntity {
 
   @ManyToOne(() => Event, { onDelete: 'SET NULL' })
   event: Event;
+
+  @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
+  user: User;
 }
