@@ -25,11 +25,11 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.useGlobalPipes(
-      new ValidationPipe({
-        stopAtFirstError: true,
-        whitelist: true,
-        transformOptions: { enableImplicitConversion: true },
-      }),
+    new ValidationPipe({
+      stopAtFirstError: true,
+      whitelist: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
   );
 
   await app.listen(configService.get('services.gateway.port'));

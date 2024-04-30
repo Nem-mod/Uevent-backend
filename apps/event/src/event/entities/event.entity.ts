@@ -22,10 +22,10 @@ export class Event extends AbstractEntity {
   @Column({ type: 'varchar', length: 200, default: 'poster.webp' }) // TODO: change default and length
   poster!: string;
 
-  @ManyToOne(() => Organization)
+  @ManyToOne(() => Organization, { onDelete: 'SET NULL' })
   organization: Organization;
 
-  @ManyToMany(() => Theme, { eager: true })
+  @ManyToMany(() => Theme, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   themes: Theme[];
 

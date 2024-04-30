@@ -6,6 +6,10 @@ import { PayloadAndIdDto } from '../dto/payload-and-id.dto';
 export abstract class BaseTokenController implements IBaseTokenController {
   protected constructor(protected readonly tokenService: IBaseTokenService) {}
 
+  async simpleSign(payload: any): Promise<string> {
+    return (await this.tokenService.simpleSign(payload)).token;
+  }
+
   async signAndPush(obj: PayloadAndIdDto): Promise<string> {
     return await this.tokenService.signAndPush(obj.payload, obj.id);
   }
@@ -22,18 +26,19 @@ export abstract class BaseTokenController implements IBaseTokenController {
     return await this.tokenService.remove(obj.token, obj.id);
   }
 
-  async verify(obj: TokenAndIdDto): Promise<true> {
-    await this.tokenService.verify(obj.token, obj.id);
-    return true;
+  async simpleVerify(token: string): Promise<object> {
+    return await this.tokenService.simpleVerify(token);
   }
 
-  async verifyAndClear(obj: TokenAndIdDto): Promise<true> {
-    await this.tokenService.verifyAndClear(obj.token, obj.id);
-    return true;
+  async verify(obj: TokenAndIdDto): Promise<object> {
+    return await this.tokenService.verify(obj.token, obj.id);
   }
 
-  async verifyAndRemove(obj: TokenAndIdDto): Promise<true> {
-    await this.tokenService.verifyAndRemove(obj.token, obj.id);
-    return true;
+  async verifyAndClear(obj: TokenAndIdDto): Promise<object> {
+    return await this.tokenService.verifyAndClear(obj.token, obj.id);
+  }
+
+  async verifyAndRemove(obj: TokenAndIdDto): Promise<object> {
+    return await this.tokenService.verifyAndRemove(obj.token, obj.id);
   }
 }

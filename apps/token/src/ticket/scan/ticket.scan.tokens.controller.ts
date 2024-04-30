@@ -7,58 +7,58 @@ import { PayloadAndIdDto } from '../../interfaces/dto/payload-and-id.dto';
 import { TokenAndIdDto } from '../../interfaces/dto/token-and-id.dto';
 
 @Controller()
-export class UserAccessTokensController
+export class TicketScanTokensController
   extends BaseTokenController
   implements IBaseTokenController
 {
   constructor(
-    @Inject('accessService')
-    private readonly userAccessTokensService: IBaseTokenService,
+    @Inject('scanService')
+    private readonly ticketScanTokensService: IBaseTokenService,
   ) {
-    super(userAccessTokensService);
+    super(ticketScanTokensService);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'sign' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'sign' })
   async simpleSign(payload: any): Promise<string> {
     return await super.simpleSign(payload);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'signAndPush' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'signAndPush' })
   async signAndPush(obj: PayloadAndIdDto): Promise<string> {
     return await super.signAndPush(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'signAndClear' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'signAndClear' })
   async signAndClear(obj: PayloadAndIdDto): Promise<string> {
     return await super.signAndClear(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'decode' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'decode' })
   async decode(token: string): Promise<object> {
     return await super.decode(token);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'remove' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'remove' })
   async remove(obj: TokenAndIdDto): Promise<boolean> {
     return await super.remove(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'simpleVerify' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'simpleVerify' })
   async simpleVerify(token: string): Promise<object> {
     return await super.simpleVerify(token);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'verify' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'verify' })
   async verify(obj: TokenAndIdDto): Promise<object> {
     return await super.verify(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'verifyAndClear' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'verifyAndClear' })
   async verifyAndClear(obj: TokenAndIdDto): Promise<object> {
     return await super.verifyAndClear(obj);
   }
 
-  @MessagePattern({ role: 'user', token: 'access', cmd: 'verifyAndRemove' })
+  @MessagePattern({ role: 'ticket', token: 'scan', cmd: 'verifyAndRemove' })
   async verifyAndRemove(obj: TokenAndIdDto): Promise<object> {
     return await super.verifyAndRemove(obj);
   }

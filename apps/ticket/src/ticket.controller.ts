@@ -1,13 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
-import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
-import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
-import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
-import { ITicketSearchResponse } from './interfaces/ticket-search-response';
-import { ITicket } from './interfaces/ticket.interface';
-import { TicketTypeAndIdDto } from './interfaces/dto/ticket-type-and-id.dto';
-import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
+import { CreateTicketsAmountAndIdDto } from './ticket/interfaces/dto/create-tickets-amount-and-id.dto';
+import { ITicketStatistic } from './ticket/interfaces/ticket-statistic.interface';
+import { ITicketSearchQuery } from './ticket/interfaces/ticket-search-query.interface';
+import { ITicketSearchResponse } from './ticket/interfaces/ticket-search-response';
+import { ITicket } from './ticket/interfaces/ticket.interface';
+import { TicketTypeAndIdDto } from './ticket/interfaces/dto/ticket-type-and-id.dto';
+import { ITicketIdAndUserId } from './ticket/interfaces/ticket-id-and-user-id.interface';
 
 @Controller()
 export class TicketController {
@@ -33,26 +33,6 @@ export class TicketController {
     return this.ticketService.getTickets(query);
   }
 
-  // @MessagePattern({ cmd: 'connectTicketToUser' })
-  // async connectTicketToUser(ticketId: number, userId: number) {}
-
-  @EventPattern('setTicketSold')
-  async setTicketAsSold(ticketId: number): Promise<void> {
-    await this.ticketService.setTicketAsSold(ticketId);
-  }
-
-  @EventPattern('setTicketProcessing')
-  async setTicketAsProcessing(
-    ticketAndUserIds: ITicketIdAndUserId,
-  ): Promise<void> {
-    await this.ticketService.setTicketAsProcessing(ticketAndUserIds);
-  }
-
-  @EventPattern('setTicketAvailable')
-  async setTicketAsAvailable(ticketId: number): Promise<void> {
-    await this.ticketService.setTicketAsAvailable(ticketId);
-  }
-
   @MessagePattern({ cmd: 'getAvailableTicketByType' })
   async getAvailableTicketByType(
     typeAndEventId: TicketTypeAndIdDto,
@@ -62,9 +42,37 @@ export class TicketController {
     //   userId: Number(typeAndEventId.type),
     // };
     // return await this.ticketService.setTicketAsAvailable(typeAndEventId.id); // TODO: for test. delete
-    // return await this.ticketService.setTicketAsSold(typeAndEventId.id); // TODO: for test. delete
     // return await this.ticketService.setTicketAsProcessing(ticketAndUserIds); // TODO: for test. delete
+    // return await this.ticketService.setTicketAsSold(typeAndEventId.id); // TODO: for test. delete
+    // await this.ticketService.compostTicket(typeAndEventId.type);
 
     return await this.ticketService.getAvailableTicketByType(typeAndEventId);
+  }
+
+  @EventPattern('setTicketAvailable')
+  async setTicketAsAvailable(ticketId: number): Promise<void> {
+    await this.ticketService.setTicketAsAvailable(ticketId);
+  }
+
+  @EventPattern('setTicketProcessing')
+  async setTicketAsProcessing(
+    ticketAndUserIds: ITicketIdAndUserId,
+  ): Promise<void> {
+    await this.ticketService.setTicketAsProcessing(ticketAndUserIds);
+  }
+
+  @MessagePattern({ cmd: 'setTicketSold' })
+  async setTicketAsSold(ticketId: number): Promise<string> {
+    return await this.ticketService.setTicketAsSold(ticketId);
+  }
+
+  @MessagePattern({ cmd: 'scanTicket' })
+  async scanTicket(token: string): Promise<ITicket> {
+    return await this.ticketService.scanTicket(token);
+  }
+
+  @EventPattern('compostTicket')
+  async compostTicket(token: string): Promise<void> {
+    await this.ticketService.compostTicket(token);
   }
 }

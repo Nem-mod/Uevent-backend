@@ -11,6 +11,8 @@ import { UserAccessTokensService } from './user/access/user.access.tokens.servic
 import { UserAccessTokensController } from './user/access/user.access.tokens.controller';
 import { UserRefreshTokensController } from './user/refresh/user.refresh.tokens.controller';
 import { UserResetPswTokensController } from './user/reset-psw/user.reset-psw.tokens.controller';
+import { TicketScanTokensService } from './ticket/scan/ticket.scan.tokens.service';
+import { TicketScanTokensController } from './ticket/scan/ticket.scan.tokens.controller';
 
 @Module({
   imports: [ConfigModule, LoggerModule, JwtModule, RedisRedisOmModule],
@@ -19,12 +21,14 @@ import { UserResetPswTokensController } from './user/reset-psw/user.reset-psw.to
     UserAccessTokensController,
     UserRefreshTokensController,
     UserResetPswTokensController,
+    TicketScanTokensController,
   ],
   providers: [
     { provide: 'verifyService', useClass: UserVerifyTokensService },
     { provide: 'accessService', useClass: UserAccessTokensService },
     { provide: 'refreshService', useClass: UserRefreshTokensService },
     { provide: 'resetPswService', useClass: UserResetPswTokensService },
+    { provide: 'scanService', useClass: TicketScanTokensService },
   ],
 })
 export class TokenModule {}

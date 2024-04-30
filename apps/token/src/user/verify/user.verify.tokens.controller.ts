@@ -18,6 +18,11 @@ export class UserVerifyTokensController
     super(userVerifyTokensService);
   }
 
+  @MessagePattern({ role: 'user', token: 'verify', cmd: 'sign' })
+  async simpleSign(payload: any): Promise<string> {
+    return await super.simpleSign(payload);
+  }
+
   @MessagePattern({ role: 'user', token: 'verify', cmd: 'signAndPush' })
   async signAndPush(obj: PayloadAndIdDto): Promise<string> {
     return await super.signAndPush(obj);
@@ -38,18 +43,23 @@ export class UserVerifyTokensController
     return await super.remove(obj);
   }
 
+  @MessagePattern({ role: 'user', token: 'verify', cmd: 'simpleVerify' })
+  async simpleVerify(token: string): Promise<object> {
+    return await super.simpleVerify(token);
+  }
+
   @MessagePattern({ role: 'user', token: 'verify', cmd: 'verify' })
-  async verify(obj: TokenAndIdDto): Promise<true> {
+  async verify(obj: TokenAndIdDto): Promise<object> {
     return await super.verify(obj);
   }
 
   @MessagePattern({ role: 'user', token: 'verify', cmd: 'verifyAndClear' })
-  async verifyAndClear(obj: TokenAndIdDto): Promise<true> {
+  async verifyAndClear(obj: TokenAndIdDto): Promise<object> {
     return await super.verifyAndClear(obj);
   }
 
   @MessagePattern({ role: 'user', token: 'verify', cmd: 'verifyAndRemove' })
-  async verifyAndRemove(obj: TokenAndIdDto): Promise<true> {
+  async verifyAndRemove(obj: TokenAndIdDto): Promise<object> {
     return await super.verifyAndRemove(obj);
   }
 }

@@ -63,7 +63,8 @@ export abstract class BaseTypeormRepository<T extends AbstractEntity>
   }
 
   async update(id: number, data: DeepPartial<T>): Promise<T> {
-    await this.entity.update(id, data as any);
+    if (!(await this.findOneById(id))) return null;
+    await this.entity.save({ ...data, id } as any);
     return await this.findOneById(id);
   }
 

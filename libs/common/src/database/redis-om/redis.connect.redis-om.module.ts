@@ -5,6 +5,7 @@ import { UserVerifyTokensSchema } from '../../../../../apps/token/src/user/verif
 import { UserRefreshTokensSchema } from '../../../../../apps/token/src/user/refresh/user.refresh.tokens.schema';
 import { UserResetPswTokensSchema } from '../../../../../apps/token/src/user/reset-psw/user.reset-psw.tokens.schema';
 import { UserAccessTokensSchema } from '../../../../../apps/token/src/user/access/user.access.tokens.schema';
+import { TicketScanTokensSchema } from '../../../../../apps/token/src/ticket/scan/ticket.scan.tokens.schema';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserAccessTokensSchema } from '../../../../../apps/token/src/user/acces
         UserRefreshTokensSchema,
         UserResetPswTokensSchema,
         UserAccessTokensSchema,
+        TicketScanTokensSchema,
       ],
       {
         url: 'redis://default:OrNeRmipafJKRCixxUCowRrmvJPurTDK@viaduct.proxy.rlwy.net:50185',

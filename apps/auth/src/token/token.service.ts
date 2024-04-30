@@ -8,7 +8,7 @@ import { IId } from './interfaces/id.interface';
 import { IAuthTokensAndId } from './interfaces/auth-tokens-and-id.interface';
 
 @Injectable()
-export class TokenAuthService {
+export class TokenService {
   constructor(
     @Inject('TOKEN_SERVICE') private readonly tokenClient: ClientProxy,
   ) {}

@@ -4,7 +4,7 @@ import { MailerAuthService } from '../mailer/mailer.auth.service';
 import { IBaseUserMail } from '../mailer/interfaces/base.user.mail.interface';
 import { IVerificationUserMail } from '../mailer/interfaces/verification.user.mail.interface';
 import { ITokenAndId } from '../token/interfaces/token-and-id.interface';
-import { TokenAuthService } from '../token/token.auth.service';
+import { TokenService } from '../token/token.service';
 import { UserAuthService } from '../user/user.auth.service';
 import { ILogin } from '../user/interfaces/login.interface';
 import { IAuthTokens } from '../token/interfaces/auth-tokens.interface';
@@ -15,7 +15,7 @@ export class AuthService {
   constructor(
     private readonly userAuthService: UserAuthService,
     private readonly mailerAuthService: MailerAuthService,
-    private readonly tokenAuthService: TokenAuthService,
+    private readonly tokenAuthService: TokenService,
   ) {}
 
   async sendUserVerifyEmail(baseMailInfo: IBaseUserMail): Promise<void> {

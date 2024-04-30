@@ -5,5 +5,5 @@ export interface ITicket {
   // description: string;
   event: number;
   // composted: boolean;
-  // dateScanned: Date;
+  // dateComposted: Date;
 }

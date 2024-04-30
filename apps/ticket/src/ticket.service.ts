@@ -1,20 +1,29 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ITicketRepository } from './interfaces/ticket.repository.interface';
-import { CreateTicketDto } from './interfaces/dto/create-ticket.dto';
-import { ITicket } from './interfaces/ticket.interface';
-import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
-import { Ticket } from './entities/ticket.entity';
-import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
-import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
-import { ITicketSearchResponse } from './interfaces/ticket-search-response';
-import { TicketTypeAndIdDto } from './interfaces/dto/ticket-type-and-id.dto';
-import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { ITicketRepository } from './ticket/interfaces/ticket.repository.interface';
+import { CreateTicketDto } from './ticket/interfaces/dto/create-ticket.dto';
+import { ITicket } from './ticket/interfaces/ticket.interface';
+import { CreateTicketsAmountAndIdDto } from './ticket/interfaces/dto/create-tickets-amount-and-id.dto';
+import { ITicketStatistic } from './ticket/interfaces/ticket-statistic.interface';
+import { ITicketSearchQuery } from './ticket/interfaces/ticket-search-query.interface';
+import { ITicketSearchResponse } from './ticket/interfaces/ticket-search-response';
+import { TicketTypeAndIdDto } from './ticket/interfaces/dto/ticket-type-and-id.dto';
+import { ITicketIdAndUserId } from './ticket/interfaces/ticket-id-and-user-id.interface';
+import { TokenService } from './token/token.service';
+import { Ticket } from './ticket/entities/ticket.entity';
+import { Event } from '../../event/src/event/entities/event.entity';
+import { TicketStatus } from './ticket/interfaces/enums/ticket-status.enum';
 
 @Injectable()
 export class TicketService {
   constructor(
     @Inject('ITicketRepository')
     private readonly ticketRepository: ITicketRepository,
+    private readonly tokenService: TokenService,
   ) {}
 
   async createTickets(
@@ -39,13 +48,24 @@ export class TicketService {
   }
 
   async createTicket(ticket: CreateTicketDto): Promise<ITicket> {
-    const event = { id: ticket.event };
+    const event = { id: ticket.event } as Event;
 
     return this.ticketRepository.create({ ...ticket, event });
   }
 
   async saveTickets(ticket: ITicket[]): Promise<ITicket[]> {
     return await this.ticketRepository.saveMany(ticket as unknown as Ticket[]);
+  }
+
+  async scanTicket(token: string): Promise<ITicket> {
+    const { id: ticketId } = await this.tokenService.verifyToken(token);
+    const ticket: ITicket = await this.getTicketById(ticketId);
+
+    await this.ticketRepository.update(ticket.id, {
+      dateComposted: new Date(),
+    });
+
+    return ticket;
   }
 
   async getTicketsStatisticByEvent(
@@ -76,22 +96,63 @@ export class TicketService {
     });
   }
 
-  async setTicketAsProcessing(
-    ticketsInfoAndId: ITicketIdAndUserId,
-  ): Promise<ITicket> {
-    return await this.ticketRepository.update(ticketsInfoAndId.ticketId, {
-      userId: ticketsInfoAndId.userId,
-    });
-  }
+  async getTicketById(ticketId: number): Promise<ITicket> {
+    const ticket = await this.ticketRepository.findOneById(ticketId);
 
-  async setTicketAsSold(ticketId: number): Promise<ITicket> {
-    return await this.ticketRepository.update(ticketId, { sold: true });
+    if (!ticket)
+      throw new NotFoundException(`Ticket with id ${ticketId} not found`);
+
+    return ticket;
   }
 
   async setTicketAsAvailable(ticketId: number): Promise<ITicket> {
     return await this.ticketRepository.update(ticketId, {
       user: null,
       sold: false,
+      composted: false,
+      dateComposted: null,
+      status: TicketStatus.AVAILABLE,
+    });
+  }
+
+  async setTicketAsProcessing(
+    ticketsInfoAndId: ITicketIdAndUserId,
+  ): Promise<ITicket> {
+    const ticket = await this.getTicketById(ticketsInfoAndId.ticketId);
+
+    if (ticket.status !== TicketStatus.AVAILABLE)
+      throw new ForbiddenException(
+        'Ticket must be available to start processing',
+      );
+
+    return await this.ticketRepository.update(ticketsInfoAndId.ticketId, {
+      user: { id: ticketsInfoAndId.userId },
+      status: TicketStatus.PROCESSING,
+    });
+  }
+
+  async setTicketAsSold(ticketId: number): Promise<string> {
+    const ticket = await this.ticketRepository.findOneById(ticketId);
+
+    if (ticket.status !== TicketStatus.PROCESSING)
+      throw new ForbiddenException('Ticket must be processing to be sold');
+
+    await this.ticketRepository.update(ticketId, {
+      sold: true,
+      status: TicketStatus.SOLD,
+    });
+
+    return await this.tokenService.signToken(ticket.id);
+  }
+
+  async compostTicket(token: string): Promise<void> {
+    const { id: ticketId } = await this.tokenService.verifyToken(token);
+    const ticket: ITicket = await this.getTicketById(ticketId);
+
+    await this.ticketRepository.update(ticket.id, {
+      composted: true,
+      dateComposted: new Date(),
+      status: TicketStatus.COMPOSTED,
     });
   }
 

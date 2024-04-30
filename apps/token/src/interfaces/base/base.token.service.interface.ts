@@ -1,5 +1,6 @@
+import { ITokenAndUuid } from '../token-and-uuid.interface';
+
 export interface IBaseTokenService {
-  // sign(payload: any): Promise<string>;
   // verify(token: string): Promise<boolean>;
   //
   // getByEntityId(entityId: string): Promise<any>
@@ -8,6 +9,8 @@ export interface IBaseTokenService {
   // push(entityId: string, uuid: string)
   // clear(entityId: string)
   // remove(uuid: string)
+  //
+  simpleSign(payload: any): Promise<ITokenAndUuid>;
   signAndPush(payload: any, id: string): Promise<string>;
   signAndClear(payload: any, id: string): Promise<string>;
   // signAndRemove(payload: any, id: string): Promise<string>;
@@ -15,7 +18,8 @@ export interface IBaseTokenService {
   decode(token: string): Promise<object>;
   remove(token: string, id: string): Promise<boolean>;
 
-  verify(token: string, id: string): Promise<void>;
-  verifyAndClear(token: string, id: string): Promise<void>;
-  verifyAndRemove(token: string, id: string): Promise<void>;
+  simpleVerify(token: string): Promise<object>;
+  verify(token: string, id: string): Promise<object>;
+  verifyAndClear(token: string, id: string): Promise<object>;
+  verifyAndRemove(token: string, id: string): Promise<object>;
 }
