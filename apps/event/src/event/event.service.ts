@@ -4,9 +4,11 @@ import { IEventRepository } from './interfaces/event.repository.interface';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { FormatService } from '../format/format.service';
 import { ThemeService } from '../theme/theme.service';
-import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 import { FullThemeDto } from '../theme/interfaces/dto/full-theme.dto';
+import { IEventSearchQuery } from './interfaces/dto/event-search-query.dto';
+import { Between, Or } from 'typeorm';
+import { groupDatesByDay } from '../utils/group-dates-by-day';
 
 @Injectable()
 export class EventService {
@@ -59,9 +61,19 @@ export class EventService {
   async getEvents(
     query: IEventSearchQuery,
   ): Promise<{ data: FullEventDto[]; count: number }> {
+
     const take = query.offset || 10;
     const skip = query.page * take || 0;
+    const { date : dates } = query;
+    const groupedDates = groupDatesByDay(dates);
+    const datesFilter = groupedDates.length != 0 ? groupedDates.map(dateGroup => {
+      return Between(dateGroup[0].toISOString(), dateGroup[1].toISOString());
+    }) : null;
+
     return await this.eventRepository.findAndCount({
+      where: {
+        startTime: datesFilter ? Or(...datesFilter): null
+      },
       take: take,
       skip: skip,
       order: { startTime: 'DESC' },

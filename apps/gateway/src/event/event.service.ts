@@ -4,7 +4,7 @@ import { catchError, lastValueFrom } from 'rxjs';
 import { IEvent } from './interfaces/event.interface';
 import { TicketService } from '../ticket/ticket.service';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
-import { IEventSearchQuery } from './interfaces/event-search-query.interface';
+import { IEventSearchQueryDTO } from './interfaces/event-search-query.dto';
 
 @Injectable()
 export class EventService {
@@ -55,7 +55,7 @@ export class EventService {
     this.eventClient.emit('deleteEvent', id);
   }
 
-  async getEvents(query: IEventSearchQuery) {
+  async getEvents(query: IEventSearchQueryDTO) {
     return await lastValueFrom(
       this.eventClient.send<any>({ cmd: 'getEvents' }, query).pipe(
         // TODO: Create interface for this

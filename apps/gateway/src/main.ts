@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { GatewayModule } from './gateway.module';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
@@ -24,6 +24,13 @@ async function bootstrap() {
   });
 
   app.use(cookieParser());
+  app.useGlobalPipes(
+      new ValidationPipe({
+        stopAtFirstError: true,
+        whitelist: true,
+        transformOptions: { enableImplicitConversion: true },
+      }),
+  );
 
   await app.listen(configService.get('services.gateway.port'));
 }
