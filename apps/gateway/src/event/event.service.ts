@@ -4,7 +4,7 @@ import { catchError, lastValueFrom } from 'rxjs';
 import { IEvent } from './interfaces/event.interface';
 import { TicketService } from '../ticket/ticket.service';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
-import { IEventSearchQueryDTO } from './interfaces/event-search-query.dto';
+import { IEventSearchQueryDTO } from './dto/event-search-query.dto';
 
 @Injectable()
 export class EventService {

@@ -15,7 +15,7 @@ import { OrganizationRole } from '../common/decorators/organization-role.decorat
 import { OrganizationRoleGuard } from '../common/guards/organization-role.guard';
 import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
-import { IEventSearchQueryDTO } from './interfaces/event-search-query.dto';
+import { IEventSearchQueryDTO } from './dto/event-search-query.dto';
 import { TicketService } from '../ticket/ticket.service';
 import { IEventAndTicketsStatistic } from './interfaces/event-and-tickets-statistic.interface';
 
