@@ -1,19 +1,25 @@
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 import { Transform, TransformFnParams } from 'class-transformer';
 export class IEventSearchQueryDTO {
   @IsNumber()
   @IsOptional()
-  offset: number;
+  offset?: number;
 
   @IsNumber()
   @IsOptional()
-  page: number;
+  page?: number;
 
-  // format: number[]
+  @IsNumber()
+  @IsOptional()
+  organizationId?: number;
 
-  // @IsArray()
-  // @Type(() => Date)
-  // @IsDate({ each: true })
+  @IsOptional()
+  @Transform(({ value }: TransformFnParams) => {
+    if (typeof value === 'string' && value)
+      return value.split(',').map(e => Number(e));
+    return value;
+  })
+  format?: number[]
 
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => {
@@ -21,5 +27,5 @@ export class IEventSearchQueryDTO {
       return value.split(',').map(e => new Date(e));
     return value;
   })
-  date: Date[]
+  date?: Date[]
 }

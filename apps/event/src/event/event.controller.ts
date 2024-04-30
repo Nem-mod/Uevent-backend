@@ -3,8 +3,8 @@ import { EventService } from './event.service';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
-import { IEventSearchQuery } from './interfaces/event-search-query.interface';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
+import { IEventSearchQuery } from './interfaces/dto/event-search-query.dto';
 
 @Controller()
 export class EventController {
@@ -31,6 +31,7 @@ export class EventController {
     query: IEventSearchQuery,
   ): Promise<{ data: FullEventDto[]; count: number }> {
     // TODO: create interface for this
+    console.log(query);
     return await this.eventService.getEvents(query);
   }
 

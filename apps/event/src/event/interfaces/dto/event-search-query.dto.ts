@@ -9,6 +9,14 @@ export class IEventSearchQuery {
   page?: number;
 
   @IsOptional()
+  organizationId?: number;
+
+
+  @IsOptional()
+  format?: number[];
+
+
+  @IsOptional()
   @Transform((({ value }) : TransformFnParams => value.map(e => new Date(e)) ))
   date?: Date[]
 }
