@@ -59,9 +59,9 @@ export class EventController {
   @Get('organization/:orgId')
   async getEventsByOrganization(
     @Param('orgId', ParseIntPipe) orgId: number,
-    @Query() query: IEventSearchQuery,
+    @Query() query: IEventSearchQueryDTO,
   ): Promise<any> {
-    query.organization = orgId;
+    query.organizationId = orgId;
     return await this.eventGatewayService.getEvents(query);
   }
 
