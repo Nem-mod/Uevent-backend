@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class SearchTicketTypeAndIdDto {
+export class TicketTypeAndIdDto {
   @IsString()
   @IsNotEmpty()
   type: string;

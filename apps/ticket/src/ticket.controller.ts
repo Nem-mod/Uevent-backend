@@ -1,12 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { TicketService } from './ticket.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
 import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
 import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 import { ITicket } from './interfaces/ticket.interface';
-import { SearchTicketTypeAndIdDto } from './interfaces/dto/search-ticket-type-and-id.dto';
+import { TicketTypeAndIdDto } from './interfaces/dto/ticket-type-and-id.dto';
+import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
 
 @Controller()
 export class TicketController {
@@ -32,14 +33,38 @@ export class TicketController {
     return this.ticketService.getTickets(query);
   }
 
-  @MessagePattern({ cmd: 'connectTicketToUser' })
-  async connectTicketToUser(ticketId: number, userId: number) {}
+  // @MessagePattern({ cmd: 'connectTicketToUser' })
+  // async connectTicketToUser(ticketId: number, userId: number) {}
+
+  @EventPattern('setTicketSold')
+  async setTicketAsSold(ticketId: number): Promise<void> {
+    await this.ticketService.setTicketAsSold(ticketId);
+  }
+
+  @EventPattern('setTicketProcessing')
+  async setTicketAsProcessing(
+    ticketAndUserIds: ITicketIdAndUserId,
+  ): Promise<void> {
+    await this.ticketService.setTicketAsProcessing(ticketAndUserIds);
+  }
+
+  @EventPattern('setTicketAvailable')
+  async setTicketAsAvailable(ticketId: number): Promise<void> {
+    await this.ticketService.setTicketAsAvailable(ticketId);
+  }
 
   @MessagePattern({ cmd: 'getAvailableTicketByType' })
   async getAvailableTicketByType(
-    typeAndEventId: SearchTicketTypeAndIdDto,
+    typeAndEventId: TicketTypeAndIdDto,
   ): Promise<ITicket> {
-    console.log(typeAndEventId);
+    // const ticketAndUserIds: ITicketIdAndUserId = {
+    //   ticketId: typeAndEventId.id,
+    //   userId: Number(typeAndEventId.type),
+    // };
+    // return await this.ticketService.setTicketAsAvailable(typeAndEventId.id); // TODO: for test. delete
+    // return await this.ticketService.setTicketAsSold(typeAndEventId.id); // TODO: for test. delete
+    // return await this.ticketService.setTicketAsProcessing(ticketAndUserIds); // TODO: for test. delete
+
     return await this.ticketService.getAvailableTicketByType(typeAndEventId);
   }
 }

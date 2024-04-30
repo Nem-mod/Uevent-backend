@@ -7,7 +7,8 @@ import { Ticket } from './entities/ticket.entity';
 import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
 import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
-import { SearchTicketTypeAndIdDto } from './interfaces/dto/search-ticket-type-and-id.dto';
+import { TicketTypeAndIdDto } from './interfaces/dto/ticket-type-and-id.dto';
+import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
 
 @Injectable()
 export class TicketService {
@@ -75,26 +76,36 @@ export class TicketService {
     });
   }
 
+  async setTicketAsProcessing(
+    ticketsInfoAndId: ITicketIdAndUserId,
+  ): Promise<ITicket> {
+    return await this.ticketRepository.update(ticketsInfoAndId.ticketId, {
+      userId: ticketsInfoAndId.userId,
+    });
+  }
+
+  async setTicketAsSold(ticketId: number): Promise<ITicket> {
+    return await this.ticketRepository.update(ticketId, { sold: true });
+  }
+
+  async setTicketAsAvailable(ticketId: number): Promise<ITicket> {
+    return await this.ticketRepository.update(ticketId, {
+      user: null,
+      sold: false,
+    });
+  }
+
   async getAvailableTicketByType(
-    typeAndEventId: SearchTicketTypeAndIdDto,
+    typeAndEventId: TicketTypeAndIdDto,
   ): Promise<ITicket> {
     const ticket: ITicket = await this.ticketRepository.findOne({
       where: {
         user: null,
+        sold: false,
         type: typeAndEventId.type,
         event: { id: typeAndEventId.id },
       },
     });
-
-    console.log(
-      await this.ticketRepository.findAll({
-        where: {
-          user: null,
-          type: typeAndEventId.type,
-          event: { id: typeAndEventId.id },
-        },
-      }),
-    );
 
     if (!ticket)
       throw new NotFoundException('Ticket with such type is sold out');
