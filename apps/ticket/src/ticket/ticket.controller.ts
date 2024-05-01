@@ -57,8 +57,9 @@ export class TicketController {
   @MessagePattern({ cmd: 'setTicketProcessing' })
   async setTicketAsProcessing(
     ticketAndUserIds: ITicketIdAndUserId,
-  ): Promise<void> {
+  ): Promise<true> {
     await this.ticketService.setTicketAsProcessing(ticketAndUserIds);
+    return true;
   }
 
   @MessagePattern({ cmd: 'setTicketSold' })

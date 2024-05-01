@@ -12,6 +12,8 @@ import { ConfigService } from '@nestjs/config';
 import { StripeModule } from '@golevelup/nestjs-stripe';
 import { PaymentService } from './payment/payment.service';
 import { StripeWebhookHandlerService } from './payment/stripe-webhook-handler.service';
+import { UserService } from './user/user.service';
+import { MailerService } from './mailer/mailer.service';
 
 @Module({
   imports: [
@@ -47,9 +49,47 @@ import { StripeWebhookHandlerService } from './payment/stripe-webhook-handler.se
           };
         },
       },
+      {
+        inject: [ConfigService],
+        name: 'USER_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get('services.user.transport') as keyof Transport
+              ],
+            options: configService.get(
+              'services.user.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
+      {
+        inject: [ConfigService],
+        name: 'MAILER_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get(
+                  'services.mailer.transport',
+                ) as keyof Transport
+              ],
+            options: configService.get(
+              'services.mailer.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
     ]),
   ],
   controllers: [PaymentController],
-  providers: [PaymentService, TicketService, StripeWebhookHandlerService],
+  providers: [
+    PaymentService,
+    TicketService,
+    UserService,
+    MailerService,
+    StripeWebhookHandlerService,
+  ],
 })
 export class PaymentModule {}

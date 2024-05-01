@@ -23,6 +23,7 @@ import { AccessAuthGuard } from './common/guards/access-auth.guard';
 import { AccessStrategy } from './common/strategies/access.strategy';
 import { TicketService } from './ticket/ticket.service';
 import { TicketController } from './ticket/ticket.controller';
+import { PaymentService } from './payment/payment.service';
 
 @Module({
   imports: [
@@ -108,6 +109,23 @@ import { TicketController } from './ticket/ticket.controller';
           };
         },
       },
+      {
+        inject: [ConfigService],
+        name: 'PAYMENT_SERVICE',
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport:
+              Transport[
+                configService.get(
+                  'services.payment.transport',
+                ) as keyof Transport
+              ],
+            options: configService.get(
+              'services.payment.options',
+            ) as MicroserviceOptions,
+          };
+        },
+      },
     ]),
   ],
   providers: [
@@ -122,6 +140,7 @@ import { TicketController } from './ticket/ticket.controller';
     OrganizationService,
     EventService,
     TicketService,
+    PaymentService,
   ],
   controllers: [
     UserController,

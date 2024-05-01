@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -13,7 +15,9 @@ import { OrganizationRoleGuard } from '../common/guards/organization-role.guard'
 import { AccessAuthGuard } from '../common/guards/access-auth.guard';
 import { OrganizationRole } from '../common/decorators/organization-role.decorator';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
-import { ITicket } from './interfaces/ticket.interface';
+import { IReturnLink } from '../auth/interfaces/return-link.interface';
+import { ReqUser } from '../common/decorators/user-request.decorator';
+import { IUser } from '../user/interfaces/user.interface';
 
 @Controller({
   version: '1',
@@ -22,12 +26,20 @@ import { ITicket } from './interfaces/ticket.interface';
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
-  @Get('event/:id/type/:type')
-  async getAvailableTicketByType(
+  @UseGuards(AccessAuthGuard)
+  @Post('event/:id/type/:type/buy')
+  async buyAvailableTicket(
+    @ReqUser() user: IUser,
     @Param('id', ParseIntPipe) eventId: number,
     @Param('type') type: string,
-  ): Promise<ITicket> {
-    return await this.ticketService.getTicketByType(eventId, type);
+    @Body() returnLink: IReturnLink,
+  ): Promise<string> {
+    return await this.ticketService.buyAvailableTicket(
+      user.id,
+      eventId,
+      type,
+      returnLink.returnLink,
+    );
   }
 
   @Get('event/:id/stats')

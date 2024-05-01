@@ -7,11 +7,13 @@ import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
 import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 import { ITicket } from './interfaces/ticket.interface';
 import { IEventIdAndTicketType } from './interfaces/event-id-and-ticket-type.interface';
+import { PaymentService } from '../payment/payment.service';
 
 @Injectable()
 export class TicketService {
   constructor(
     @Inject('TICKET_SERVICE') private readonly ticketClient: ClientProxy,
+    private readonly paymentService: PaymentService,
   ) {}
 
   async createTickets(ticketsInfo: ITickets[], eventId: number): Promise<void> {
@@ -63,6 +65,20 @@ export class TicketService {
             throw new RpcException(val);
           }),
         ),
+    );
+  }
+
+  async buyAvailableTicket(
+    userId: number,
+    eventId: number,
+    type: string,
+    returnLink: string,
+  ): Promise<string> {
+    return await this.paymentService.getTicketPaymentLink(
+      userId,
+      eventId,
+      type,
+      returnLink,
     );
   }
 }

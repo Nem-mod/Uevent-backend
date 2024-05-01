@@ -21,7 +21,7 @@ export class UserController {
   }
 
   @MessagePattern({ cmd: 'updateUser' })
-  async updateUser({id ,data: user}: { id: number, data: UpdateUserDto }) {
+  async updateUser({ id, data: user }: { id: number; data: UpdateUserDto }) {
     return await this.userService.updateUser(id, user);
   }
 

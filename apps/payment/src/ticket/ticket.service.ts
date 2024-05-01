@@ -3,6 +3,7 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { ITicket } from './interfaces/ticket.interface';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ITicketTypeAndEventId } from './interfaces/ticket-type-and-event-id.interface';
+import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
 
 @Injectable()
 export class TicketService {
@@ -28,19 +29,22 @@ export class TicketService {
     this.ticketClient.emit('setTicketAvailable', ticketId);
   }
 
-  async blockTicket(ticketId: number): Promise<void> {
+  async blockTicket(ticketId: number, userId: number): Promise<void> {
+    const hui: ITicketIdAndUserId = {
+      ticketId,
+      userId,
+    };
+
     await lastValueFrom(
-      this.ticketClient
-        .send<void>({ cmd: 'getAvailableTicketByType' }, ticketId)
-        .pipe(
-          catchError((val) => {
-            throw new RpcException(val);
-          }),
-        ),
+      this.ticketClient.send<true>({ cmd: 'setTicketProcessing' }, hui).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
     );
   }
 
-  async setTicketSoldAndGetLink(ticketId: number): Promise<string> {
+  async setTicketSoldAndGetToken(ticketId: number): Promise<string> {
     return await lastValueFrom(
       this.ticketClient.send<string>({ cmd: 'setTicketSold' }, ticketId).pipe(
         catchError((val) => {

@@ -121,9 +121,7 @@ export class TicketService {
     const ticket = await this.getTicketById(ticketsInfoAndId.ticketId);
 
     if (ticket.status !== TicketStatus.AVAILABLE)
-      throw new ForbiddenException(
-        'Ticket must be available to start processing',
-      );
+      throw new ForbiddenException('Ticket is not available');
 
     return await this.ticketRepository.update(ticketsInfoAndId.ticketId, {
       user: { id: ticketsInfoAndId.userId },
@@ -161,8 +159,7 @@ export class TicketService {
   ): Promise<ITicket> {
     const ticket: ITicket = await this.ticketRepository.findOne({
       where: {
-        user: null,
-        sold: false,
+        status: TicketStatus.AVAILABLE,
         type: typeAndEventId.type,
         event: { id: typeAndEventId.id },
       },

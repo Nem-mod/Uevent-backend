@@ -1,30 +1,70 @@
 import { Injectable } from '@nestjs/common';
-import { IBuyTicketRequest } from '../ticket/interfaces/buy-ticket-request.interface';
 import { TicketService } from '../ticket/ticket.service';
 import { InjectStripeClient } from '@golevelup/nestjs-stripe';
 import Stripe from 'stripe';
+import { ConfigService } from '@nestjs/config';
+import { UserService } from '../user/user.service';
+import { IUser } from '../user/interfaces/user.interface';
+import { MailerService } from '../mailer/mailer.service';
+import { BuyTicketRequestDto } from './interfaces/dto/buy-ticket-request.dto';
+import { ITicketReceiptMail } from '../mailer/interfaces/ticket-receipt-mail.interface';
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectStripeClient() private readonly stripeClient: Stripe,
     private readonly ticketService: TicketService,
+    private readonly userService: UserService,
+    private readonly mailerService: MailerService,
+    private readonly configService: ConfigService,
   ) {}
 
-  async buyTicket(req: IBuyTicketRequest) {
+  async buyTicket(req: BuyTicketRequestDto) {
     const ticket = await this.ticketService.getAvailableTicket(
       req.ticketType,
       req.eventId,
     );
+    const user: IUser = await this.userService.getUserById(req.userId);
 
-    // await this.ticketService.blockTicket(ticket.id);
+    await this.ticketService.blockTicket(ticket.id, req.userId);
 
-    return await this.initStripePayment({
+    const checkout: Stripe.Checkout.Session = await this.initStripePayment({
       name: ticket.type,
       cost: ticket.cost,
       quantity: 1,
       successUrl: 'https://google.com',
+      metadata: {
+        ticketId: ticket.id,
+        email: user.email,
+        returnLink: req.returnLink,
+      },
     });
+
+    console.log(checkout.id); // TODO: delete
+
+    return checkout.url;
+  }
+
+  async completePayment(
+    ticketId: number,
+    email: string,
+    returnLink: string,
+  ): Promise<string> {
+    const token: string =
+      await this.ticketService.setTicketSoldAndGetToken(ticketId);
+    const mailInfo: ITicketReceiptMail = {
+      email,
+      returnLink,
+      token,
+    };
+
+    await this.mailerService.sendTicketReceiptEmail(mailInfo);
+
+    return token;
+  }
+
+  async unblockTicket(ticketId: number): Promise<void> {
+    await this.ticketService.unblockTicket(ticketId);
   }
 
   async initStripePayment(options: {
@@ -34,26 +74,38 @@ export class PaymentService {
     email?: string;
     successUrl: string;
     cancelUrl?: string;
-  }): Promise<string> {
-    return (
-      await this.stripeClient.checkout.sessions.create({
-        line_items: [
-          {
-            price_data: {
-              currency: 'usd',
-              product_data: {
-                name: options.name,
-              },
-              unit_amount: options.cost,
+    metadata: {
+      ticketId: number;
+      email: string;
+      returnLink: string;
+    };
+  }): Promise<Stripe.Checkout.Session> {
+    return await this.stripeClient.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: options.name,
             },
-            quantity: options.quantity,
+            unit_amount: options.cost,
           },
-        ],
-        mode: 'payment',
-        customer_email: options.email,
-        success_url: options.successUrl,
-        cancel_url: options.cancelUrl,
-      })
-    ).url;
+          quantity: options.quantity,
+        },
+      ],
+      mode: 'payment',
+      customer_email: options.email,
+      success_url: options.successUrl,
+      cancel_url: options.cancelUrl,
+      expires_at: Math.ceil(
+        new Date().getTime() / 1000 +
+          Number(
+            this.configService.get<number>(
+              'api.stripe.payment_link_expire_seconds',
+            ),
+          ),
+      ),
+      metadata: options.metadata,
+    });
   }
 }
