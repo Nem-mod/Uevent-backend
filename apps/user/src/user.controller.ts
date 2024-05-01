@@ -15,6 +15,11 @@ export class UserController {
     return await this.userService.createUser(user);
   }
 
+  @MessagePattern({ cmd: 'createNullUser' })
+  async createNullUser(email: string): Promise<FullUserDto> {
+    return await this.userService.createNullUser(email);
+  }
+
   @MessagePattern({ cmd: 'updateUser' })
   async updateUser({id ,data: user}: { id: number, data: UpdateUserDto }) {
     return await this.userService.updateUser(id, user);

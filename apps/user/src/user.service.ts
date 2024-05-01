@@ -38,6 +38,14 @@ export class UserService {
     return this.sanitizeUser(newUser);
   }
 
+  async createNullUser(email: string): Promise<FullUserDto> {
+    const newUser: FullUserDto = await this.userRepository.save(
+        this.userRepository.create({ email: email}),
+    );
+
+    return this.sanitizeUser(newUser);
+  }
+
   async verifyUser(login: LoginDto) {
     try {
       const user: FullUserDto = await this.getUserByEmail(login.email, false);
