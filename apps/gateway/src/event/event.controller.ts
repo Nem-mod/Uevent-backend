@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
+  ParseIntPipe, Patch,
   Post,
   Query,
   UseGuards,
@@ -18,6 +18,7 @@ import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
 import { IEventSearchQueryDTO } from './dto/event-search-query.dto';
 import { TicketService } from '../ticket/ticket.service';
 import { IEventAndTicketsStatistic } from './interfaces/event-and-tickets-statistic.interface';
+import { IEventUpdate } from './interfaces/event-update';
 
 @Controller({
   version: '1',
@@ -75,6 +76,20 @@ export class EventController {
     return await this.eventGatewayService.createEventWithTickets(
       orgId,
       eventAndTickets,
+    );
+  }
+
+  @OrganizationRole('owner', 'moderator')
+  @UseGuards(AccessAuthGuard, OrganizationRoleGuard)
+  @Patch(':orgId')
+  async updateEvent(
+      @Param('orgId', ParseIntPipe) orgId: number,
+      @Body() event: IEventUpdate,
+  ): Promise<IEvent> {
+    console.log(orgId, event);
+    return await this.eventGatewayService.updateEvent(
+        orgId,
+        event,
     );
   }
 

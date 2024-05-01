@@ -7,8 +7,9 @@ import { ThemeService } from '../theme/theme.service';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 import { FullThemeDto } from '../theme/interfaces/dto/full-theme.dto';
 import { IEventSearchQuery } from './interfaces/dto/event-search-query.dto';
-import { Between, Equal, ILike, Or } from 'typeorm';
+import { Between, DeepPartial, Equal, ILike, Or } from 'typeorm';
 import { groupDatesByDay } from '../utils/group-dates-by-day';
+import { UpdateEventDto } from './interfaces/dto/update-event.dto';
 
 @Injectable()
 export class EventService {
@@ -36,6 +37,11 @@ export class EventService {
     return await this.getById(newEvent.id);
   }
 
+  async update(event: UpdateEventDto) {
+    const { id, organization, ...updatedEvent} = event
+    // FIXME: Hmm as Deep, so deep?
+    return await this.eventRepository.update(id,  updatedEvent as DeepPartial<FullEventDto>)
+  }
   async delete(id: number): Promise<void> {
     await this.eventRepository.delete({ id });
   }

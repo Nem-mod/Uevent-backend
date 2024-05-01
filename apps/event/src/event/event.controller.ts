@@ -5,6 +5,7 @@ import { CreateEventDto } from './interfaces/dto/create-event.dto';
 import { FullEventDto } from './interfaces/dto/full-event.dto';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 import { IEventSearchQuery } from './interfaces/dto/event-search-query.dto';
+import { UpdateEventDto } from './interfaces/dto/update-event.dto';
 
 @Controller()
 export class EventController {
@@ -14,6 +15,11 @@ export class EventController {
   async create(event: CreateEventDto): Promise<FullEventDto> {
     // TODO: Rename startTime to start
     return await this.eventService.create(event);
+  }
+
+  @MessagePattern({ cmd: 'update' })
+  async update(event: UpdateEventDto) {
+    return await this.eventService.update(event);
   }
 
   @EventPattern('deleteEvent')

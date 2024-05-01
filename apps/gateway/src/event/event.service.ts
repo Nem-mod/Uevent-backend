@@ -5,6 +5,7 @@ import { IEvent } from './interfaces/event.interface';
 import { TicketService } from '../ticket/ticket.service';
 import { IEventAndTickets } from './interfaces/event-and-tickets.interface';
 import { IEventSearchQueryDTO } from './dto/event-search-query.dto';
+import { IEventUpdate } from './interfaces/event-update';
 
 @Injectable()
 export class EventService {
@@ -49,6 +50,17 @@ export class EventService {
     }
 
     return createdEvent;
+  }
+
+  async updateEvent(orgId: number, event: IEventUpdate): Promise<IEvent> {
+    event.organization = orgId;
+    return await lastValueFrom(
+          this.eventClient.send<IEvent>({ cmd: 'update' }, event).pipe(
+            catchError((val) => {
+              throw new RpcException(val);
+            }),
+        )
+    );
   }
 
   async deleteEvent(id: number): Promise<void> {
