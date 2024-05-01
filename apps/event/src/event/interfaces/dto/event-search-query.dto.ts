@@ -1,4 +1,4 @@
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { Transform, TransformFnParams } from 'class-transformer';
 
 export class IEventSearchQuery {
@@ -7,6 +7,11 @@ export class IEventSearchQuery {
 
   @IsOptional()
   page?: number;
+
+
+  @IsString()
+  @IsOptional()
+  search?: string;
 
   @IsOptional()
   organizationId?: number;

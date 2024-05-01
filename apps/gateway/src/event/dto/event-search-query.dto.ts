@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { Transform, TransformFnParams } from 'class-transformer';
 export class IEventSearchQueryDTO {
   @IsNumber()
@@ -8,6 +8,11 @@ export class IEventSearchQueryDTO {
   @IsNumber()
   @IsOptional()
   page?: number;
+
+
+  @IsString()
+  @IsOptional()
+  search?: string;
 
   @IsNumber()
   @IsOptional()
