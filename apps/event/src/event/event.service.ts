@@ -7,7 +7,7 @@ import { ThemeService } from '../theme/theme.service';
 import { FullFormatDto } from '../format/interfaces/dto/full-format.dto';
 import { FullThemeDto } from '../theme/interfaces/dto/full-theme.dto';
 import { IEventSearchQuery } from './interfaces/dto/event-search-query.dto';
-import { Between, Equal, Or } from 'typeorm';
+import { Between, Equal, ILike, Or } from 'typeorm';
 import { groupDatesByDay } from '../utils/group-dates-by-day';
 
 @Injectable()
@@ -64,6 +64,7 @@ export class EventService {
 
     const take = query.offset || 10;
     const skip = query.page * take || 0;
+    const { search } = query;
     const { organizationId } = query;
     const { format: formats } = query;
     const { date : dates } = query;
@@ -74,6 +75,7 @@ export class EventService {
 
     return await this.eventRepository.findAndCount({
       where: {
+        title: search ? ILike(`%${search}%`): null,
         startTime: datesFilter ? Or(...datesFilter): null,
         format: {
           id: formats ? Or(...formats.map(e => Equal(e))) : null
