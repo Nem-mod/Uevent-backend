@@ -4,19 +4,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ITicketRepository } from './ticket/interfaces/ticket.repository.interface';
-import { CreateTicketDto } from './ticket/interfaces/dto/create-ticket.dto';
-import { ITicket } from './ticket/interfaces/ticket.interface';
-import { CreateTicketsAmountAndIdDto } from './ticket/interfaces/dto/create-tickets-amount-and-id.dto';
-import { ITicketStatistic } from './ticket/interfaces/ticket-statistic.interface';
-import { ITicketSearchQuery } from './ticket/interfaces/ticket-search-query.interface';
-import { ITicketSearchResponse } from './ticket/interfaces/ticket-search-response';
-import { TicketTypeAndIdDto } from './ticket/interfaces/dto/ticket-type-and-id.dto';
-import { ITicketIdAndUserId } from './ticket/interfaces/ticket-id-and-user-id.interface';
-import { TokenService } from './token/token.service';
-import { Ticket } from './ticket/entities/ticket.entity';
-import { Event } from '../../event/src/event/entities/event.entity';
-import { TicketStatus } from './ticket/interfaces/enums/ticket-status.enum';
+import { ITicketRepository } from './interfaces/ticket.repository.interface';
+import { CreateTicketDto } from './interfaces/dto/create-ticket.dto';
+import { ITicket } from './interfaces/ticket.interface';
+import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
+import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
+import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
+import { ITicketSearchResponse } from './interfaces/ticket-search-response';
+import { TicketTypeAndIdDto } from './interfaces/dto/ticket-type-and-id.dto';
+import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
+import { TokenService } from '../token/token.service';
+import { Ticket } from './entities/ticket.entity';
+import { Event } from '../../../event/src/event/entities/event.entity';
+import { TicketStatus } from './interfaces/enums/ticket-status.enum';
 
 @Injectable()
 export class TicketService {

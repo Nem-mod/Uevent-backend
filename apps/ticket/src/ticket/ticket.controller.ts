@@ -1,13 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
-import { CreateTicketsAmountAndIdDto } from './ticket/interfaces/dto/create-tickets-amount-and-id.dto';
-import { ITicketStatistic } from './ticket/interfaces/ticket-statistic.interface';
-import { ITicketSearchQuery } from './ticket/interfaces/ticket-search-query.interface';
-import { ITicketSearchResponse } from './ticket/interfaces/ticket-search-response';
-import { ITicket } from './ticket/interfaces/ticket.interface';
-import { TicketTypeAndIdDto } from './ticket/interfaces/dto/ticket-type-and-id.dto';
-import { ITicketIdAndUserId } from './ticket/interfaces/ticket-id-and-user-id.interface';
+import { CreateTicketsAmountAndIdDto } from './interfaces/dto/create-tickets-amount-and-id.dto';
+import { ITicketStatistic } from './interfaces/ticket-statistic.interface';
+import { ITicketSearchQuery } from './interfaces/ticket-search-query.interface';
+import { ITicketSearchResponse } from './interfaces/ticket-search-response';
+import { ITicket } from './interfaces/ticket.interface';
+import { TicketTypeAndIdDto } from './interfaces/dto/ticket-type-and-id.dto';
+import { ITicketIdAndUserId } from './interfaces/ticket-id-and-user-id.interface';
 
 @Controller()
 export class TicketController {
@@ -54,7 +54,7 @@ export class TicketController {
     await this.ticketService.setTicketAsAvailable(ticketId);
   }
 
-  @EventPattern('setTicketProcessing')
+  @MessagePattern({ cmd: 'setTicketProcessing' })
   async setTicketAsProcessing(
     ticketAndUserIds: ITicketIdAndUserId,
   ): Promise<void> {

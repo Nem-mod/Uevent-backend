@@ -6,7 +6,11 @@ export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
   @Get()
-  getHello(): string {
-    return this.paymentService.getHello();
+  async buyTicket(): Promise<string> {
+    return await this.paymentService.buyTicket({
+      ticketType: 'Premium',
+      eventId: 47,
+      userId: 1,
+    });
   }
 }

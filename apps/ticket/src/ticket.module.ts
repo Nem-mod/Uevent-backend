@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TicketController } from './ticket.controller';
-import { TicketService } from './ticket.service';
+import { TicketController } from './ticket/ticket.controller';
+import { TicketService } from './ticket/ticket.service';
 import { ConfigModule } from '@app/common/config/config.module';
 import { LoggerModule } from '@app/common/logger/logger.module';
 import { PgTypeormModule } from '@app/common/database/typeorm/postgres/pg.typeorm.module';
