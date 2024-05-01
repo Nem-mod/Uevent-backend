@@ -41,8 +41,7 @@ export class TicketReceiptMail extends BaseMailTypeSendgrid {
   ): TicketReceiptTemplateDataDto {
     return {
       // imgLink: mailInfo.returnLink,
-      imgLink:
-        this.imgPrefix + 'https://i.ytimg.com/vi/JxS5E-kZc2s/maxresdefault.jpg',
+      imgLink: this.imgPrefix + mailInfo.returnLink,
     };
   }
 

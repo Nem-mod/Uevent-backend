@@ -32,6 +32,7 @@ export class PaymentService {
       name: ticket.type,
       cost: ticket.cost,
       quantity: 1,
+      email: user.email,
       successUrl: 'https://google.com',
       metadata: {
         ticketId: ticket.id,
