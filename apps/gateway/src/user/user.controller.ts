@@ -6,7 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
+  ParseIntPipe, Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +14,7 @@ import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
 import { ReqUser } from '../common/decorators/user-request.decorator';
 import { AccessAuthGuard } from '../common/guards/access-auth.guard';
+import { IUserUpdate } from './interfaces/user-update';
 
 @Controller({
   version: '1',
@@ -25,6 +26,13 @@ export class UserController {
   @Post(`register`)
   async registerUser(@Body() user: IUser): Promise<IUser> {
     return await this.userGatewayService.registerUser(user);
+  }
+
+
+  @UseGuards(AccessAuthGuard)
+  @Patch()
+  async updateUser(@ReqUser() { id }: IUser, @Body() user: IUserUpdate): Promise<IUser> {
+    return await this.userGatewayService.updateUser(id, user);
   }
 
   @Get()

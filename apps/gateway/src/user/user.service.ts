@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { IUser } from './interfaces/user.interface';
 import { catchError, lastValueFrom } from 'rxjs';
+import { IUserUpdate } from './interfaces/user-update';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,15 @@ export class UserService {
     );
   }
 
+    async updateUser(id: number, user: IUserUpdate): Promise<IUser> {
+        return lastValueFrom(
+            this.userClient.send<any>({ cmd: 'updateUser' }, { id: id, data: user }).pipe(
+                catchError((val) => {
+                    throw new RpcException(val);
+                }),
+            ),
+        );
+    }
   async getAllUsers(): Promise<IUser[]> {
     return await lastValueFrom(
       this.userClient.send<IUser[]>({ cmd: 'getAllUsers' }, {}).pipe(

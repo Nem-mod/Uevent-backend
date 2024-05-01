@@ -4,6 +4,7 @@ import { FullUserDto } from './interfaces/dto/full-user.dto';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateUserDto } from './interfaces/dto/create-user.dto';
 import { LoginDto } from './interfaces/dto/login.dto';
+import { UpdateUserDto } from './interfaces/dto/update-user.dto';
 
 @Controller()
 export class UserController {
@@ -12,6 +13,11 @@ export class UserController {
   @MessagePattern({ cmd: 'createUser' })
   async createUser(user: CreateUserDto): Promise<FullUserDto> {
     return await this.userService.createUser(user);
+  }
+
+  @MessagePattern({ cmd: 'updateUser' })
+  async updateUser({id ,data: user}: { id: number, data: UpdateUserDto }) {
+    return await this.userService.updateUser(id, user);
   }
 
   // @Patch(':id')
