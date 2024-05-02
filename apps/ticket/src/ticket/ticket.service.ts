@@ -59,13 +59,8 @@ export class TicketService {
 
   async scanTicket(token: string): Promise<ITicket> {
     const { id: ticketId } = await this.tokenService.verifyToken(token);
-    const ticket: ITicket = await this.getTicketById(ticketId);
 
-    await this.ticketRepository.update(ticket.id, {
-      dateComposted: new Date(),
-    });
-
-    return ticket;
+    return await this.getTicketById(ticketId);
   }
 
   async getTicketsStatisticByEvent(
