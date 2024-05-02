@@ -69,7 +69,7 @@ export class TicketController {
     return await this.ticketService.getTickets(query);
   }
 
-  @Get('scan')
+  @Post('scan')
   async scanTicket(@Body() ticketReq: ITicketScanRequest): Promise<ITicket> {
     return await this.ticketService.scanTicket(ticketReq.token);
   }
