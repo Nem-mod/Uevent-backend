@@ -33,7 +33,8 @@ export class PaymentService {
       cost: ticket.cost,
       quantity: 1,
       email: user.email,
-      successUrl: 'https://google.com',
+      successUrl: req.successUrl,
+      cancelUrl: req.cancelUrl,
       metadata: {
         ticketId: ticket.id,
         email: user.email,

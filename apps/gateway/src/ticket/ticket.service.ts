@@ -8,6 +8,7 @@ import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 import { ITicket } from './interfaces/ticket.interface';
 import { IEventIdAndTicketType } from './interfaces/event-id-and-ticket-type.interface';
 import { PaymentService } from '../payment/payment.service';
+import { IBuyTicketRequest } from '../payment/interfaces/buy-ticket-request.interface';
 
 @Injectable()
 export class TicketService {
@@ -71,14 +72,20 @@ export class TicketService {
   async buyAvailableTicket(
     userId: number,
     eventId: number,
-    type: string,
+    ticketType: string,
     returnLink: string,
+    successUrl: string,
+    cancelUrl: string,
   ): Promise<string> {
-    return await this.paymentService.getTicketPaymentLink(
+    const req: IBuyTicketRequest = {
       userId,
       eventId,
-      type,
+      ticketType,
       returnLink,
-    );
+      successUrl,
+      cancelUrl,
+    };
+
+    return await this.paymentService.getTicketPaymentLink(req);
   }
 }

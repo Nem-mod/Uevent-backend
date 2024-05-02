@@ -9,19 +9,7 @@ export class PaymentService {
     @Inject('PAYMENT_SERVICE') private readonly paymentClient: ClientProxy,
   ) {}
 
-  async getTicketPaymentLink(
-    userId: number,
-    eventId: number,
-    ticketType: string,
-    returnLink: string,
-  ): Promise<string> {
-    const req: IBuyTicketRequest = {
-      userId,
-      eventId,
-      ticketType,
-      returnLink,
-    };
-
+  async getTicketPaymentLink(req: IBuyTicketRequest): Promise<string> {
     return await lastValueFrom(
       this.paymentClient.send<string>({ cmd: 'startBuyTicket' }, req).pipe(
         catchError((val) => {

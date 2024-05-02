@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class BuyTicketRequestDto {
   @IsString()
@@ -14,4 +14,12 @@ export class BuyTicketRequestDto {
   @IsString()
   @IsNotEmpty()
   returnLink: string;
+
+  @IsString()
+  @IsNotEmpty()
+  successUrl: string;
+
+  @IsOptional()
+  @IsString()
+  cancelUrl: string;
 }

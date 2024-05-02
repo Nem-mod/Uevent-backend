@@ -18,6 +18,7 @@ import { ITicketSearchResponse } from './interfaces/ticket-search-response';
 import { IReturnLink } from '../auth/interfaces/return-link.interface';
 import { ReqUser } from '../common/decorators/user-request.decorator';
 import { IUser } from '../user/interfaces/user.interface';
+import { IPaymentLinkLinks } from '../payment/interfaces/payment-link-links.interface';
 
 @Controller({
   version: '1',
@@ -33,12 +34,15 @@ export class TicketController {
     @Param('id', ParseIntPipe) eventId: number,
     @Param('type') type: string,
     @Body() returnLink: IReturnLink,
+    @Body() redirectLinks: IPaymentLinkLinks,
   ): Promise<string> {
     return await this.ticketService.buyAvailableTicket(
       user.id,
       eventId,
       type,
       returnLink.returnLink,
+      redirectLinks.successUrl,
+      redirectLinks.cancelUrl,
     );
   }
 
