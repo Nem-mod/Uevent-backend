@@ -42,6 +42,7 @@ export class TicketReceiptMail extends BaseMailTypeSendgrid {
     return {
       // imgLink: mailInfo.returnLink,
       imgLink: this.imgPrefix + mailInfo.returnLink,
+      link: mailInfo.returnLink,
     };
   }
 

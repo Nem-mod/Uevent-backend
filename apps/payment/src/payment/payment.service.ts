@@ -100,6 +100,7 @@ export class PaymentService {
         ui_mode: 'embedded',
         customer_email: options.email,
         return_url: options.successUrl,
+        // success_url: options.successUrl,
         // cancel_url: options.cancelUrl,
         expires_at: Math.ceil(
           new Date().getTime() / 1000 +
