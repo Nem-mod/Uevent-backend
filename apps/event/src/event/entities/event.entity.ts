@@ -34,4 +34,7 @@ export class Event extends AbstractEntity {
 
   @ManyToOne(() => Position)
   location: Position;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  locationStr: string;
 }

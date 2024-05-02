@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsDate,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -36,4 +37,8 @@ export class CreateEventDto {
 
   @IsNumber()
   format: number;
+
+  @IsString()
+  @IsNotEmpty()
+  locationStr: string;
 }
