@@ -42,8 +42,6 @@ export class PaymentService {
       },
     });
 
-    console.log(checkout.id); // TODO: delete
-
     return checkout.client_secret;
   }
 
@@ -115,7 +113,6 @@ export class PaymentService {
     } catch (err:
       | { type: Stripe.RawErrorType; raw: Stripe.StripeRawError }
       | any) {
-      console.log('HEREEE');
       throw new HttpException(err.raw.message, err.raw.statusCode);
     }
   }

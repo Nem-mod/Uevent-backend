@@ -1,0 +1,89 @@
+stage: develop of production
+
+services:
+  user:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3001
+  auth:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3002
+  mailer:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3003
+  token:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3004
+  organization:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3005
+  event:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3006
+  ticket:
+    transport: TCP
+    options:
+      host: localhost
+      port: 3007
+  payment:
+    transport: TCP
+    httpPort: 5008
+    options:
+      host: localhost
+      port: 3009
+  gateway:
+    port: 5000
+
+db:
+  postgres:
+    type: postgres
+    uri: postgres db url
+  redis:
+    type: redis
+    uri: redis db url
+
+crypt:
+  salt: 12
+
+jwt:
+  access:
+    secret: TESTACCESSSECRET
+    expiresIn: 10m
+  refresh:
+    secret: TESTREFRESHSECRET
+    expiresIn: 30d
+  verify:
+    secret: TESTVERIFYSECRET
+    expiresIn: 3h
+  reset-psw:
+    secret: TESTRESETPSWSECRET
+    expiresIn: 3h
+  scan:
+    secret: TESTSCANSECRET
+
+api:
+  sendgrid:
+    templates:
+      user-verify: sendgrid template id
+      ticket-receipt: sendgrid template id
+      user-reset-psw: sendgrid template id
+    key: sendgrid key
+    sender: email of sender registered in sendgrid
+    replaceWord: word to replace with token in return link
+  stripe:
+    key: stripe secret key
+    webhook_secret: stripe webhook secret. Used for authenticate webhook sender as stripe
+    payment_link_expire_seconds: 1800
+  qr:
+    prefix: https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=
