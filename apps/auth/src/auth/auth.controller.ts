@@ -6,6 +6,7 @@ import { ITokenAndId } from '../token/interfaces/token-and-id.interface';
 import { ILogin } from '../user/interfaces/login.interface';
 import { IAuthTokens } from '../token/interfaces/auth-tokens.interface';
 import { IAuthTokensAndId } from '../token/interfaces/auth-tokens-and-id.interface';
+import { ITokenAndPassword } from '../token/interfaces/token-and-password.interface';
 
 @Controller()
 export class AuthController {
@@ -26,6 +27,12 @@ export class AuthController {
   @MessagePattern({ cmd: 'validateUserVerifyToken' })
   async validateUserVerifyToken(userToken: ITokenAndId): Promise<true> {
     await this.authService.validateUserVerifyToken(userToken);
+    return true;
+  }
+
+  @MessagePattern({ cmd: 'validateUserResetPswToken' })
+  async validateUserResetPswToken(pswToken: ITokenAndPassword): Promise<true> {
+    await this.authService.validateUserResetPswToken(pswToken);
     return true;
   }
 

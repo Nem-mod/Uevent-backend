@@ -24,6 +24,7 @@ import { RefreshAuthGuard } from '../common/guards/refresh-auth.guard';
 import { IReturnLink } from './interfaces/return-link.interface';
 import { IReturnLinkAndEmail } from './interfaces/return-link-and-email.interface';
 import { IMailWithEmailRequest } from './interfaces/mail-with-email-request.interface';
+import { IResetPasswordRequest } from './interfaces/reset-password-request.interface';
 
 @Controller({
   version: '1',
@@ -68,6 +69,21 @@ export class AuthController {
       token,
     };
     await this.authGatewayService.userValidateVerifyToken(userToken);
+  }
+
+  @Patch(`user/validate/reset-psw`)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async userValidateResetPswToken(
+    @Req() req: IAuthorizedRequest,
+    @Body() tokenAndPsw: IResetPasswordRequest,
+    @Res({ passthrough: true }) res: ResponseType,
+  ): Promise<void> {
+    // const authTokens: IAuthTokens = {
+    //   refreshToken: req.cookies.refreshToken,
+    //   accessToken: req.cookies.accessToken,
+    // };
+    await this.authGatewayService.userValidateResetPswToken(tokenAndPsw);
+    // await this.authGatewayService.logout(authTokens, res);
   }
 
   @Post('user/login')

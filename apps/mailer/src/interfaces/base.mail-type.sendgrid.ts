@@ -25,11 +25,8 @@ export abstract class BaseMailTypeSendgrid implements IBaseMailType {
     payload: object,
     returnLink: string,
   ): Promise<string> {
-    console.log(payload);
     const token = await this.generateJwt(payload);
-    console.log(token);
     returnLink = returnLink.replace(this.replaceWord, token);
-    console.log(returnLink);
     return returnLink;
   }
 
@@ -45,20 +42,14 @@ export abstract class BaseMailTypeSendgrid implements IBaseMailType {
   }
 
   async execute(mailInfo: object): Promise<void> {
-    console.log(mailInfo);
     const payload = await this.extractPayload(mailInfo);
-    console.log(payload);
 
     mailInfo['returnLink'] = await this.prepareReturnLink(
       payload,
       mailInfo['returnLink'],
     );
 
-    console.log(mailInfo);
-
     const templateData = this.setTemplateData(mailInfo);
-
-    console.log(templateData);
 
     await this.sendMail(mailInfo['email'], templateData);
   }

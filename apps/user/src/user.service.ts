@@ -11,6 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { UpdateUserDto } from './interfaces/dto/update-user.dto';
 import { LoginDto } from './interfaces/dto/login.dto';
+import { PasswordAndIdDto } from './interfaces/dto/password-and-id.dto';
 
 @Injectable()
 export class UserService {
@@ -40,7 +41,7 @@ export class UserService {
 
   async createNullUser(email: string): Promise<FullUserDto> {
     const newUser: FullUserDto = await this.userRepository.save(
-        this.userRepository.create({ email: email}),
+      this.userRepository.create({ email: email }),
     );
 
     return this.sanitizeUser(newUser);
@@ -87,6 +88,19 @@ export class UserService {
 
   async getAllUsers(): Promise<FullUserDto[]> {
     return await this.userRepository.findAll();
+  }
+
+  async changePsw(pswAndId: PasswordAndIdDto): Promise<FullUserDto> {
+    pswAndId.password = bcrypt.hashSync(
+      pswAndId.password,
+      this.configService.get('crypt.salt'),
+    );
+
+    const user: FullUserDto = await this.userRepository.save(
+      this.userRepository.create(pswAndId),
+    );
+
+    return this.sanitizeUser(user);
   }
 
   async updateUser(id: number, user: UpdateUserDto): Promise<FullUserDto> {

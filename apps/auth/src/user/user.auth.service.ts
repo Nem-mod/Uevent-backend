@@ -43,4 +43,14 @@ export class UserAuthService {
   async setUserVerified(id: number): Promise<void> {
     this.userClient.emit('setVerifyUser', id);
   }
+
+  async changePassword(id: number, password: string) {
+    await lastValueFrom(
+      this.userClient.send({ cmd: 'changePsw' }, { id, password }).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
+    );
+  }
 }

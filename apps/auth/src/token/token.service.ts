@@ -28,6 +28,57 @@ export class TokenService {
     );
   }
 
+  async verifyResetPswToken(token: string): Promise<number> {
+    const { id }: IId = await lastValueFrom(
+      this.tokenClient
+        .send<IId>({ role: 'user', token: 'reset-psw', cmd: 'decode' }, token)
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+    const userToken: ITokenAndId = {
+      id,
+      token,
+    };
+
+    await lastValueFrom(
+      this.tokenClient
+        .send<boolean>(
+          { role: 'user', token: 'reset-psw', cmd: 'verify' },
+          userToken,
+        )
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+
+    return id;
+  }
+
+  async verifyResetPswTokenAndClear(id: number, token: string): Promise<void> {
+    const userToken: ITokenAndId = {
+      id,
+      token,
+    };
+
+    await lastValueFrom(
+      this.tokenClient
+        .send<boolean>(
+          { role: 'user', token: 'reset-psw', cmd: 'verifyAndClear' },
+          userToken,
+        )
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+  }
+
   async signAuthTokensAndPush(id: number): Promise<IAuthTokens> {
     const payloadAndId: IPayloadAndId = {
       payload: { id },

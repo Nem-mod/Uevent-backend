@@ -5,6 +5,7 @@ import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateUserDto } from './interfaces/dto/create-user.dto';
 import { LoginDto } from './interfaces/dto/login.dto';
 import { UpdateUserDto } from './interfaces/dto/update-user.dto';
+import { PasswordAndIdDto } from './interfaces/dto/password-and-id.dto';
 
 @Controller()
 export class UserController {
@@ -36,6 +37,11 @@ export class UserController {
   @MessagePattern({ cmd: 'verifyUser' })
   async verifyUser(login: LoginDto): Promise<FullUserDto> {
     return await this.userService.verifyUser(login);
+  }
+
+  @MessagePattern({ cmd: 'changePsw' })
+  async changePsw(pswAndId: PasswordAndIdDto): Promise<FullUserDto> {
+    return await this.userService.changePsw(pswAndId);
   }
 
   @MessagePattern({ cmd: 'getUserById' })

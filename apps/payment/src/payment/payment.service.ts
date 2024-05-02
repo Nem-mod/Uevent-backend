@@ -96,6 +96,7 @@ export class PaymentService {
         },
       ],
       mode: 'payment',
+      ui_mode: 'embedded',
       customer_email: options.email,
       success_url: options.successUrl,
       cancel_url: options.cancelUrl,

@@ -14,6 +14,7 @@ import { IAuthTokensAndId } from './interfaces/auth-tokens-and-id.interface';
 import { IUser } from '../user/interfaces/user.interface';
 import { UserService } from '../user/user.service';
 import { IMailWithEmailRequest } from './interfaces/mail-with-email-request.interface';
+import { IResetPasswordRequest } from './interfaces/reset-password-request.interface';
 
 @Injectable()
 export class AuthService {
@@ -49,6 +50,17 @@ export class AuthService {
           throw new RpcException(val);
         }),
       ),
+    );
+  }
+  async userValidateResetPswToken(tokenAndPsw: IResetPasswordRequest) {
+    await lastValueFrom(
+      this.authClient
+        .send({ cmd: 'validateUserResetPswToken' }, tokenAndPsw)
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
     );
   }
 

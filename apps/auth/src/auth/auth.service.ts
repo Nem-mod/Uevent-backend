@@ -10,6 +10,7 @@ import { ILogin } from '../user/interfaces/login.interface';
 import { IAuthTokens } from '../token/interfaces/auth-tokens.interface';
 import { IAuthTokensAndId } from '../token/interfaces/auth-tokens-and-id.interface';
 import { IResetPswUserMail } from '../mailer/interfaces/reset-psw.user.mail.interface';
+import { ITokenAndPassword } from '../token/interfaces/token-and-password.interface';
 
 @Injectable()
 export class AuthService {
@@ -53,6 +54,16 @@ export class AuthService {
     await this.tokenAuthService.verifyVerifyTokenAndClear(userToken);
 
     await this.userAuthService.setUserVerified(userToken.id);
+  }
+
+  async validateUserResetPswToken(pswToken: ITokenAndPassword): Promise<void> {
+    const id: number = await this.tokenAuthService.verifyResetPswToken(
+      pswToken.token,
+    );
+
+    await this.userAuthService.changePassword(id, pswToken.password);
+
+    await this.tokenAuthService.verifyResetPswTokenAndClear(id, pswToken.token);
   }
 
   async validateAccessToken(accessToken: string): Promise<number> {
