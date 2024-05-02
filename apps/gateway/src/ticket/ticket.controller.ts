@@ -19,6 +19,8 @@ import { IReturnLink } from '../auth/interfaces/return-link.interface';
 import { ReqUser } from '../common/decorators/user-request.decorator';
 import { IUser } from '../user/interfaces/user.interface';
 import { IPaymentLinkLinks } from '../payment/interfaces/payment-link-links.interface';
+import { ITicketScanRequest } from './interfaces/ticket-scan-request.interface';
+import { ITicket } from './interfaces/ticket.interface';
 
 @Controller({
   version: '1',
@@ -62,5 +64,10 @@ export class TicketController {
   ): Promise<ITicketSearchResponse> {
     query.event = eventId;
     return await this.ticketService.getTickets(query);
+  }
+
+  @Get('scan')
+  async scanTicket(@Body() ticketReq: ITicketScanRequest): Promise<ITicket> {
+    return await this.ticketService.scanTicket(ticketReq.token);
   }
 }

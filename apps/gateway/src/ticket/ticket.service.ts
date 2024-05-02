@@ -55,6 +55,16 @@ export class TicketService {
     );
   }
 
+  async scanTicket(token: string): Promise<ITicket> {
+    return await lastValueFrom(
+      this.ticketClient.send<ITicket>({ cmd: 'scanTicket' }, token).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
+    );
+  }
+
   async getTicketByType(eventId: number, type: string): Promise<ITicket> {
     const eventIdAndType: IEventIdAndTicketType = { id: eventId, type };
 
