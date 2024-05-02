@@ -25,6 +25,7 @@ import { IReturnLink } from './interfaces/return-link.interface';
 import { IReturnLinkAndEmail } from './interfaces/return-link-and-email.interface';
 import { IMailWithEmailRequest } from './interfaces/mail-with-email-request.interface';
 import { IResetPasswordRequest } from './interfaces/reset-password-request.interface';
+import { ITokenAndId } from '../../../auth/src/token/interfaces/token-and-id.interface';
 
 @Controller({
   version: '1',
@@ -62,11 +63,11 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async userValidateVerifyToken(
     @Param('id', ParseIntPipe) id: number,
-    @Body() token: string,
+    @Body() token: ITokenAndId,
   ): Promise<void> {
     const userToken: IBaseTokenRequest = {
       id,
-      token,
+      token: token.token,
     };
     await this.authGatewayService.userValidateVerifyToken(userToken);
   }
