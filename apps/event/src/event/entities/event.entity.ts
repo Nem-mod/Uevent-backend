@@ -19,7 +19,11 @@ export class Event extends AbstractEntity {
   @Column({ type: 'int', nullable: true })
   duration: number;
 
-  @Column({ type: 'varchar', length: 200, default: 'poster.webp' }) // TODO: change default and length
+  @Column({
+    type: 'varchar',
+    length: 200,
+    default: 'https://storage.googleapis.com/uevent-bucket/poster.webp',
+  })
   poster!: string;
 
   @ManyToOne(() => Organization, { onDelete: 'SET NULL' })
