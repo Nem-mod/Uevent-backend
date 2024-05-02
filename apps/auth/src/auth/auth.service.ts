@@ -9,6 +9,7 @@ import { UserAuthService } from '../user/user.auth.service';
 import { ILogin } from '../user/interfaces/login.interface';
 import { IAuthTokens } from '../token/interfaces/auth-tokens.interface';
 import { IAuthTokensAndId } from '../token/interfaces/auth-tokens-and-id.interface';
+import { IResetPswUserMail } from '../mailer/interfaces/reset-psw.user.mail.interface';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +30,23 @@ export class AuthService {
     };
 
     await this.mailerAuthService.userEmailVerification(fullMailInfo);
+  }
+
+  async sendUserResetPsw(baseMailInfo: IBaseUserMail): Promise<void> {
+    let user: IUser;
+
+    try {
+      user = await this.userAuthService.getUserByEmail(baseMailInfo.email);
+    } catch (err) {
+      return;
+    }
+
+    const fullMailInfo: IResetPswUserMail = {
+      ...baseMailInfo,
+      id: user.id,
+    };
+
+    await this.mailerAuthService.userResetPsw(fullMailInfo);
   }
 
   async validateUserVerifyToken(userToken: ITokenAndId): Promise<void> {

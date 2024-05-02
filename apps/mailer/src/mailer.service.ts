@@ -8,6 +8,8 @@ export class MailerService {
   constructor(
     @Inject('UserVerificationMail')
     private readonly userVerificationMail: IBaseMailType,
+    @Inject('UserResetPswMail')
+    private readonly userResetPswMail: IBaseMailType,
     @Inject('TicketReceiptMail')
     private readonly ticketReceiptMail: IBaseMailType,
   ) {}
@@ -18,7 +20,11 @@ export class MailerService {
     await this.userVerificationMail.execute(mailInfo);
   }
 
-  async ticketReceiptEmail(mailInfo: TicketReceiptMailDto): Promise<void> {
+  async userResetPsw(mailInfo: UserVerificationMailDto): Promise<void> {
+    await this.userResetPswMail.execute(mailInfo);
+  }
+
+  async ticketReceipt(mailInfo: TicketReceiptMailDto): Promise<void> {
     await this.ticketReceiptMail.execute(mailInfo);
   }
 }

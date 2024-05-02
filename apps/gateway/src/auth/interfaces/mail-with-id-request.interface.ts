@@ -1,4 +1,4 @@
-export interface IBaseMailRequest {
+export interface IMailWithIdRequest {
   id: number;
   returnLink: string;
 }

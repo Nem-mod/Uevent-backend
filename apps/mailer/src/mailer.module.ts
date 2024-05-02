@@ -12,6 +12,7 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { TicketReceiptMail } from './mail-types/ticket-receipt.mail';
+import { UserResetPswMail } from './mail-types/user-reset-psw.mail';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { TicketReceiptMail } from './mail-types/ticket-receipt.mail';
   providers: [
     MailerService,
     { provide: 'UserVerificationMail', useClass: UserVerificationMail },
+    { provide: 'UserResetPswMail', useClass: UserResetPswMail },
     { provide: 'TicketReceiptMail', useClass: TicketReceiptMail },
   ],
 })

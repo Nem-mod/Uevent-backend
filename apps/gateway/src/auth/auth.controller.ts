@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { IBaseMailRequest } from './interfaces/base/base.mail-request.interface';
+import { IMailWithIdRequest } from './interfaces/mail-with-id-request.interface';
 import { IBaseTokenRequest } from './interfaces/base/base.token-request.interface';
 import { ILogin } from './interfaces/login.interface';
 import { Response as ResponseType } from 'express';
@@ -22,6 +22,8 @@ import { IUser } from '../user/interfaces/user.interface';
 import { IAuthorizedRequest } from '../common/interfaces/authorized-request.interface';
 import { RefreshAuthGuard } from '../common/guards/refresh-auth.guard';
 import { IReturnLink } from './interfaces/return-link.interface';
+import { IReturnLinkAndEmail } from './interfaces/return-link-and-email.interface';
+import { IMailWithEmailRequest } from './interfaces/mail-with-email-request.interface';
 
 @Controller({
   version: '1',
@@ -36,11 +38,23 @@ export class AuthController {
     @Param('id', ParseIntPipe) id: number,
     @Body() returnLink: IReturnLink,
   ): Promise<void> {
-    const userSendEmail: IBaseMailRequest = {
+    const userSendEmail: IMailWithIdRequest = {
       id,
       returnLink: returnLink.returnLink,
     };
     await this.authGatewayService.userSendVerifyEmail(userSendEmail);
+  }
+
+  @Post('user/send/reset-psw')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async userSendResetPsw(
+    @Body() returnLinkAndEmail: IReturnLinkAndEmail,
+  ): Promise<void> {
+    const userSendEmail: IMailWithEmailRequest = {
+      email: returnLinkAndEmail.email,
+      returnLink: returnLinkAndEmail.returnLink,
+    };
+    await this.authGatewayService.userSendResetPsw(userSendEmail);
   }
 
   @Patch(`user/:id/validate/verify`)

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, lastValueFrom } from 'rxjs';
-import { IBaseMailRequest } from './interfaces/base/base.mail-request.interface';
+import { IMailWithIdRequest } from './interfaces/mail-with-id-request.interface';
 import { IBaseTokenRequest } from './interfaces/base/base.token-request.interface';
 import { ILogin } from './interfaces/login.interface';
 import { IAuthTokens } from './interfaces/auth-tokens.interface';
@@ -13,6 +13,7 @@ import { Response as ResponseType } from 'express';
 import { IAuthTokensAndId } from './interfaces/auth-tokens-and-id.interface';
 import { IUser } from '../user/interfaces/user.interface';
 import { UserService } from '../user/user.service';
+import { IMailWithEmailRequest } from './interfaces/mail-with-email-request.interface';
 
 @Injectable()
 export class AuthService {
@@ -21,9 +22,19 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async userSendVerifyEmail(userSendEmail: IBaseMailRequest): Promise<void> {
+  async userSendVerifyEmail(userSendEmail: IMailWithIdRequest): Promise<void> {
     await lastValueFrom(
       this.authClient.send({ cmd: 'sendUserVerifyEmail' }, userSendEmail).pipe(
+        catchError((val) => {
+          throw new RpcException(val);
+        }),
+      ),
+    );
+  }
+
+  async userSendResetPsw(userSendEmail: IMailWithEmailRequest): Promise<void> {
+    await lastValueFrom(
+      this.authClient.send({ cmd: 'sendUserResetPsw' }, userSendEmail).pipe(
         catchError((val) => {
           throw new RpcException(val);
         }),

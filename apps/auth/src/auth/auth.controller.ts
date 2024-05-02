@@ -17,6 +17,12 @@ export class AuthController {
     return true;
   }
 
+  @MessagePattern({ cmd: 'sendUserResetPsw' })
+  async sendUserResetPswEmail(baseMailInfo: IBaseUserMail): Promise<true> {
+    await this.authService.sendUserResetPsw(baseMailInfo);
+    return true;
+  }
+
   @MessagePattern({ cmd: 'validateUserVerifyToken' })
   async validateUserVerifyToken(userToken: ITokenAndId): Promise<true> {
     await this.authService.validateUserVerifyToken(userToken);

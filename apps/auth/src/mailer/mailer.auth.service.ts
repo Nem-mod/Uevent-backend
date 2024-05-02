@@ -20,4 +20,16 @@ export class MailerAuthService {
         ),
     );
   }
+
+  async userResetPsw(mailInfo: IVerificationUserMail): Promise<void> {
+    await lastValueFrom(
+      this.mailerClient
+        .send({ role: 'user', mail: 'reset-psw', cmd: 'send' }, mailInfo)
+        .pipe(
+          catchError((val) => {
+            throw new RpcException(val);
+          }),
+        ),
+    );
+  }
 }
