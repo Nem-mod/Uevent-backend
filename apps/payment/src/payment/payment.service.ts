@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { TicketService } from '../ticket/ticket.service';
 import { InjectStripeClient } from '@golevelup/nestjs-stripe';
 import Stripe from 'stripe';
@@ -44,7 +44,7 @@ export class PaymentService {
 
     console.log(checkout.id); // TODO: delete
 
-    return checkout.url;
+    return checkout.client_secret;
   }
 
   async completePayment(
@@ -82,33 +82,40 @@ export class PaymentService {
       returnLink: string;
     };
   }): Promise<Stripe.Checkout.Session> {
-    return await this.stripeClient.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: options.name,
+    try {
+      return await this.stripeClient.checkout.sessions.create({
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: options.name,
+              },
+              unit_amount: options.cost,
             },
-            unit_amount: options.cost,
+            quantity: options.quantity,
           },
-          quantity: options.quantity,
-        },
-      ],
-      mode: 'payment',
-      ui_mode: 'embedded',
-      customer_email: options.email,
-      success_url: options.successUrl,
-      cancel_url: options.cancelUrl,
-      expires_at: Math.ceil(
-        new Date().getTime() / 1000 +
-          Number(
-            this.configService.get<number>(
-              'api.stripe.payment_link_expire_seconds',
+        ],
+        mode: 'payment',
+        ui_mode: 'embedded',
+        customer_email: options.email,
+        return_url: options.successUrl,
+        // cancel_url: options.cancelUrl,
+        expires_at: Math.ceil(
+          new Date().getTime() / 1000 +
+            Number(
+              this.configService.get<number>(
+                'api.stripe.payment_link_expire_seconds',
+              ),
             ),
-          ),
-      ),
-      metadata: options.metadata,
-    });
+        ),
+        metadata: options.metadata,
+      });
+    } catch (err:
+      | { type: Stripe.RawErrorType; raw: Stripe.StripeRawError }
+      | any) {
+      console.log('HEREEE');
+      throw new HttpException(err.raw.message, err.raw.statusCode);
+    }
   }
 }
