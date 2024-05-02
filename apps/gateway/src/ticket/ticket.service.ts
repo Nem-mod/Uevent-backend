@@ -65,6 +65,10 @@ export class TicketService {
     );
   }
 
+  async compostTicket(token: string): Promise<void> {
+    this.ticketClient.emit('compostTicket', token);
+  }
+
   async getTicketByType(eventId: number, type: string): Promise<ITicket> {
     const eventIdAndType: IEventIdAndTicketType = { id: eventId, type };
 

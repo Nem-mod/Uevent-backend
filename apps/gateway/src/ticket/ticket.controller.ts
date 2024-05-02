@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -69,5 +72,11 @@ export class TicketController {
   @Get('scan')
   async scanTicket(@Body() ticketReq: ITicketScanRequest): Promise<ITicket> {
     return await this.ticketService.scanTicket(ticketReq.token);
+  }
+
+  @Patch('compost')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async compostTicket(@Body() ticketReq: ITicketScanRequest): Promise<void> {
+    await this.ticketService.compostTicket(ticketReq.token);
   }
 }
