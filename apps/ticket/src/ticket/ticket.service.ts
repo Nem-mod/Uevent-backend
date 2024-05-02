@@ -86,6 +86,7 @@ export class TicketService {
       skip: skip,
       where: {
         event: { id: query.event },
+        user: { id: query.user },
       },
       order: { id: 'DESC' },
     });

@@ -69,6 +69,16 @@ export class TicketController {
     return await this.ticketService.getTickets(query);
   }
 
+  @UseGuards(AccessAuthGuard)
+  @Get('user/me')
+  async getTicketsByUser(
+    @ReqUser() user: IUser,
+    @Query() query: ITicketSearchQuery,
+  ): Promise<ITicketSearchResponse> {
+    query.user = user.id;
+    return await this.ticketService.getTickets(query);
+  }
+
   @Post('scan')
   async scanTicket(@Body() ticketReq: ITicketScanRequest): Promise<ITicket> {
     return await this.ticketService.scanTicket(ticketReq.token);
