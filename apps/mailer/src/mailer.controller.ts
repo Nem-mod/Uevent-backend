@@ -19,6 +19,7 @@ export class MailerController {
 
   @EventPattern({ role: 'ticket', mail: 'receipt', cmd: 'send' })
   async sendTicketReceiptEmail(mailInfo: TicketReceiptMailDto): Promise<void> {
+    console.log(mailInfo);
     await this.mailerService.ticketReceipt(mailInfo);
   }
 
